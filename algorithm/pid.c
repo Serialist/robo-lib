@@ -114,7 +114,7 @@ fp32 PID_Diff_Update(PID_Typedef *pid, fp32 set, fp32 ref)
  * @param[out]     pid: PID结构数据指针
  * @retval         none
  */
-void PID_clear(PID_Typedef *pid)
+void PID_Clear(PID_Typedef *pid)
 {
     if (pid == NULL)
     {

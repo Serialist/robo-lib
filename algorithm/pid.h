@@ -62,6 +62,6 @@ fp32 PID_Diff_Update(PID_Typedef *pid, fp32 set, fp32 ref);
 
 /// @brief pid Êä³öÇå³ý
 /// @param pid
-void PID_clear(PID_Typedef *pid);
+void PID_Clear(PID_Typedef *pid);
 
 #endif
