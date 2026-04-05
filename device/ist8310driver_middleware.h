@@ -19,7 +19,7 @@
 #ifndef IST8310DRIVER_MIDDLEWARE_H
 #define IST8310DRIVER_MIDDLEWARE_H
 
-#include "struct_typedef.h"
+#include "user_lib.h"
 
 #define IST8310_IIC_ADDRESS (0x0E << 1)  //IST8310的IIC地址
 #define IST8310_IIC_READ_MSB (0x80) //IST8310的SPI读取发送第一个bit为1

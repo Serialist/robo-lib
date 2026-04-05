@@ -5,7 +5,7 @@
 #include "user_lib.h"
 #include "dt7.h"
 #include "main.h"
-#include "struct_typedef.h"
+#include "user_lib.h"
 
 #define P_MIN -12.5f
 #define P_MAX 12.5f

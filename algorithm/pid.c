@@ -26,7 +26,7 @@
  * @param max_out 最大输出
  * @param max_iout 最大积分输出
  */
-void PID_init(PID_Typedef *pid, const fp32 kp, const fp32 ki, const fp32 kd, fp32 max_out, fp32 max_iout)
+void PID_init(PID_Typedef *pid, const float32_t kp, const float32_t ki, const float32_t kd, float32_t max_out, float32_t max_iout)
 {
     if (pid == NULL)
     {
@@ -47,9 +47,9 @@ void PID_init(PID_Typedef *pid, const fp32 kp, const fp32 ki, const fp32 kd, fp3
  * @param pid
  * @param set
  * @param ref
- * @return fp32
+ * @return float32_t
  */
-fp32 PID_Update(PID_Typedef *pid, fp32 set, fp32 ref)
+float32_t PID_Update(PID_Typedef *pid, float32_t set, float32_t ref)
 {
     if (pid == NULL)
     {
@@ -83,9 +83,9 @@ fp32 PID_Update(PID_Typedef *pid, fp32 set, fp32 ref)
  * @param pid
  * @param set
  * @param ref
- * @return fp32
+ * @return float32_t
  */
-fp32 PID_Diff_Update(PID_Typedef *pid, fp32 set, fp32 ref)
+float32_t PID_Diff_Update(PID_Typedef *pid, float32_t set, float32_t ref)
 {
     if (pid == NULL)
     {

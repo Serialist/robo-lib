@@ -2,7 +2,7 @@
 #ifndef __BSP_BUZZER_H
 #define __BSP_BUZZER_H
 
-#include "struct_typedef.h"
+#include "user_lib.h"
 
 void Buzzer_Init(void);
 extern void Buzzer_Off(void);

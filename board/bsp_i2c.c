@@ -41,7 +41,7 @@ void bsp_I2C_reset(I2C_TypeDef *I2C)
 
 
 
-bool_t bsp_I2C_check_ack(I2C_TypeDef *I2C, uint16_t I2C_address)
+bool bsp_I2C_check_ack(I2C_TypeDef *I2C, uint16_t I2C_address)
 {
     I2C_HandleTypeDef *hi2c;
     if(I2C == I2C1)
