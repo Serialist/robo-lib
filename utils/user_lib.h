@@ -54,7 +54,7 @@
 #endif
 
 #define DEG_CLAMPF(Ang) LoopClampf((Ang), -180.0f, 180.0f) // 角度格式化为-180~180
-#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI)         // 弧度格式化为-PI~PI
+#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI)		   // 弧度格式化为-PI~PI
 
 #ifndef DEG2RAD
 #define DEG2RAD(Ang) ((Ang) * 0.01745329252f)
@@ -99,66 +99,68 @@
 
 typedef enum
 {
-    CHASSIS_DEBUG = 1,
-    GIMBAL_DEBUG,
-    INS_DEBUG,
-    RC_DEBUG,
-    IMU_HEAT_DEBUG,
-    SHOOT_DEBUG,
-    AIMASSIST_DEBUG,
+	CHASSIS_DEBUG = 1,
+	GIMBAL_DEBUG,
+	INS_DEBUG,
+	RC_DEBUG,
+	IMU_HEAT_DEBUG,
+	SHOOT_DEBUG,
+	AIMASSIST_DEBUG,
 } GlobalDebugMode_t;
 
 /* ================================================================ variable ================================================================ */
 
 /* ================================================================ prototype ================================================================ */
 
-float Signf(float value);                                                    // 符号函数
-void Clampfp(float *in, float min, float max);                               // 指针限幅
-float Clampf(float value, float min, float max);                             // 限幅
-float ClampAbsf(float value, float max);                                     // 绝对值限幅
-float LoopClampf(float Input, float minValue, float maxValue);               // 循环限幅
+float Signf(float value);													 // 符号函数
+void Clampfp(float *in, float min, float max);								 // 指针限幅
+float Clampf(float value, float min, float max);							 // 限幅
+float ClampAbsf(float value, float max);									 // 绝对值限幅
+float LoopClampf(float Input, float minValue, float maxValue);				 // 循环限幅
 float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值映射
-float Rampf(float prev_x, float x, float k_min, float k_max, float dt);      // 斜坡函数
-float Deadzonef(float value, float point, float deadzone);                   // 死区
+float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
+float Deadzonef(float value, float point, float deadzone);					 // 死区
 
-float Modf(float value, float range);
+float Bit2Float(int X_int, float X_min, float X_max, int Bits);
+int Float2Bit(float x, float x_min, float x_max, int bits);
 
-float SSqrt(float x);                                     // 开方
-long long FPow(long long a, long long b);                 // 快速幂
+float Modf(float value, float range);					  // 取模
+float SSqrt(float x);									  // 开方
+long long FPow(long long a, long long b);				  // 快速幂
 long long FPowMod(long long a, long long b, long long p); // 快速幂取模
-float FiSqrt(float x);                                    // 快速平方根倒数
-float FSqrtf(float x);                                    // 快速平方根
-long long FGcd(long long a, long long b);                 // 计算最大公约数 greatest common divisor
+float FiSqrt(float x);									  // 快速平方根倒数
+float FSqrtf(float x);									  // 快速平方根
+long long FGcd(long long a, long long b);				  // 计算最大公约数 greatest common divisor
 
 /* ================================ 斜波函数 ================================ */
 
 typedef struct
 {
-    float value; // 输出数据
-    float kmin;  // 斜率最小值
-    float kmax;  // 斜率最大值
+	float value; // 输出数据
+	float kmin;	 // 斜率最小值
+	float kmax;	 // 斜率最大值
 } Ramp_t;
 
 void Ramp_Init(Ramp_t *self, float initial_value, float kmin, float kmax); // 斜波函数初始化
-void Ramp_Reset(Ramp_t *self, float value);                                // 重置
-float Ramp_Update(Ramp_t *self, float target, float dt);                   // 斜波函数计算
+void Ramp_Reset(Ramp_t *self, float value);								   // 重置
+float Ramp_Update(Ramp_t *self, float target, float dt);				   // 斜波函数计算
 
 /* ================================ OLS Ordinary Least Squares 最小二乘法 ================================ */
 
 typedef __packed struct
 {
-    uint16_t Order;
-    uint32_t Count;
+	uint16_t Order;
+	uint32_t Count;
 
-    float *x;
-    float *y;
+	float *x;
+	float *y;
 
-    float k;
-    float b;
+	float k;
+	float b;
 
-    float StandardDeviation;
+	float StandardDeviation;
 
-    float t[4];
+	float t[4];
 } OLS_t;
 
 void OLS_Init(OLS_t *OLS, uint16_t order);

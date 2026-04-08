@@ -1,10 +1,18 @@
-#ifndef __CHASSISMOTOR_H__
-#define __CHASSISMOTOR_H__
+/**
+ * @file chassismotor.h
+ * @author Serialist (ba3pt@qq.com)
+ * @brief 
+ * @version 0.1.0
+ * @date 2026-04-08
+ * 
+ * @copyright Copyright (c) Serialist 2026
+ * 
+*/
 
-#include "stdint.h"
-#include "user_lib.h"
-#include "dt7.h"
-#include "main.h"
+#ifndef CHASSISMOTOR_H
+#define CHASSISMOTOR_H
+
+
 #include "user_lib.h"
 
 #define P_MIN -12.5f
@@ -83,7 +91,6 @@ void comm_can_set_origin(uint8_t controller_id, uint8_t set_origin_mode);
 void AK_Motor_MIT_Enable(uint8_t id);
 void AK_Motor_MIT_Disable(uint8_t id);
 void AK_Motor_MIT_Setorigin(uint8_t id);
-int float_to_uint(float x, float x_min, float x_max, unsigned int bits);
 void AK_Motor_MIT_Transmit(uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff);
 
 /* ================================ new cubemars code ================================ */
@@ -98,7 +105,6 @@ typedef struct
 	float errCode; // π ’œ¬Î
 } Motor_AK_RxData_t;
 
-float Uint_To_Float(int x_int, float x_min, float x_max, int bits);
 void Motor_AK_MIT_Decode(Motor_AK_RxData_t *rxData, uint8_t data[8], float pMax, float vMax, float tMax);
 
 #endif
