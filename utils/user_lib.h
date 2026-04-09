@@ -31,14 +31,14 @@
 #endif
 #endif
 
-#ifndef MAT
-#define MAT arm_matrix_instance_f32
-#define MAT_INIT arm_mat_init_f32
-#define MAT_ADD arm_mat_add_f32
-#define MAT_SUB arm_mat_sub_f32
-#define MAT_MULT arm_mat_mult_f32
-#define MAT_TRANS arm_mat_trans_f32
-#define MAT_INVERSE arm_mat_inverse_f32
+#ifndef MAT32
+#define MAT32 arm_matrix_instance_f32
+#define MAT32_INIT arm_mat_init_f32
+#define MAT32_ADD arm_mat_add_f32
+#define MAT32_SUB arm_mat_sub_f32
+#define MAT32_MULT arm_mat_mult_f32
+#define MAT32_TRANS arm_mat_trans_f32
+#define MAT32_INVERSE arm_mat_inverse_f32
 #endif
 
 #ifndef PI
