@@ -56,7 +56,7 @@ typedef struct
     float R;  // 加速度计量测噪声
 
     float dt; // 姿态更新周期
-    mat ChiSquare;
+    MAT32 ChiSquare;
     float ChiSquare_Data[1];      // 卡方检验检测函数
     float ChiSquareTestThreshold; // 卡方检验阈值
     float lambda;                 // 渐消因子
