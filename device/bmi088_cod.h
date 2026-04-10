@@ -2,7 +2,7 @@
 #ifndef DEVICE_BMI088_H
 #define DEVICE_BMI088_H
 
-#include "bmi088_reg.h"
+#include "bmi088_reg_cod.h"
 #include "stdint.h"
 #include "stdbool.h"
 

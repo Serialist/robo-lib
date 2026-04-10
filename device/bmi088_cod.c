@@ -1,4 +1,4 @@
-#include "bmi088.h"
+#include "bmi088_cod.h"
 #include "bsp_gpio.h"
 #include "bsp_spi.h"
 #include "bsp_tick.h"
