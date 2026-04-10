@@ -10,8 +10,8 @@
  *
  ******************************************************************************
  */
-#include "BMI088driver.h"
-#include "BMI088reg.h"
+#include "BMI088driver_whx.h"
+#include "BMI088reg_whx.h"
 #include "BMI088Middleware.h"
 #include "bsp_dwt.h"
 #include <math.h>

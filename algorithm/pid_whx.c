@@ -9,7 +9,7 @@
  *
  ************************/
 
-#include "pid.h"
+#include "pid_whx.h"
 #include "main.h"
 #include "user_lib.h"
 #include "math.h"

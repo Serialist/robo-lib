@@ -9,7 +9,7 @@
  *
  ************************/
 
-#include "chassismotor.h"
+#include "cubemars_motor.h"
 #include "can.h"
 #include "wheel_legged_chassis.h"
 

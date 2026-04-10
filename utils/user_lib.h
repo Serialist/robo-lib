@@ -9,8 +9,10 @@
  *
  */
 
-#ifndef USERLIB_H
-#define USERLIB_H
+#ifndef USER_LIB_H
+#define USER_LIB_H
+
+#define DEBUG
 
 /* ================================================================ include ================================================================ */
 
@@ -19,7 +21,14 @@
 #include "stdlib.h"
 #include "string.h"
 #include "math.h"
+
+#include "main.h"
+
 #include "arm_math.h"
+
+#include "robo_config.h"
+
+// #include "math_adapter.h"
 
 // #include "cmsis_os.h" // 下面有这个要不要用（?）
 
@@ -31,16 +40,6 @@
 #else
 #define user_malloc malloc
 #endif
-#endif
-
-#ifndef MAT32
-#define MAT32 arm_matrix_instance_f32
-#define MAT32_INIT arm_mat_init_f32
-#define MAT32_ADD arm_mat_add_f32
-#define MAT32_SUB arm_mat_sub_f32
-#define MAT32_MULT arm_mat_mult_f32
-#define MAT32_TRANS arm_mat_trans_f32
-#define MAT32_INVERSE arm_mat_inverse_f32
 #endif
 
 #ifndef PI
@@ -88,14 +87,39 @@
 #ifndef NULL
 #define NULL 0
 #endif
-// #define AIMASSIST 1
 
 // 做一层 adapter，方便移植
 /// @todo 放到单独一个适配层文件中，比如 math-adapter，这样不同平台移植方便还能硬件优化
 #define SINF(x) arm_sin_f32(x)
 #define COSF(x) arm_cos_f32(x)
 
-#define BUFFER_T __attribute__((section(".AXI_SRAM"))) static uint8_t
+#if defined(BOARD_DM_MC02)
+
+#define BUFFER_T __attribute__((section(".AXI_SRAM"))) uint8_t
+
+#define Matrix arm_matrix_instance_f32
+#define Matrix_64 arm_matrix_instance_f64
+#define Matrix_Init arm_mat_init_f32
+#define Matrix_Add arm_mat_add_f32
+#define Matrix_Subtract arm_mat_sub_f32
+#define Matrix_Multiply arm_mat_mult_f32
+#define Matrix_Transpose arm_mat_trans_f32
+#define Matrix_Inverse arm_mat_inverse_f32
+#define Matrix_Inverse_64 arm_mat_inverse_f64
+
+#elif defined(BOARD_RM_C)
+
+#define BUFFER_T uint8_t
+
+#define MAT32 arm_matrix_instance_f32
+#define MAT32_INIT arm_mat_init_f32
+#define MAT32_ADD arm_mat_add_f32
+#define MAT32_SUB arm_mat_sub_f32
+#define MAT32_MULT arm_mat_mult_f32
+#define MAT32_TRANS arm_mat_trans_f32
+#define MAT32_INVERSE arm_mat_inverse_f32
+
+#endif
 
 /* ================================================================ typedef ================================================================ */
 
@@ -149,7 +173,11 @@ float Ramp_Update(Ramp_t *self, float target, float dt);				   // 斜波函数计算
 
 /* ================================ OLS Ordinary Least Squares 最小二乘法 ================================ */
 
-typedef __packed struct
+typedef
+#ifdef BOARD_RM_C
+	__packed
+#endif
+	struct
 {
 	uint16_t Order;
 	uint32_t Count;

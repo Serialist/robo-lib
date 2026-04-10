@@ -18,7 +18,7 @@
   ****************************(C) COPYRIGHT 2016 DJI****************************
   */
 
-#include "ist8310driver.h"
+#include "ist8310driver_whx.h"
 #include "ist8310driver_middleware.h"
 
 #define MAG_SEN 0.3f //×ª»»³É uT
