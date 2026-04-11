@@ -33,10 +33,10 @@
 #define GM6020_TX_A_ID_2 0x2FE
 #define GM6020_RX_ID(id) (0x204 + (id))
 
-#define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191.0f * 2 * PI)					// rad
+#define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191.0f * 2 * PI)				   // rad
 #define RM_MOTOR_SPEED(self) ((float)(self)->velocity / 60.0f * 2 * PI / (268.0f / 17.0f)) // rpm --> rps --> rad/s --> reduction radio
-#define RM_MOTOR_CURRENT(self) ((self)->current)										// +-16384 --> +-3A
-#define RM_MOTOR_TEMP(self) ((self)->temperature)										// C
+#define RM_MOTOR_CURRENT(self) ((self)->current)										   // +-16384 --> +-3A
+#define RM_MOTOR_TEMP(self) ((self)->temperature)										   // C
 
 #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3554.3214161749397f)
 #define HEXROLL_CURRENT_TO_TORQUE(curren) ((float)curren * 0.00030059168198529415f)
