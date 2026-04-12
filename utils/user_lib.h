@@ -46,6 +46,10 @@
 #define PI 3.14159265354f
 #endif
 
+#ifndef EULER_NUMBER
+#define EULER_NUMBER 2.718281828f
+#endif
+
 #ifndef MIN
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
 #endif
