@@ -105,6 +105,6 @@ typedef struct
 	float errCode; // π ’œ¬Î
 } Motor_AK_RxData_t;
 
-void Motor_AK_MIT_Decode(Motor_AK_RxData_t *rxData, uint8_t data[8], float pMax, float vMax, float tMax);
+void AK_Motor_MIT_Decode(Motor_AK_RxData_t *rxData, uint8_t data[8], float pMax, float vMax, float tMax);
 
 #endif

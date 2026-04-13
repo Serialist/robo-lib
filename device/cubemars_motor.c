@@ -242,7 +242,7 @@ void AK_Motor_MIT_Transmit(uint8_t id, float p_des, float v_des, float kp, float
 	}
 }
 
-void Motor_AK_MIT_Decode(Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
+void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
 {
 	data->id = buf[0]; // Çý¶¯ ID ºÅ
 
