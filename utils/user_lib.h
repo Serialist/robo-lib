@@ -69,10 +69,12 @@
 #define RAD2DEG(Ang) ((Ang) * 57.295779513f)
 #endif
 
+#ifndef LF
 #define LF 0
 #define LB 1
 #define RF 2
 #define RB 3
+#endif
 
 // ÂÖ×Ó
 #define WL 4
