@@ -40,6 +40,11 @@
 #define GM6020_TX_A_ID_2 0x2FE
 #define GM6020_RX_ID(id) (0x204 + (id))
 
+// 3508 电机的减速比
+#define M3508_GEAR_RATIO (3591.f / 187.f)
+
+// 电机读取数据
+
 #define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191.0f * 2 * PI)   // unit: rad
 #define RM_MOTOR_VELOCITY(self) ((float)(self)->velocity / 60.0f * 2 * PI) // unit: rad/s
 #define RM_MOTOR_CURRENT(self) ((self)->current)						   // unit: A
@@ -47,9 +52,10 @@
 
 // 关于 HEXROLL 减速箱 + M3508 电机下的一些转换
 
-#define HEXROLL_VELOCITY(self) ((float)(self)->velocity / 60.0f * 2 * PI / (268.0f / 17.0f)) // unit: rad/s
-#define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3554.3214161749397f)
-#define HEXROLL_CURRENT_TO_TORQUE(curren) ((float)curren * 0.00030059168198529415f)
+#define HEXROLL_GEAR_RATIO (268.f / 17.f) // HEXROLL 减速比
+
+#define HEXROLL_VELOCITY(self) ((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
+#define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3600.f)
 
 /* ================================================================ struct ================================================================ */
 

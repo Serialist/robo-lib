@@ -10,9 +10,6 @@
  ************************/
 
 #include "pid_whx.h"
-#include "main.h"
-#include "utils.h"
-#include "math.h"
 
 /**
  * @brief pid struct data init
@@ -114,7 +111,7 @@ float32_t PID_Diff_Update(PID_Typedef *pid, float32_t set, float32_t ref)
  * @param[out]     pid: PID结构数据指针
  * @retval         none
  */
-void PID_Clear(PID_Typedef *pid)
+void PID_Reset(PID_Typedef *pid)
 {
     if (pid == NULL)
     {

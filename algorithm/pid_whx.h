@@ -62,6 +62,6 @@ float32_t PID_Diff_Update(PID_Typedef *pid, float32_t set, float32_t ref);
 
 /// @brief pid Êä³öÇå³ý
 /// @param pid
-void PID_Clear(PID_Typedef *pid);
+void PID_Reset(PID_Typedef *pid);
 
 #endif
