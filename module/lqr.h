@@ -12,7 +12,7 @@
 #ifndef LQR_H
 #define LQR_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 #define U_T 0
 #define U_TP 1

@@ -1,5 +1,5 @@
 /**
- * @file userlib.h
+ * @file utils.h
  * @author Serialist (ba3pt@chd.edu.cn)
  * @brief
  * @version 0.1.0
@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef USER_LIB_H
-#define USER_LIB_H
+#ifndef utils_H
+#define utils_H
 
 #define DEBUG
 
@@ -26,7 +26,7 @@
 
 #include "arm_math.h"
 
-#include "robo_config.h"
+#include "robo-config.h"
 
 // #include "math_adapter.h"
 

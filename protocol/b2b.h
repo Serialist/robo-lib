@@ -12,7 +12,7 @@
 #ifndef B2B_H
 #define B2B_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 typedef struct
 {

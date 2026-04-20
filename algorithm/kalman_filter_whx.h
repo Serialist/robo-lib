@@ -13,7 +13,7 @@
 #ifndef KALMAN_FILTER_H
 #define KALMAN_FILTER_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 typedef struct kf_t
 {

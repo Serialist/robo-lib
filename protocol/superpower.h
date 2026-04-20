@@ -12,7 +12,7 @@
 #ifndef SUPERPOWER_H
 #define SUPERPOWER_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 #define SUPERPOWER_FDB_ID 0x211
 #define SUPERPOWER_CMD_ID 0x210

@@ -6,7 +6,7 @@ extern "C"
 {
 #endif
 
-#include "user_lib.h"
+#include "utils.h"
 
 /**
  * @brief macro definition of the matrix calculation.

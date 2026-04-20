@@ -1,5 +1,5 @@
 /**
- * @file userlib.c
+ * @file utils.c
  * @author Serialist (ba3pt@qq.com)
  * @brief
  * @version 0.1.0
@@ -9,7 +9,7 @@
  *
  */
 
-#include "user_lib.h"
+#include "utils.h"
 
 // 快速开方（牛顿迭代法）
 float SSqrt(float x)

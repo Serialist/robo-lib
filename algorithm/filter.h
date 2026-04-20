@@ -12,7 +12,7 @@
 #ifndef __FILTER_H
 #define __FILTER_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 /* ================================================ filter average ================================================ */
 

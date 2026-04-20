@@ -36,7 +36,7 @@
 #ifndef REMOTE_CONTROL_H
 #define REMOTE_CONTROL_H
 
-#include "user_lib.h"
+#include "utils.h"
 #include "bsp_rc.h"
 
 #define RC_IS_OFFLINE(rc_ctrl) ((rc_ctrl)->offline_flag == 1)

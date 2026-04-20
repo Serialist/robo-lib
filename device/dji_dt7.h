@@ -12,7 +12,7 @@
 #ifndef DJI_DT7_H
 #define DJI_DT7_H
 
-#include "user_lib.h"
+#include "utils.h"
 
 #define SBUS_RX_BUF_NUM 18u
 #define RC_CH_VALUE_OFFSET 1024U
