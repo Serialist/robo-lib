@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef utils_H
+#define utils_H
 
 #define DEBUG
 
