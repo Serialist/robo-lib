@@ -422,7 +422,7 @@ float Rampf(float x, float x0, float k_min, float k_max, float dt)
 // ·ûºÅº¯Êý
 float Signf(float value)
 {
-	return (value >= 0.0f) ? 1.0f : -1.0f;
+	return (value > 0.0f) - (value < 0.0f);
 }
 
 /**

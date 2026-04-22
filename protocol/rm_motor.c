@@ -45,8 +45,8 @@ void RM_Motor_Feedback_Decode(uint8_t *buf, RM_Motor_Feedback_t *data)
 	data->temperature = buf[6];
 }
 
-void RM_Motor_Control_Transmit(CAN_HandleTypeDef *hcan, uint32_t id, RM_Motor_Control_t data)
+void RM_Motor_Control_Transmit(BSP_Port_t port, uint32_t id, RM_Motor_Control_t data)
 {
 	RM_Motor_Control_Encode(data, rmmotor_txbuf);
-	BSP_CAN_Transmit(hcan, id, rmmotor_txbuf);
+	BSP_CAN_Transmit(port, id, rmmotor_txbuf);
 }

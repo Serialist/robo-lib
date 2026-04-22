@@ -12,20 +12,25 @@
 #ifndef TASK_TOOL_H
 #define TASK_TOOL_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "cmsis_os.h"
 #include "robo-config.h"
 
-/// @brief 按照 freertos.c 写的任务初始化工具宏
-// あみのし这个很蠢啊要是再改就建议自己写一遍去 cubemx 生成的 freertos.c 找
-//
-// Usage:
-//
-// TASK_DEFINE(CAN_Task, osPriorityHigh, 2048);
-//
-// void Application_Init(void)
-// {
-// 		TASK_CREATE(CAN_Task);
-// }
+	/// @brief 按照 freertos.c 写的任务初始化工具宏
+	// あみのし这个很蠢啊要是再改就建议自己写一遍去 cubemx 生成的 freertos.c 找
+	//
+	// Usage:
+	//
+	// TASK_DEFINE(CAN_Task, osPriorityHigh, 2048);
+	//
+	// void Application_Init(void)
+	// {
+	// 		TASK_CREATE(CAN_Task);
+	// }
 
 #ifndef TASK_DEFINE
 /// @brief 任务定义
@@ -34,7 +39,7 @@
 	static uint32_t Start_##name##Buffer[stack_size];      \
 	static osStaticThreadDef_t Start_##name##ControlBlock; \
 	static osThreadId Start_##name##Handle;                \
-	extern void name(void const *argument);
+	void name(void const *argument);
 #else
 #warning "application.c: TASK_DEFINE macro redefined"
 #endif
@@ -46,6 +51,10 @@
 	Start_##name##Handle = osThreadCreate(osThread(Start_##name), NULL);
 #else
 #warning "application.c: TASK_CREATE macro redefined"
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif
