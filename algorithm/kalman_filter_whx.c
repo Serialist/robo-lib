@@ -44,7 +44,7 @@
  *   |  velocity  |
  *   |acceleration|
  *
- * KalmanFilter_t Height_KF;
+ * whxKalmanFilter_t Height_KF;
  *
  * void INS_Task_Init(void)
  * {
@@ -88,7 +88,7 @@
  *       | 0  25   0|
  *       | 0   0  35|
  *
- *     Kalman_Filter_Init(&Height_KF, 3, 0, 3);
+ *     whxKalman_Filter_Init(&Height_KF, 3, 0, 3);
  *
  *     // 设置矩阵值
  *     memcpy(Height_KF.P_data, P_Init, sizeof(P_Init));
@@ -103,7 +103,7 @@
  * void INS_Task(void const *pvParameters)
  * {
  *     // 循环更新
- *     Kalman_Filter_Update(&Height_KF);
+ *     whxKalman_Filter_Update(&Height_KF);
  *     vTaskDelay(ts);
  * }
  *
@@ -130,7 +130,7 @@
 
 uint16_t sizeof_float, sizeof_double;
 
-static void H_K_R_Adjustment(KalmanFilter_t *kf);
+static void H_K_R_Adjustment(whxKalmanFilter_t *kf);
 
 /**
  * @brief 初始化矩阵维度信息并为矩阵分配空间
@@ -140,7 +140,7 @@ static void H_K_R_Adjustment(KalmanFilter_t *kf);
  * @param uSize 控制变量维度
  * @param zSize 观测量维度
  */
-void Kalman_Filter_Init(KalmanFilter_t *kf, uint8_t xhatSize, uint8_t uSize, uint8_t zSize)
+void whxKalman_Filter_Init(whxKalmanFilter_t *kf, uint8_t xhatSize, uint8_t uSize, uint8_t zSize)
 {
     sizeof_float = sizeof(float);
     sizeof_double = sizeof(double);
@@ -261,7 +261,7 @@ void Kalman_Filter_Init(KalmanFilter_t *kf, uint8_t xhatSize, uint8_t uSize, uin
     kf->SkipEq5 = 0;
 }
 
-void Kalman_Filter_Measure(KalmanFilter_t *kf)
+void whxKalman_Filter_Measure(whxKalmanFilter_t *kf)
 {
     // 矩阵H K R根据量测情况自动调整
     // matrix H K R auto adjustment
@@ -276,7 +276,7 @@ void Kalman_Filter_Measure(KalmanFilter_t *kf)
     memcpy(kf->u_data, kf->ControlVector, sizeof_float * kf->uSize);
 }
 
-void Kalman_Filter_xhatMinusUpdate(KalmanFilter_t *kf)
+void whxKalman_Filter_xhatMinusUpdate(whxKalmanFilter_t *kf)
 {
     if (!kf->SkipEq1)
     {
@@ -297,7 +297,7 @@ void Kalman_Filter_xhatMinusUpdate(KalmanFilter_t *kf)
     }
 }
 
-void Kalman_Filter_PminusUpdate(KalmanFilter_t *kf)
+void whxKalman_Filter_PminusUpdate(whxKalmanFilter_t *kf)
 {
     if (!kf->SkipEq2)
     {
@@ -309,7 +309,7 @@ void Kalman_Filter_PminusUpdate(KalmanFilter_t *kf)
         kf->MatStatus = MAT32_ADD(&kf->temp_matrix, &kf->Q, &kf->Pminus);
     }
 }
-void Kalman_Filter_SetK(KalmanFilter_t *kf)
+void whxKalman_Filter_SetK(whxKalmanFilter_t *kf)
 {
     if (!kf->SkipEq3)
     {
@@ -330,7 +330,7 @@ void Kalman_Filter_SetK(KalmanFilter_t *kf)
         kf->MatStatus = MAT32_MULT(&kf->temp_matrix, &kf->temp_matrix1, &kf->K);
     }
 }
-void Kalman_Filter_xhatUpdate(KalmanFilter_t *kf)
+void whxKalman_Filter_xhatUpdate(whxKalmanFilter_t *kf)
 {
     if (!kf->SkipEq4)
     {
@@ -346,7 +346,7 @@ void Kalman_Filter_xhatUpdate(KalmanFilter_t *kf)
         kf->MatStatus = MAT32_ADD(&kf->xhatminus, &kf->temp_vector, &kf->xhat);
     }
 }
-void Kalman_Filter_P_Update(KalmanFilter_t *kf)
+void whxKalman_Filter_P_Update(whxKalmanFilter_t *kf)
 {
     if (!kf->SkipEq5)
     {
@@ -366,22 +366,22 @@ void Kalman_Filter_P_Update(KalmanFilter_t *kf)
  * @param kf kf类型定义
  * @return float* 返回滤波值
  */
-float *Kalman_Filter_Update(KalmanFilter_t *kf)
+float *whxKalman_Filter_Update(whxKalmanFilter_t *kf)
 {
     // 0. 获取量测信息
-    Kalman_Filter_Measure(kf);
+    whxKalman_Filter_Measure(kf);
     if (kf->User_Func0_f != NULL)
         kf->User_Func0_f(kf);
 
     // 先验估计
     // 1. xhat'(k)= A·xhat(k-1) + B·u
-    Kalman_Filter_xhatMinusUpdate(kf);
+    whxKalman_Filter_xhatMinusUpdate(kf);
     if (kf->User_Func1_f != NULL)
         kf->User_Func1_f(kf);
 
     // 预测更新
     // 2. P'(k) = A·P(k-1)·AT + Q
-    Kalman_Filter_PminusUpdate(kf);
+    whxKalman_Filter_PminusUpdate(kf);
     if (kf->User_Func2_f != NULL)
         kf->User_Func2_f(kf);
 
@@ -389,21 +389,21 @@ float *Kalman_Filter_Update(KalmanFilter_t *kf)
     {
         // 量测更新
         // 3. K(k) = P'(k)·HT / (H·P'(k)·HT + R)
-        Kalman_Filter_SetK(kf);
+        whxKalman_Filter_SetK(kf);
 
         if (kf->User_Func3_f != NULL)
             kf->User_Func3_f(kf);
 
         // 融合
         // 4. xhat(k) = xhat'(k) + K(k)·(z(k) - H·xhat'(k))
-        Kalman_Filter_xhatUpdate(kf);
+        whxKalman_Filter_xhatUpdate(kf);
 
         if (kf->User_Func4_f != NULL)
             kf->User_Func4_f(kf);
 
         // 修正方差
         // 5. P(k) = (1-K(k)·H)·P'(k) ==> P(k) = P'(k)-K(k)·H·P'(k)
-        Kalman_Filter_P_Update(kf);
+        whxKalman_Filter_P_Update(kf);
     }
     else
     {
@@ -434,7 +434,7 @@ float *Kalman_Filter_Update(KalmanFilter_t *kf)
     return kf->FilteredValue;
 }
 
-static void H_K_R_Adjustment(KalmanFilter_t *kf)
+static void H_K_R_Adjustment(whxKalmanFilter_t *kf)
 {
     kf->MeasurementValidNum = 0;
 

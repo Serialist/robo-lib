@@ -446,11 +446,11 @@ float Deadzonef(float value, float point, float deadzone)
 	}
 }
 
-float Bit2Float(int X_int, float X_min, float X_max, int Bits)
+float Bit2Float(int x_int, float x_min, float x_max, int Bits)
 {
-	float span = X_max - X_min;
-	float offset = X_min;
-	return ((float)X_int) * span / ((float)((1 << Bits) - 1)) + offset;
+	float span = x_max - x_min;
+	float offset = x_min;
+	return ((float)x_int) * span / ((float)((1 << Bits) - 1)) + offset;
 }
 
 int Float2Bit(float x, float x_min, float x_max, int bits)

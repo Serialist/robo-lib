@@ -1,6 +1,6 @@
-/************************
- * @file chassismotor.c
- * @author Serialist (ba3pt@chd.edu.cn)
+/**
+ * @file cubemars_motor.c
+ * @author Serialist (ba3pt@qq.com)
  * @brief
  * @version 0.1.0
  * @date 2025-12-02
@@ -10,174 +10,150 @@
  ************************/
 
 #include "cubemars_motor.h"
-#include "can.h"
-#include "wheel_legged_chassis.h"
+#include "bsp-adapter.h"
 
-// µÁª˙CAN∑¢ÀÕ//
-CAN_TxHeaderTypeDef TX_message;
-uint8_t send_data_message[8];
-uint32_t send_mailbox1;
-uint32_t send_mailbox2;
-uint8_t can_tx_data[8];
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// cubemars motors//
 // servo mode
-void comm_can_transmit_eid(uint32_t id, const uint8_t *data, uint8_t len)
-{
-	uint8_t i = 0;
-	if (len > 8)
-	{
-		len = 8;
-	}
-	TX_message.StdId = 0;
-	TX_message.IDE = CAN_ID_EXT;
-	TX_message.ExtId = id;
-	TX_message.RTR = CAN_RTR_DATA;
-	TX_message.DLC = len;
-	for (i = 0; i < len; i++)
-	{
-		can_tx_data[i] = data[i];
-	}
-	HAL_CAN_AddTxMessage(&hcan1, &TX_message, can_tx_data, &send_mailbox2); // CAN ø⁄∑¢ÀÕ TxMessage  ˝æ›
-}
+// void comm_can_transmit_eid(uint32_t id, const uint8_t *data, uint8_t len)
+// {
+// 	uint8_t i = 0;
+// 	if (len > 8)
+// 	{
+// 		len = 8;
+// 	}
+// 	TX_message.StdId = 0;
+// 	TX_message.IDE = CAN_ID_EXT;
+// 	TX_message.ExtId = id;
+// 	TX_message.RTR = CAN_RTR_DATA;
+// 	TX_message.DLC = len;
+// 	for (i = 0; i < len; i++)
+// 	{
+// 		buf[i] = data[i];
+// 	}
+// 	HAL_CAN_AddTxMessage(&hcan1, &TX_message, buf, &send_mailbox2); // CAN Âè£ÂèëÈÄÅ TxMessage Êï∞ÊçÆ
+// }
 
-void buffer_append_int32(uint8_t *buffer, int32_t number, int32_t *index)
-{
-	buffer[(*index)++] = number >> 24;
-	buffer[(*index)++] = number >> 16;
-	buffer[(*index)++] = number >> 8;
-	buffer[(*index)++] = number;
-}
+// void buffer_append_int32(uint8_t *buffer, int32_t number, int32_t *index)
+// {
+// 	buffer[(*index)++] = number >> 24;
+// 	buffer[(*index)++] = number >> 16;
+// 	buffer[(*index)++] = number >> 8;
+// 	buffer[(*index)++] = number;
+// }
 
-void buffer_append_int16(uint8_t *buffer, int16_t number, int16_t *index)
-{
-	buffer[(*index)++] = number >> 8;
-	buffer[(*index)++] = number;
-}
+// void buffer_append_int16(uint8_t *buffer, int16_t number, int16_t *index)
+// {
+// 	buffer[(*index)++] = number >> 8;
+// 	buffer[(*index)++] = number;
+// }
 
-void comm_can_set_current(uint8_t controller_id, float current)
-{
-	int32_t send_index = 0;
-	uint8_t buffer[4];
-	buffer_append_int32(buffer, (int32_t)(current * 1000.0f), &send_index);
-	comm_can_transmit_eid(controller_id |
-							  ((uint32_t)CAN_PACKET_SET_CURRENT << 8),
-						  buffer, send_index);
-}
+// void comm_can_set_current(uint8_t controller_id, float current)
+// {
+// 	int32_t send_index = 0;
+// 	uint8_t buffer[4];
+// 	buffer_append_int32(buffer, (int32_t)(current * 1000.0f), &send_index);
+// 	comm_can_transmit_eid(controller_id |
+// 							  ((uint32_t)CAN_PACKET_SET_CURRENT << 8),
+// 						  buffer, send_index);
+// }
 
-void comm_can_set_rpm(uint8_t controller_id, float rpm)
-{
-	int32_t send_index = 0;
-	uint8_t buffer[4];
-	buffer_append_int32(buffer, (int32_t)rpm, &send_index);
-	comm_can_transmit_eid(controller_id |
-							  ((uint32_t)CAN_PACKET_SET_RPM << 8),
-						  buffer, send_index);
-}
+// void comm_can_set_rpm(uint8_t controller_id, float rpm)
+// {
+// 	int32_t send_index = 0;
+// 	uint8_t buffer[4];
+// 	buffer_append_int32(buffer, (int32_t)rpm, &send_index);
+// 	comm_can_transmit_eid(controller_id |
+// 							  ((uint32_t)CAN_PACKET_SET_RPM << 8),
+// 						  buffer, send_index);
+// }
 
-void comm_can_set_pos(uint8_t controller_id, float pos)
-{
-	int32_t send_index = 0;
-	uint8_t buffer[4];
-	buffer_append_int32(buffer, (int32_t)(pos * 10000.0f), &send_index);
-	comm_can_transmit_eid(controller_id |
-							  ((uint32_t)CAN_PACKET_SET_POS << 8),
-						  buffer, send_index);
-}
+// void comm_can_set_pos(uint8_t controller_id, float pos)
+// {
+// 	int32_t send_index = 0;
+// 	uint8_t buffer[4];
+// 	buffer_append_int32(buffer, (int32_t)(pos * 10000.0f), &send_index);
+// 	comm_can_transmit_eid(controller_id |
+// 							  ((uint32_t)CAN_PACKET_SET_POS << 8),
+// 						  buffer, send_index);
+// }
 
-void comm_can_set_origin(uint8_t controller_id, uint8_t set_origin_mode)
-{
-	int32_t send_index = 0;
-	uint8_t buffer;
-	buffer = set_origin_mode;
-	comm_can_transmit_eid(controller_id |
-							  ((uint32_t)CAN_PACKET_SET_ORIGIN_HERE << 8),
-						  &buffer, send_index);
-}
+// void comm_can_set_origin(uint8_t controller_id, uint8_t set_origin_mode)
+// {
+// 	int32_t send_index = 0;
+// 	uint8_t buffer;
+// 	buffer = set_origin_mode;
+// 	comm_can_transmit_eid(controller_id |
+// 							  ((uint32_t)CAN_PACKET_SET_ORIGIN_HERE << 8),
+// 						  &buffer, send_index);
+// }
 
 // motion controller
 
 /**
- * @brief mit ƒ£ Ω πƒ‹
+ * @brief mit Ê®°Âºè‰ΩøËÉΩ
  *
  * @param id
  *
- * @note æ›Àµ πƒ‹√¸¡Ó◊Ó∫√≤ª“™÷ÿ∏¥∑¢ÀÕ...?
+ * @note ÊçÆËØ¥‰ΩøËÉΩÂëΩ‰ª§ÊúÄÂ•Ω‰∏çË¶ÅÈáçÂ§çÂèëÈÄÅ...?
  */
 void AK_Motor_MIT_Enable(uint8_t id)
 {
-	uint32_t send_mail_box = CAN_TX_MAILBOX0;
-	TX_message.StdId = id;
-	TX_message.IDE = CAN_ID_STD;
-	TX_message.RTR = CAN_RTR_DATA;
-	TX_message.DLC = 0x08;
+	uint8_t buf[8];
 
-	can_tx_data[0] = 0xFF;
-	can_tx_data[1] = 0xFF;
-	can_tx_data[2] = 0xFF;
-	can_tx_data[3] = 0xFF;
-	can_tx_data[4] = 0xFF;
-	can_tx_data[5] = 0xFF;
-	can_tx_data[6] = 0xFF;
-	can_tx_data[7] = 0xFC;
+	buf[0] = 0xFF;
+	buf[1] = 0xFF;
+	buf[2] = 0xFF;
+	buf[3] = 0xFF;
+	buf[4] = 0xFF;
+	buf[5] = 0xFF;
+	buf[6] = 0xFF;
+	buf[7] = 0xFC;
 
-	HAL_CAN_AddTxMessage(&hcan1, &TX_message, can_tx_data, &send_mail_box);
+	BSP_CAN_Transmit(BSP_PORT1, id, buf);
 }
 
 /**
- * @brief mit ƒ£ Ω ßƒ‹
+ * @brief mit Ê®°ÂºèÂ§±ËÉΩ
  *
  * @param id
  */
 void AK_Motor_MIT_Disable(uint8_t id)
 {
-	TX_message.StdId = id;
-	TX_message.IDE = CAN_ID_STD;
-	TX_message.RTR = CAN_RTR_DATA;
-	TX_message.DLC = 0x08;
+	uint8_t buf[8];
 
-	can_tx_data[0] = 0xFF;
-	can_tx_data[1] = 0xFF;
-	can_tx_data[2] = 0xFF;
-	can_tx_data[3] = 0xFF;
-	can_tx_data[4] = 0xFF;
-	can_tx_data[5] = 0xFF;
-	can_tx_data[6] = 0xFF;
-	can_tx_data[7] = 0xFD;
+	buf[0] = 0xFF;
+	buf[1] = 0xFF;
+	buf[2] = 0xFF;
+	buf[3] = 0xFF;
+	buf[4] = 0xFF;
+	buf[5] = 0xFF;
+	buf[6] = 0xFF;
+	buf[7] = 0xFD;
 
-	HAL_CAN_AddTxMessage(&hcan1, &TX_message, can_tx_data, &send_mailbox1);
+	BSP_CAN_Transmit(BSP_PORT1, id, buf);
 }
 
 /**
- * @brief …Ë÷√±‡¬Î∆˜¡„µ„
+ * @brief ËÆæÁΩÆÁºñÁ†ÅÂô®Èõ∂ÁÇπ
  *
  * @param id
  *
- * @note ’‚∏ˆ…Ë÷√µƒ¡„µ„Œª÷√À∆∫ı∂œµÁ≤ª±£¥Ê
+ * @note Ëøô‰∏™ËÆæÁΩÆÁöÑÈõ∂ÁÇπ‰ΩçÁΩÆ‰ºº‰πéÊñ≠Áîµ‰∏ç‰øùÂ≠ò
  */
 void AK_Motor_MIT_Setorigin(uint8_t id)
 {
-	TX_message.StdId = id;
-	TX_message.IDE = CAN_ID_STD;
-	TX_message.RTR = CAN_RTR_DATA;
-	TX_message.DLC = 0x08;
+	uint8_t buf[8];
 
-	can_tx_data[0] = 0xFF;
-	can_tx_data[1] = 0xFF;
-	can_tx_data[2] = 0xFF;
-	can_tx_data[3] = 0xFF;
-	can_tx_data[4] = 0xFF;
-	can_tx_data[5] = 0xFF;
-	can_tx_data[6] = 0xFF;
-	can_tx_data[7] = 0xFE;
+	buf[0] = 0xFF;
+	buf[1] = 0xFF;
+	buf[2] = 0xFF;
+	buf[3] = 0xFF;
+	buf[4] = 0xFF;
+	buf[5] = 0xFF;
+	buf[6] = 0xFF;
+	buf[7] = 0xFE;
 
-	HAL_CAN_AddTxMessage(&hcan1, &TX_message, can_tx_data, &send_mailbox1);
+	BSP_CAN_Transmit(BSP_PORT1, id, buf);
 }
-
-HAL_StatusTypeDef ak10_send_status = HAL_OK;
-bool busy_flag = false;
 
 void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
 {
@@ -212,39 +188,27 @@ void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd
 }
 
 /************************
- * @brief ∑¢ÀÕµÁª˙ MIT ƒ£ Ωøÿ÷∆
+ * @brief ÂèëÈÄÅÁîµÊú∫ MIT Ê®°ÂºèÊéßÂà∂
  *
- * @param id µÁª˙ ID
- * @param p_des ƒø±ÍŒª÷√
- * @param v_des ƒø±ÍÀŸ∂»
- * @param kp ƒ⁄÷√ PID ≤Œ ˝
- * @param kd ƒ⁄÷√ PID ≤Œ ˝
- * @param t_ff ¡¶æÿ«∞¿°
+ * @param id ÁîµÊú∫ ID
+ * @param p_des ÁõÆÊ†á‰ΩçÁΩÆ
+ * @param v_des ÁõÆÊ†áÈÄüÂ∫¶
+ * @param kp ÂÜÖÁΩÆ PID ÂèÇÊï∞
+ * @param kd ÂÜÖÁΩÆ PID ÂèÇÊï∞
+ * @param t_ff ÂäõÁü©ÂâçÈ¶à
  ************************/
 void AK_Motor_MIT_Transmit(uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff)
 {
-	CAN_TxHeaderTypeDef header;
 	uint8_t buf[8];
-	uint32_t send_mail_box = CAN_TX_MAILBOX0;
-
-	header.StdId = id;
-	header.IDE = CAN_ID_STD;
-	header.RTR = CAN_RTR_DATA;
-	header.DLC = 0x08;
 
 	AK_Motor_MIT_Control_Encode(p_des, v_des, kp, kd, t_ff, buf);
 
-	ak10_send_status = HAL_CAN_AddTxMessage(&hcan1, &header, buf, &send_mail_box);
-
-	if (ak10_send_status != HAL_OK)
-	{
-		busy_flag = true;
-	}
+	BSP_CAN_Transmit(BSP_PORT1, id, buf);
 }
 
 void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
 {
-	data->id = buf[0]; // «˝∂Ø ID ∫≈
+	data->id = buf[0]; // È©±Âä® ID Âè∑
 
 	int p_int = (buf[1] << 8) | (buf[2]);
 	int v_int = (buf[3] << 4) | (buf[4] >> 4);

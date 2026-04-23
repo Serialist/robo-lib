@@ -13,6 +13,11 @@
 #ifndef KALMAN_FILTER_H
 #define KALMAN_FILTER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include "utils.h"
 
 typedef struct kf_t
@@ -75,17 +80,21 @@ typedef struct kf_t
 	float *R_data;
 	float *K_data;
 	float *S_data, *temp_matrix_data, *temp_matrix_data1, *temp_vector_data, *temp_vector_data1;
-} KalmanFilter_t;
+} whxKalmanFilter_t;
 
 extern uint16_t sizeof_float, sizeof_double;
 
-void Kalman_Filter_Init(KalmanFilter_t *kf, uint8_t xhatSize, uint8_t uSize, uint8_t zSize);
-void Kalman_Filter_Measure(KalmanFilter_t *kf);
-void Kalman_Filter_xhatMinusUpdate(KalmanFilter_t *kf);
-void Kalman_Filter_PminusUpdate(KalmanFilter_t *kf);
-void Kalman_Filter_SetK(KalmanFilter_t *kf);
-void Kalman_Filter_xhatUpdate(KalmanFilter_t *kf);
-void Kalman_Filter_P_Update(KalmanFilter_t *kf);
-float *Kalman_Filter_Update(KalmanFilter_t *kf);
+void whxKalman_Filter_Init(whxKalmanFilter_t *kf, uint8_t xhatSize, uint8_t uSize, uint8_t zSize);
+void whxKalman_Filter_Measure(whxKalmanFilter_t *kf);
+void whxKalman_Filter_xhatMinusUpdate(whxKalmanFilter_t *kf);
+void whxKalman_Filter_PminusUpdate(whxKalmanFilter_t *kf);
+void whxKalman_Filter_SetK(whxKalmanFilter_t *kf);
+void whxKalman_Filter_xhatUpdate(whxKalmanFilter_t *kf);
+void whxKalman_Filter_P_Update(whxKalmanFilter_t *kf);
+float *whxKalman_Filter_Update(whxKalmanFilter_t *kf);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__KALMAN_FILTER_H

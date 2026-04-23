@@ -128,6 +128,14 @@ extern "C"
 #define Matrix_Inverse arm_mat_inverse_f32
 #define Matrix_Inverse_64 arm_mat_inverse_f64
 
+#define MAT32 arm_matrix_instance_f32
+#define MAT32_INIT arm_mat_init_f32
+#define MAT32_ADD arm_mat_add_f32
+#define MAT32_SUB arm_mat_sub_f32
+#define MAT32_MULT arm_mat_mult_f32
+#define MAT32_TRANS arm_mat_trans_f32
+#define MAT32_INVERSE arm_mat_inverse_f32
+
 #elif defined(BOARD_RM_C)
 
 #define BUFFER_T uint8_t
@@ -168,7 +176,7 @@ extern "C"
 	float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
 	float Deadzonef(float value, float point, float deadzone);					 // 死区
 
-	float Bit2Float(int X_int, float X_min, float X_max, int Bits);
+	float Bit2Float(int x_int, float x_min, float x_max, int Bits);
 	int Float2Bit(float x, float x_min, float x_max, int bits);
 
 	float Modf(float value, float range);					  // 取模
