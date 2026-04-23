@@ -24,6 +24,22 @@ pt::PID::PID(float kp, float ki, float kd, float maxout, float maxintegral)
 	this->out = 0.0f;
 }
 
+void pt::PID::ParamSet(float kp, float ki, float kd, float maxout, float maxintegral)
+{
+	this->kp = kp;
+	this->ki = ki;
+	this->kd = kd;
+	this->maxout = maxout;
+	this->maxintegral = maxintegral;
+}
+
+void pt::PID::Reset()
+{
+	integral = 0.0f;
+	prev_feedback = 0.0f;
+	out = 0.0f;
+}
+
 float pt::PID::Update(float setpoint, float feedback)
 {
 	// 积分计算和限幅

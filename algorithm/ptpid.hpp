@@ -26,6 +26,8 @@ namespace pt
 
 		PID(float kp, float ki, float kd, float maxout, float maxintegral);
 
+		void ParamSet(float kp, float ki, float kd, float maxout, float maxintegral);
+		void Reset();
 		float Update(float setpoint, float feedback);
 	};
 }
