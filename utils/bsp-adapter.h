@@ -12,6 +12,11 @@
 #ifndef BSP_ADAPTER_H
 #define BSP_ADAPTER_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "utils.h"
 
 typedef enum
@@ -28,5 +33,9 @@ typedef enum
 } BSP_Port_t;
 
 void BSP_CAN_Transmit(BSP_Port_t port, uint32_t id, uint8_t *data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

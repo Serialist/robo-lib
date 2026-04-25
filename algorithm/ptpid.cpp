@@ -11,7 +11,17 @@
 
 #include "ptpid.hpp"
 
-pt::PID::PID(float kp, float ki, float kd, float maxout, float maxintegral)
+/// @brief
+/// @param kp
+/// @param ki
+/// @param kd
+/// @param maxout 最大总输出
+/// @param maxintegral 最大积分（不是最大积分输出）
+PT::PID::PID(float kp,
+			 float ki,
+			 float kd,
+			 float maxout, //
+			 float maxintegral)
 {
 	this->kp = kp;
 	this->ki = ki;
@@ -20,11 +30,17 @@ pt::PID::PID(float kp, float ki, float kd, float maxout, float maxintegral)
 	this->maxintegral = maxintegral;
 
 	this->integral = 0.0f;
-	this->prev_feedback = 0.0f;
+	this->prev_error = 0.0f;
 	this->out = 0.0f;
 }
 
-void pt::PID::ParamSet(float kp, float ki, float kd, float maxout, float maxintegral)
+/// @brief 设置参数
+/// @param 同构造函数
+void PT::PID::ParamSet(float kp,
+					   float ki,
+					   float kd,
+					   float maxout, //
+					   float maxintegral)
 {
 	this->kp = kp;
 	this->ki = ki;
@@ -33,30 +49,30 @@ void pt::PID::ParamSet(float kp, float ki, float kd, float maxout, float maxinte
 	this->maxintegral = maxintegral;
 }
 
-void pt::PID::Reset()
+void PT::PID::Reset()
 {
 	integral = 0.0f;
-	prev_feedback = 0.0f;
+	prev_error = 0.0f;
 	out = 0.0f;
 }
 
-float pt::PID::Update(float setpoint, float feedback)
+float PT::PID::Update(float setpoint, float feedback)
 {
+	error = setpoint - feedback;
+
 	// 积分计算和限幅
-	integral = ClampAbsf(integral + (setpoint - feedback),
-						 maxintegral);
+	integral = ClampAbsf(integral + error, maxintegral);
 
 	// 计算
-	out = kp * (setpoint - feedback) +
-		  ki * integral +
-		  kd * (feedback - prev_feedback);
+	out = kp * error				   // 比例
+		  + ki * integral			   // 积分
+		  + kd * (error - prev_error); // 微分
 
 	// 更新反馈值，为下一次差分
-	prev_feedback = feedback;
+	prev_error = error;
 
 	// 输出限幅
-	out = ClampAbsf(out,
-					maxout);
+	out = ClampAbsf(out, maxout);
 
 	return out;
 }
