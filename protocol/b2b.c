@@ -22,19 +22,19 @@
  * @param buf 输出 8 字节
  */
 
-void B2B_Chassis_Cmd_Encode(B2B_Chassis_Cmd_t *data, uint8_t *buf)
+void B2B_Chassis_Command_Encode(B2B_Chassis_Command_t *data, uint8_t *buf)
 {
 
-    int16_t vx_int = (int16_t)roundf(data->vx * SCALE_FACTOR);
-    int16_t vy_int = (int16_t)roundf(data->vy * SCALE_FACTOR);
-    int16_t vyaw_int = (int16_t)roundf(data->vyaw * SCALE_FACTOR);
+	int16_t vx_int = (int16_t)roundf(data->vx * SCALE_FACTOR);
+	int16_t vy_int = (int16_t)roundf(data->vy * SCALE_FACTOR);
+	int16_t vyaw_int = (int16_t)roundf(data->vyaw * SCALE_FACTOR);
 
-    buf[0] = (vx_int >> 8) & 0xFF;
-    buf[1] = vx_int & 0xFF;
-    buf[2] = (vy_int >> 8) & 0xFF;
-    buf[3] = vy_int & 0xFF;
-    buf[4] = (vyaw_int >> 8) & 0xFF;
-    buf[5] = vyaw_int & 0xFF;
+	buf[0] = (vx_int >> 8) & 0xFF;
+	buf[1] = vx_int & 0xFF;
+	buf[2] = (vy_int >> 8) & 0xFF;
+	buf[3] = vy_int & 0xFF;
+	buf[4] = (vyaw_int >> 8) & 0xFF;
+	buf[5] = vyaw_int & 0xFF;
 }
 
 /**
@@ -45,16 +45,16 @@ void B2B_Chassis_Cmd_Encode(B2B_Chassis_Cmd_t *data, uint8_t *buf)
  * @param vy
  * @param vyaw
  */
-void B2B_Chassis_Cmd_Decode(uint8_t *buf, B2B_Chassis_Cmd_t *data)
+void B2B_Chassis_Command_Decode(uint8_t *buf, B2B_Chassis_Command_t *data)
 {
 
-    int16_t vx_int = (buf[0] << 8) | buf[1];
-    int16_t vy_int = (buf[2] << 8) | buf[3];
-    int16_t vyaw_int = (buf[4] << 8) | buf[5];
+	int16_t vx_int = (buf[0] << 8) | buf[1];
+	int16_t vy_int = (buf[2] << 8) | buf[3];
+	int16_t vyaw_int = (buf[4] << 8) | buf[5];
 
-    data->vx = (float)vx_int / SCALE_FACTOR;
-    data->vy = (float)vy_int / SCALE_FACTOR;
-    data->vyaw = (float)vyaw_int / SCALE_FACTOR;
+	data->vx = (float)vx_int / SCALE_FACTOR;
+	data->vy = (float)vy_int / SCALE_FACTOR;
+	data->vyaw = (float)vyaw_int / SCALE_FACTOR;
 }
 
 #undef SCALE_FACTOR
