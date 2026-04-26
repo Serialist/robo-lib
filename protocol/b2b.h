@@ -24,6 +24,8 @@ typedef struct
 	float vx;
 	float vy;
 	float vyaw;
+	uint8_t sw[2];
+	uint8_t button[4];
 } B2B_Chassis_Command_t;
 
 // typedef enum

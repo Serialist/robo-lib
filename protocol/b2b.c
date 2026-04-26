@@ -11,7 +11,7 @@
 
 #include "b2b.h"
 
-#define SCALE_FACTOR 100.0f
+#define SCALE_FACTOR 10.0f
 
 /**
  * @brief 底盘控制命令编码
@@ -35,6 +35,9 @@ void B2B_Chassis_Command_Encode(B2B_Chassis_Command_t *data, uint8_t *buf)
 	buf[3] = vy_int & 0xFF;
 	buf[4] = (vyaw_int >> 8) & 0xFF;
 	buf[5] = vyaw_int & 0xFF;
+	buf[6] = (data->sw[0] & 0x03) << 6 | (data->sw[1] & 0x03) << 4;
+	buf[7] = (data->button[0] & 0x01) << 7 | (data->button[1] & 0x01) << 6
+			 | (data->button[2] & 0x01) << 5 | (data->button[3] & 0x01) << 4;
 }
 
 /**
@@ -55,6 +58,13 @@ void B2B_Chassis_Command_Decode(uint8_t *buf, B2B_Chassis_Command_t *data)
 	data->vx = (float)vx_int / SCALE_FACTOR;
 	data->vy = (float)vy_int / SCALE_FACTOR;
 	data->vyaw = (float)vyaw_int / SCALE_FACTOR;
+
+	data->sw[0] = (buf[6] >> 6) & 0x03;
+	data->sw[1] = (buf[6] >> 4) & 0x03;
+	data->button[0] = (buf[7] >> 7) & 0x01;
+	data->button[1] = (buf[7] >> 6) & 0x01;
+	data->button[2] = (buf[7] >> 5) & 0x01;
+	data->button[3] = (buf[7] >> 4) & 0x01;
 }
 
 #undef SCALE_FACTOR
