@@ -11,7 +11,7 @@
 
 #include "b2b.h"
 
-#define SCALE_FACTOR 100.0f
+#define SCALE_FACTOR 10.0f
 
 /**
  * @brief 底盘控制命令编码
