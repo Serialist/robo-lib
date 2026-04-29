@@ -30,7 +30,7 @@ public:
 	ParamSet(float kp, float ki, float kd, float maxout, float maxintegral);
 	void Reset();
 	float Update(float setpoint, float feedback);
-	float UpdateEZ(float e, float de, float ie);
+	float UpdateEZ(float e, float ie, float de);
 };
 } // namespace PT
 

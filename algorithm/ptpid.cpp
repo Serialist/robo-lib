@@ -77,7 +77,7 @@ float PT::PID::Update(float setpoint, float feedback)
 	return out;
 }
 
-float PT::PID::UpdateEZ(float e, float de, float ie)
+float PT::PID::UpdateEZ(float e, float ie, float de)
 {
 	out = kp * e + ki * ie + kd * de;
 	out = ClampAbsf(out, maxout);

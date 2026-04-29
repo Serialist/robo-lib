@@ -19,7 +19,12 @@ extern "C"
 
 #include "utils.h"
 
-	float Heat_limit(float cooling_speed, float heat_limit, float heat_per_bullet);
+/// @brief 热量限制
+/// @param cooling_speed 冷却速度
+/// @param heat_limit 最大热量
+/// @param heat_per_bullet 单发热量
+/// @return 射速
+float Heat_limit(float cooling_speed, float heat_limit, float heat_per_bullet);
 
 #ifdef __cplusplus
 }
