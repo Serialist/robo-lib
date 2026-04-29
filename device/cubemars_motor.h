@@ -45,9 +45,9 @@ extern "C"
 // void comm_can_set_origin(uint8_t controller_id, uint8_t set_origin_mode);
 
 // 运控模式//
-void AK_Motor_MIT_Enable(uint8_t id);
-void AK_Motor_MIT_Disable(uint8_t id);
-void AK_Motor_MIT_Setorigin(uint8_t id);
+void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id);
+void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id);
+void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Transmit(BSP_Port_t port,
 						   uint8_t id,
 						   float p_des,

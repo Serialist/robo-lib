@@ -22,7 +22,7 @@ extern "C"
 #define U_T 0
 #define U_TP 1
 
-	void LQR_Control(float *x, float *u, float len);
+void LQR_Control(float *x, float *u, float *u_temp, float len);
 
 #ifdef __cplusplus
 }

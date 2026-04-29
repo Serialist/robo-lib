@@ -95,7 +95,7 @@
  *
  * @note 据说使能命令最好不要重复发送...?
  */
-void AK_Motor_MIT_Enable(uint8_t id)
+void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id)
 {
 	uint8_t buf[8];
 
@@ -108,7 +108,7 @@ void AK_Motor_MIT_Enable(uint8_t id)
 	buf[6] = 0xFF;
 	buf[7] = 0xFC;
 
-	BSP_CAN_Transmit(BSP_PORT1, id, buf);
+	BSP_CAN_Transmit(port, id, buf);
 }
 
 /**
@@ -116,7 +116,7 @@ void AK_Motor_MIT_Enable(uint8_t id)
  *
  * @param id
  */
-void AK_Motor_MIT_Disable(uint8_t id)
+void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id)
 {
 	uint8_t buf[8];
 
@@ -129,7 +129,7 @@ void AK_Motor_MIT_Disable(uint8_t id)
 	buf[6] = 0xFF;
 	buf[7] = 0xFD;
 
-	BSP_CAN_Transmit(BSP_PORT1, id, buf);
+	BSP_CAN_Transmit(port, id, buf);
 }
 
 /**
@@ -139,7 +139,7 @@ void AK_Motor_MIT_Disable(uint8_t id)
  *
  * @note 这个设置的零点位置似乎断电不保存
  */
-void AK_Motor_MIT_Setorigin(uint8_t id)
+void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id)
 {
 	uint8_t buf[8];
 
@@ -152,10 +152,11 @@ void AK_Motor_MIT_Setorigin(uint8_t id)
 	buf[6] = 0xFF;
 	buf[7] = 0xFE;
 
-	BSP_CAN_Transmit(BSP_PORT1, id, buf);
+	BSP_CAN_Transmit(port, id, buf);
 }
 
-void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
+void AK_Motor_MIT_Control_Encode(
+	float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
 {
 	int angle_int, velocity_int, kp_int, kd_int, torque_int;
 
@@ -193,7 +194,13 @@ void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd
  * @param kd 内置 PID 参数
  * @param t_ff 力矩前馈
  ************************/
-void AK_Motor_MIT_Transmit(BSP_Port_t port, uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff)
+void AK_Motor_MIT_Transmit(BSP_Port_t port,
+						   uint8_t id,
+						   float p_des,
+						   float v_des,
+						   float kp,
+						   float kd,
+						   float t_ff)
 {
 	uint8_t buf[8];
 
@@ -202,7 +209,8 @@ void AK_Motor_MIT_Transmit(BSP_Port_t port, uint8_t id, float p_des, float v_des
 	BSP_CAN_Transmit(port, id, buf);
 }
 
-void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
+void AK_Motor_MIT_Decode(
+	Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
 {
 	data->id = buf[0]; // 驱动 ID 号
 
