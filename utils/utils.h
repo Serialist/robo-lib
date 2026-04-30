@@ -19,25 +19,23 @@ extern "C"
 
 #define DEBUG
 
-/* ================================================================ include
- * ================================================================ */
+/* ================================================================ include ================================================================ */
 
-#include "arm_math.h"
 #include "blessing.h"
-#include "main.h"
 #include "math.h"
-#include "robo-config.h"
 #include "stdbool.h"
 #include "stdint.h"
 #include "stdlib.h"
 #include "string.h"
 
+// #include "arm_math.h"
+// #include "robo-config.h"
+
 // #include "math_adapter.h"
 
 // #include "cmsis_os.h" // 下面有这个要不要用（?）
 
-/* ================================================================ macro
- * ================================================================ */
+/* ================================================================ macro ================================================================ */
 
 #ifndef user_malloc
 #ifdef _CMSIS_OS_H
@@ -63,8 +61,9 @@ extern "C"
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
 #endif
 
-#define DEG_CLAMPF(Ang) LoopClampf((Ang), -180.0f, 180.0f) // 角度格式化为-180~180
-#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI)		   // 弧度格式化为-PI~PI
+#define DEG_CLAMPF(Ang)                                                        \
+	LoopClampf((Ang), -180.0f, 180.0f)			   // 角度格式化为-180~180
+#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI) // 弧度格式化为-PI~PI
 
 #ifndef DEG2RAD
 #define DEG2RAD(Ang) ((Ang) * 0.01745329252f)
@@ -148,8 +147,7 @@ extern "C"
 
 #endif
 
-/* ================================================================ typedef
- * ================================================================ */
+/* ================================================================ typedef ================================================================ */
 
 typedef enum
 {
@@ -162,20 +160,20 @@ typedef enum
 	AIMASSIST_DEBUG,
 } GlobalDebugMode_t;
 
-/* ================================================================ variable
- * ================================================================ */
+/* ================================================================ variable ================================================================ */
 
-/* ================================================================ prototype
- * ================================================================ */
+/* ================================================================ prototype ================================================================ */
 
-float Signf(float value);													 // 符号函数
-void Clampfp(float *in, float min, float max);								 // 指针限幅
-float Clampf(float value, float min, float max);							 // 限幅
-float ClampAbsf(float value, float max);									 // 绝对值限幅
-float LoopClampf(float Input, float minValue, float maxValue);				 // 循环限幅
-float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值映射
-float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
-float Deadzonef(float value, float point, float deadzone);					 // 死区
+float Signf(float value);									   // 符号函数
+void Clampfp(float *in, float min, float max);				   // 指针限幅
+float Clampf(float value, float min, float max);			   // 限幅
+float ClampAbsf(float value, float max);					   // 绝对值限幅
+float LoopClampf(float Input, float minValue, float maxValue); // 循环限幅
+float Remapf(
+	float a, float inmin, float inmax, float outmin, float outmax); // 值映射
+float Rampf(
+	float prev_x, float x, float k_min, float k_max, float dt); // 斜坡函数
+float Deadzonef(float value, float point, float deadzone);		// 死区
 
 float Bit2Float(int x_int, float x_min, float x_max, int Bits);
 int Float2Bit(float x, float x_min, float x_max, int bits);
@@ -186,52 +184,10 @@ long long FPow(long long a, long long b);				  // 快速幂
 long long FPowMod(long long a, long long b, long long p); // 快速幂取模
 float FiSqrt(float x);									  // 快速平方根倒数
 float FSqrtf(float x);									  // 快速平方根
-long long FGcd(long long a, long long b);				  // 计算最大公约数 greatest common divisor
+long long
+FGcd(long long a, long long b); // 计算最大公约数 greatest common divisor
 
-/* ================================ 斜波函数 ================================ */
-
-typedef struct
-{
-	float value; // 输出数据
-	float kmin;	 // 斜率最小值
-	float kmax;	 // 斜率最大值
-} Ramp_t;
-
-void Ramp_Init(Ramp_t *self, float initial_value, float kmin, float kmax); // 斜波函数初始化
-void Ramp_Reset(Ramp_t *self, float value);								   // 重置
-float Ramp_Update(Ramp_t *self, float target, float dt);				   // 斜波函数计算
-
-/* ================================ OLS Ordinary Least Squares 最小二乘法 ================================ */
-
-typedef
-#ifdef BOARD_RM_C
-	__packed
-#endif
-	struct
-{
-	uint16_t Order;
-	uint32_t Count;
-
-	float *x;
-	float *y;
-
-	float k;
-	float b;
-
-	float StandardDeviation;
-
-	float t[4];
-} OLS_t;
-
-void OLS_Init(OLS_t *OLS, uint16_t order);
-void OLS_Update(OLS_t *OLS, float deltax, float y);
-float OLS_Derivative(OLS_t *OLS, float deltax, float y);
-float OLS_Smooth(OLS_t *OLS, float deltax, float y);
-float Get_OLS_Derivative(OLS_t *OLS);
-float Get_OLS_Smooth(OLS_t *OLS);
-
-/* ================================================================ function
- * ================================================================ */
+/* ================================================================ function ================================================================ */
 
 #ifdef __cplusplus
 }

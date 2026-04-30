@@ -1,7 +1,7 @@
 /**
  * @file sim-module.hpp
  * @author Serialist (ba3pt@qq.com)
- * @brief
+ * @brief physics module simulator 
  * @version 0.1.0
  * @date 2026-04-23
  *
@@ -14,43 +14,31 @@
 
 namespace pt
 {
-	// 二阶惯性系统
-	class SecondOrderSystem
-	{
-		// 状态变量
-		double x = 0.0; // 位置
-		double v = 0.0; // 速度
 
-		// 系统参数
-		double m;  // 质量
-		double kf; // 阻尼系数
+class SecondOrderSystem
+{
+	// state variable
+	double x = 0.0; // position
+	double v = 0.0; // velocity
 
-	public:
-		// 构造函数
-		SecondOrderSystem(double mass, double damping)
-			: m(mass), kf(damping) {}
+	// sys param
+	double m;  // mass
+	double kf; // damping
 
-		// 获取当前位置
-		double position() { return x; }
+public:
+	// constructor
+	SecondOrderSystem(double mass, double damping);
 
-		// 单步更新（核心：正确二阶系统离散求解）
-		void step(double u, double dt)
-		{
-			// 二阶系统动力学：加速度 a = (u - kf*v) / m
-			double a = (u - kf * v) / m;
+	// get state
+	double position();
 
-			// 欧拉积分（简单稳定）
-			v = v + a * dt; // 更新速度
-			x = x + v * dt; // 更新位置
-		}
+	// update system
+	void step(double u, double dt);
 
-		// 可选：重置状态
-		void reset()
-		{
-			x = 0.0;
-			v = 0.0;
-		}
-	};
-}
+	// reset sys
+	void reset();
+};
+
+} // namespace pt
 
 #endif
