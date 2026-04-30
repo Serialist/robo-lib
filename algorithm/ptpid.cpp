@@ -83,3 +83,13 @@ float PT::PID::UpdateEZ(float e, float ie, float de)
 	out = ClampAbsf(out, maxout);
 	return out;
 }
+
+float PT::PID::ClampAbsf(float x, float max)
+{
+	if (x > max)
+		return max;
+	else if (x < -max)
+		return -max;
+	else
+		return x;
+}

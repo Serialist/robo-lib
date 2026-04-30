@@ -12,12 +12,11 @@
 #ifndef PT_PID_HPP
 #define PT_PID_HPP
 
-#include "utils.h"
-
 namespace PT
 {
 class PID
 {
+
 public:
 	float kp, ki, kd;				   // 参数
 	float maxout, maxintegral;		   // 限制
@@ -31,6 +30,7 @@ public:
 	void Reset();
 	float Update(float setpoint, float feedback);
 	float UpdateEZ(float e, float ie, float de);
+	float ClampAbsf(float x, float max);
 };
 } // namespace PT
 
