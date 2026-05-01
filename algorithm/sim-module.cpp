@@ -1,19 +1,19 @@
 #include "sim-module.hpp"
 
-pt::SecondOrderSystem::SecondOrderSystem(double mass, double damping)
+vgd::SecondOrderSystem::SecondOrderSystem(double mass, double damping)
 {
 	this->m = mass;
 	this->kf = damping;
 }
 
 // 获取当前位置
-double pt::SecondOrderSystem::position()
+double vgd::SecondOrderSystem::position()
 {
 	return x;
 }
 
 // 单步更新（核心：正确二阶系统离散求解）
-void pt::SecondOrderSystem::step(double u, double dt)
+void vgd::SecondOrderSystem::step(double u, double dt)
 {
 	// 二阶系统动力学：加速度 a = (u - kf*v) / m
 	double a = (u - kf * v) / m;
@@ -24,7 +24,7 @@ void pt::SecondOrderSystem::step(double u, double dt)
 }
 
 // 可选：重置状态
-void pt::SecondOrderSystem::reset()
+void vgd::SecondOrderSystem::reset()
 {
 	x = 0.0;
 	v = 0.0;

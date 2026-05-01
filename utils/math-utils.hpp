@@ -1,39 +1,30 @@
 /**
- * @file utils.h
- * @author Serialist (ba3pt@chd.edu.cn)
- * @brief
+ * @file utils.hpp
+ * @author Serialist (ba3pt@qq.com)
+ * @brief 
  * @version 0.1.0
- * @date 2026-01-12
- *
+ * @date 2026-04-30
+ * 
  * @copyright Copyright (c) Serialist 2026
- *
- */
+ * 
+*/
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+/* ================================================================ import ================================================================ */
 
-#define DEBUG
-
-/* ================================================================ include ================================================================ */
-
-#include "blessing.h"
-#include "math.h"
-#include "stdbool.h"
-#include "stdint.h"
-#include "stdlib.h"
-#include "string.h"
+#include <cmath>
+#include <cstdbool>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
 
 #include "arm_math.h"
 #include "robo-config.h"
 
-// #include "math_adapter.h"
-
-// #include "cmsis_os.h" // ÏÂÃæÓĞÕâ¸öÒª²»ÒªÓÃ£¨?£©
+// å¼•å…¥ blessing
+#include "blessing.h"
 
 /* ================================================================ macro ================================================================ */
 
@@ -62,8 +53,8 @@ extern "C"
 #endif
 
 #define DEG_CLAMPF(Ang)                                                        \
-	LoopClampf((Ang), -180.0f, 180.0f)			   // ½Ç¶È¸ñÊ½»¯Îª-180~180
-#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI) // »¡¶È¸ñÊ½»¯Îª-PI~PI
+	LoopClampf((Ang), -180.0f, 180.0f)			   // è§’åº¦æ ¼å¼åŒ–ä¸º-180~180
+#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI) // å¼§åº¦æ ¼å¼åŒ–ä¸º-PI~PI
 
 #ifndef DEG2RAD
 #define DEG2RAD(Ang) ((Ang) * 0.01745329252f)
@@ -88,7 +79,7 @@ extern "C"
 #define RB 3
 #endif
 
-// ÂÖ×Ó
+// è½®å­
 #define WL 4
 #define WR 5
 
@@ -106,17 +97,17 @@ extern "C"
 #define NULL 0
 #endif
 
-// ×öÒ»²ã adapter£¬·½±ãÒÆÖ²
-/// @todo ·Åµ½µ¥¶ÀÒ»¸öÊÊÅä²ãÎÄ¼şÖĞ£¬±ÈÈç math-adapter£¬ÕâÑù²»Í¬Æ½Ì¨ÒÆÖ²·½±ã»¹ÄÜÓ²¼şÓÅ»¯
+// åšä¸€å±‚ adapterï¼Œæ–¹ä¾¿ç§»æ¤
+/// @todo æ”¾åˆ°å•ç‹¬ä¸€ä¸ªé€‚é…å±‚æ–‡ä»¶ä¸­ï¼Œæ¯”å¦‚ math-adapterï¼Œè¿™æ ·ä¸åŒå¹³å°ç§»æ¤æ–¹ä¾¿è¿˜èƒ½ç¡¬ä»¶ä¼˜åŒ–
 #define SINF(x) arm_sin_f32(x)
 #define COSF(x) arm_cos_f32(x)
 
 #if defined(BOARD_DM_MC02)
 
-// ÓÃ×÷ buffer£¬Õâ¸öÊÇ h7 ÓÃµÄ£¬ÒòÎªbufĞèÒªÊµÊ±Êı¾İ²»ÄÜ cache
+// ç”¨ä½œ bufferï¼Œè¿™ä¸ªæ˜¯ h7 ç”¨çš„ï¼Œå› ä¸ºbuféœ€è¦å®æ—¶æ•°æ®ä¸èƒ½ cache
 #define BUFFER_T __attribute__((section(".AXI_SRAM"))) uint8_t
 
-// codÀïÓÃµÄ·ûºÅ£¬»¹Ã»¸Ä£¬ÏÈ±£ÁôÏÂÀ´
+// codé‡Œç”¨çš„ç¬¦å·ï¼Œè¿˜æ²¡æ”¹ï¼Œå…ˆä¿ç•™ä¸‹æ¥
 #define Matrix arm_matrix_instance_f32
 #define Matrix_64 arm_matrix_instance_f64
 #define Matrix_Init arm_mat_init_f32
@@ -127,7 +118,7 @@ extern "C"
 #define Matrix_Inverse arm_mat_inverse_f32
 #define Matrix_Inverse_64 arm_mat_inverse_f64
 
-// ×Ô¼º¶¨ÒåµÄ·ûºÅÃû£¬ÒÔºó¸Ä³ÉÕâ¸ö°É
+// è‡ªå·±å®šä¹‰çš„ç¬¦å·åï¼Œä»¥åæ”¹æˆè¿™ä¸ªå§
 #define MAT32 arm_matrix_instance_f32
 #define MAT32_INIT arm_mat_init_f32
 #define MAT32_ADD arm_mat_add_f32
@@ -150,38 +141,37 @@ extern "C"
 
 #endif
 
-/* ================================================================ typedef ================================================================ */
-
-/* ================================================================ variable ================================================================ */
-
 /* ================================================================ prototype ================================================================ */
 
-float Signf(float value);									   // ·ûºÅº¯Êı
-void Clampfp(float *in, float min, float max);				   // Ö¸ÕëÏŞ·ù
-float Clampf(float value, float min, float max);			   // ÏŞ·ù
-float ClampAbsf(float value, float max);					   // ¾ø¶ÔÖµÏŞ·ù
-float LoopClampf(float Input, float minValue, float maxValue); // Ñ­»·ÏŞ·ù
+namespace vgd
+{
+
+namespace utils
+{
+void Clampfp(float *in, float min, float max);				   // æŒ‡é’ˆé™å¹…
+float Clampf(float value, float min, float max);			   // é™å¹…
+float ClampAbsf(float value, float max);					   // ç»å¯¹å€¼é™å¹…
+float LoopClampf(float Input, float minValue, float maxValue); // å¾ªç¯é™å¹…
+
 float Remapf(
-	float a, float inmin, float inmax, float outmin, float outmax); // ÖµÓ³Éä
+	float a, float inmin, float inmax, float outmin, float outmax); // å€¼æ˜ å°„
 float Rampf(
-	float prev_x, float x, float k_min, float k_max, float dt); // Ğ±ÆÂº¯Êı
-float Deadzonef(float value, float point, float deadzone);		// ËÀÇø
+	float prev_x, float x, float k_min, float k_max, float dt); // æ–œå¡å‡½æ•°
+float Deadzonef(float value, float point, float deadzone);		// æ­»åŒº
 
 float Bit2Float(int x_int, float x_min, float x_max, int Bits);
 int Float2Bit(float x, float x_min, float x_max, int bits);
 
-float Modf(float value, float range);					  // È¡Ä£
-float SSqrt(float x);									  // ¿ª·½
-long long FPow(long long a, long long b);				  // ¿ìËÙÃİ
-long long FPowMod(long long a, long long b, long long p); // ¿ìËÙÃİÈ¡Ä£
-float FiSqrt(float x);									  // ¿ìËÙÆ½·½¸ùµ¹Êı
-float FSqrtf(float x);									  // ¿ìËÙÆ½·½¸ù
-long long FGcd(long long a, long long b); // ×î´ó¹«Ô¼Êı greatest common divisor
+float Signf(float value);								  // ç¬¦å·å‡½æ•°
+float Modf(float value, float range);					  // å–æ¨¡
+float SSqrt(float x);									  // å¼€æ–¹
+long long FPow(long long a, long long b);				  // å¿«é€Ÿå¹‚
+long long FPowMod(long long a, long long b, long long p); // å¿«é€Ÿå¹‚å–æ¨¡
+float FiSqrt(float x);									  // å¿«é€Ÿå¹³æ–¹æ ¹å€’æ•°
+float FSqrtf(float x);									  // å¿«é€Ÿå¹³æ–¹æ ¹
+long long FGcd(long long a, long long b); // æœ€å¤§å…¬çº¦æ•° greatest common divisor
+} // namespace utils
 
-/* ================================================================ function ================================================================ */
-
-#ifdef __cplusplus
-}
-#endif
+} // namespace vgd
 
 #endif

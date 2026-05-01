@@ -12,7 +12,7 @@
 #ifndef SIM_MODULE_HPP
 #define SIM_MODULE_HPP
 
-namespace pt
+namespace vgd
 {
 
 class SecondOrderSystem
@@ -39,6 +39,6 @@ public:
 	void reset();
 };
 
-} // namespace pt
+} // namespace vgd
 
 #endif

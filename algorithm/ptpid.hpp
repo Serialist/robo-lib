@@ -12,7 +12,7 @@
 #ifndef PT_PID_HPP
 #define PT_PID_HPP
 
-namespace PT
+namespace vgd
 {
 class PID
 {
@@ -32,6 +32,6 @@ public:
 	float UpdateEZ(float e, float ie, float de);
 	float ClampAbsf(float x, float max);
 };
-} // namespace PT
+} // namespace vgd
 
 #endif

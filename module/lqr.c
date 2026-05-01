@@ -12,9 +12,6 @@
 #include "lqr.h"
 #include "lqrcoef.h"
 
-float (*lqr_k_coef[])[12][4] = {
-	&lqr_coe1, &lqr_coe2, &lqr_coe3, &lqr_coe4, &lqr_coe5};
-float (*lqr_coe)[12][4] = &lqr_coe1;
 float k[2][6];
 
 /************************
@@ -38,19 +35,14 @@ void LQR_Control(float *x, float *u, float *u_temp, float len)
 	int i, j, n;
 	float k_[6][2];
 
-	// 根据 theta 选择系数
-	int8_t coef_idx = (int)roundf(fabsf(x[0]) / (PI / 12));	   // 选择系数
-	coef_idx = coef_idx < 0 ? 0 : coef_idx > 4 ? 4 : coef_idx; // 限幅
-	lqr_coe = lqr_k_coef[coef_idx];
-
 	// 计算 k
 	for (i = 0; i < 6; i++)
 	{
 		for (j = 0; j < 2; j++)
 		{
 			n = i * 2 + j;
-			k_[i][j] = (*lqr_coe)[n][0] * len + (*lqr_coe)[n][1] * len * len
-					   + (*lqr_coe)[n][2] * len * len * len + (*lqr_coe)[n][3];
+			k_[i][j] = lqr_coe1[n][0] * len + lqr_coe1[n][1] * len * len
+					   + lqr_coe1[n][2] * len * len * len + lqr_coe1[n][3];
 		}
 	}
 

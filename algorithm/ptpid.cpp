@@ -17,11 +17,11 @@
 /// @param kd
 /// @param maxout 最大总输出
 /// @param maxintegral 最大积分（不是最大积分输出）
-PT::PID::PID(float kp,
-			 float ki,
-			 float kd,
-			 float maxout, //
-			 float maxintegral)
+vgd::PID::PID(float kp,
+			  float ki,
+			  float kd,
+			  float maxout, //
+			  float maxintegral)
 {
 	this->kp = kp;
 	this->ki = ki;
@@ -36,11 +36,11 @@ PT::PID::PID(float kp,
 
 /// @brief 设置参数
 /// @param 同构造函数
-void PT::PID::ParamSet(float kp,
-					   float ki,
-					   float kd,
-					   float maxout, //
-					   float maxintegral)
+void vgd::PID::ParamSet(float kp,
+						float ki,
+						float kd,
+						float maxout, //
+						float maxintegral)
 {
 	this->kp = kp;
 	this->ki = ki;
@@ -49,14 +49,14 @@ void PT::PID::ParamSet(float kp,
 	this->maxintegral = maxintegral;
 }
 
-void PT::PID::Reset()
+void vgd::PID::Reset()
 {
 	integral = 0.0f;
 	prev_error = 0.0f;
 	out = 0.0f;
 }
 
-float PT::PID::Update(float setpoint, float feedback)
+float vgd::PID::Update(float setpoint, float feedback)
 {
 	error = setpoint - feedback;
 
@@ -77,14 +77,22 @@ float PT::PID::Update(float setpoint, float feedback)
 	return out;
 }
 
-float PT::PID::UpdateEZ(float e, float ie, float de)
+/**
+ * @brief 自己赋值的pid，有时候比如de可以是陀螺仪角速度e是角度，这时候可以更准确
+ * 
+ * @param e 
+ * @param ie 
+ * @param de 
+ * @return float 
+*/
+float vgd::PID::UpdateEZ(float e, float ie, float de)
 {
 	out = kp * e + ki * ie + kd * de;
 	out = ClampAbsf(out, maxout);
 	return out;
 }
 
-float PT::PID::ClampAbsf(float x, float max)
+float vgd::PID::ClampAbsf(float x, float max)
 {
 	if (x > max)
 		return max;
