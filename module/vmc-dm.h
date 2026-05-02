@@ -81,11 +81,7 @@ typedef struct
 
 } VMC_t;
 void VMC_Init(VMC_t *vmc); // 给杆长赋值
-void VMC_5bar_FK(VMC_t *vmc,
-				 float phi1,
-				 float phi4,
-				 float pitch,
-				 float dpitch,
+void VMC_5bar_FK(VMC_t *vmc, float phi1, float phi4, float pitch, float dpitch,
 				 float dt);						  // 正运动学，pitch，vpitch，
 void VMC_5bar_IK(VMC_t *vmc, float tp, float f0); // 逆运动学
 bool OffGround_Detection(VMC_t *leg, float az);	  // 离地检测
