@@ -31,7 +31,7 @@ vgd::PID::PID(float kp,
 
 	this->integral = 0.0f;
 	this->prev_error = 0.0f;
-	this->out = 0.0f;
+	this->output = 0.0f;
 }
 
 /// @brief 设置参数
@@ -53,28 +53,29 @@ void vgd::PID::Reset()
 {
 	integral = 0.0f;
 	prev_error = 0.0f;
-	out = 0.0f;
+	output = 0.0f;
 }
 
 float vgd::PID::Update(float setpoint, float feedback)
 {
+	// 误差
 	error = setpoint - feedback;
 
 	// 积分计算和限幅
 	integral = ClampAbsf(integral + error, maxintegral);
 
 	// 计算
-	out = kp * error				   // 比例
-		  + ki * integral			   // 积分
-		  + kd * (error - prev_error); // 微分
-
-	// 更新反馈值，为下一次差分
-	prev_error = error;
+	output = kp * error					  // 比例
+			 + ki * integral			  // 积分
+			 + kd * (error - prev_error); // 微分
 
 	// 输出限幅
-	out = ClampAbsf(out, maxout);
+	output = ClampAbsf(output, maxout);
 
-	return out;
+	// 更新
+	prev_error = error;
+
+	return output;
 }
 
 /**
@@ -87,9 +88,29 @@ float vgd::PID::Update(float setpoint, float feedback)
 */
 float vgd::PID::UpdateEZ(float e, float ie, float de)
 {
-	out = kp * e + ki * ie + kd * de;
-	out = ClampAbsf(out, maxout);
-	return out;
+	output = kp * e + ki * ie + kd * de;
+	output = ClampAbsf(output, maxout);
+	return output;
+}
+
+float vgd::PID::update_diff(float setpoint, float feedback)
+{
+	// 误差
+	error = setpoint - feedback;
+
+	// 计算
+	output = kp * (error - prev_error)						// 比例
+			 + ki * error									// 积分
+			 + kd * (error - 2 * prev_error + pprev_error); // 微分
+
+	// 输出限幅
+	output = ClampAbsf(output, maxout);
+
+	// 更新
+	pprev_error = prev_error;
+	prev_error = error;
+
+	return output;
 }
 
 float vgd::PID::ClampAbsf(float x, float max)

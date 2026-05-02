@@ -10,6 +10,7 @@
  */
 
 #include "bsp-adapter.h"
+#include "main.h"
 
 typedef enum
 {
@@ -23,7 +24,6 @@ BSP_Adapter_Status_t bsp_adapter_status;
 __weak void BSP_CAN_Transmit(BSP_Port_t port, uint32_t id, uint8_t *data)
 {
 	bsp_adapter_status = BSP_ADAPTER_ERROR;
-	return;
 }
 
 /// @note 一种设想中的can接收注册接口，相当于注册listener，不用，感觉过于复杂了，直接在回调里写吧

@@ -22,14 +22,14 @@ extern "C"
 {
 #endif
 
-	/* ================================================================ include ================================================================ */
+/* ================================================================ include ================================================================ */
 
 #include "utils.h"
 #include "bsp-adapter.h"
 
-	/* ================================================================ define ================================================================ */
+/* ================================================================ define ================================================================ */
 
-	// 电机 ID 定义
+// 电机 ID 定义
 
 #define M3508_TX_ID_1 0x200
 #define M3508_TX_ID_2 0x1FF
@@ -46,48 +46,49 @@ extern "C"
 #define GM6020_RX_ID(id) (0x204 + (id))
 
 #define M3508_GEAR_RATIO (3591.f / 187.f) // M3508 电机原版减速箱的减速比
+#define M2006_GEAR_RATIO (36 / 1)
 
-	// 电机读取数据
+// 电机读取数据
 
 #define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191.0f * 2 * PI)   // unit: rad
 #define RM_MOTOR_VELOCITY(self) ((float)(self)->velocity / 60.0f * 2 * PI) // unit: rad/s
 #define RM_MOTOR_CURRENT(self) ((self)->current * 20.f / 16384.f)		   // unit: A
 #define RM_MOTOR_TEMP(self) ((self)->temperature)						   // unit: C
 
-	// 关于 HEXROLL 减速箱 + M3508 电机下的一些转换
+// 关于 HEXROLL 减速箱 + M3508 电机下的一些转换
 
 #define HEXROLL_GEAR_RATIO (268.f / 17.f) // HEXROLL 减速比
 
 #define HEXROLL_VELOCITY(self) ((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
 #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3600.f)
 
-	// #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque / HEXROLL_GEAR_RATIO * M3508_GEAR_RATIO / 0.3 / 20 * 16384.f) // approx torque * 3326.263229308005
+// #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque / HEXROLL_GEAR_RATIO * M3508_GEAR_RATIO / 0.3 / 20 * 16384.f) // approx torque * 3326.263229308005
 
-	/* ================================================================ struct ================================================================ */
+/* ================================================================ struct ================================================================ */
 
-	typedef struct
-	{
-		int16_t encoder;	 // 0-8191 --> 2pi
-		int16_t velocity;	 // rpm
-		int16_t current;	 // +-16384 --> +-3A
-		uint8_t temperature; // C
-	} RM_Motor_Feedback_t;
+typedef struct
+{
+	int16_t encoder;	 // 0-8191 --> 2pi
+	int16_t velocity;	 // rpm
+	int16_t current;	 // +-16384 --> +-3A
+	uint8_t temperature; // C
+} RM_Motor_Feedback_t;
 
-	/**
+/**
 	 * current +-16384 --> +-3A
 	 * voltage +-25000 (--> unknown?)
 	 */
-	typedef int16_t RM_Motor_Control_t[4];
+typedef int16_t RM_Motor_Control_t[4];
 
-	/* ================================================================ value ================================================================ */
+/* ================================================================ value ================================================================ */
 
-	/* ================================================================ proto ================================================================ */
+/* ================================================================ proto ================================================================ */
 
-	void RM_Motor_Control_Transmit(BSP_Port_t port, uint32_t id, RM_Motor_Control_t data);
+void RM_Motor_Control_Transmit(BSP_Port_t port, uint32_t id, RM_Motor_Control_t data);
 
-	void RM_Motor_Control_Encode(RM_Motor_Control_t data, uint8_t *buf);
+void RM_Motor_Control_Encode(RM_Motor_Control_t data, uint8_t *buf);
 
-	void RM_Motor_Feedback_Decode(uint8_t *buf, RM_Motor_Feedback_t *data);
+void RM_Motor_Feedback_Decode(uint8_t *buf, RM_Motor_Feedback_t *data);
 
 #ifdef __cplusplus
 }

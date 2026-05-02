@@ -18,17 +18,17 @@ class PID
 {
 
 public:
-	float kp, ki, kd;				   // 参数
-	float maxout, maxintegral;		   // 限制
-	float integral, error, prev_error; // 历史
-	float out;						   // 输出
+	float kp, ki, kd;										   // 参数
+	float maxout, maxintegral;								   // 限制
+	float integral, error, prev_error, pprev_error /*上上次*/; // 历史
+	float setpoint, feedback, output;						   // 输入输出
 
 	PID(float kp, float ki, float kd, float maxout, float maxintegral);
 
-	void
-	ParamSet(float kp, float ki, float kd, float maxout, float maxintegral);
+	void ParamSet(float kp, float ki, float kd, float maxout, float maxintegral);
 	void Reset();
 	float Update(float setpoint, float feedback);
+	float update_diff(float setpoint, float feedback); // 差分式
 	float UpdateEZ(float e, float ie, float de);
 	float ClampAbsf(float x, float max);
 };
