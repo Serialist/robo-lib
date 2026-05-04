@@ -184,6 +184,8 @@ void AK_Motor_MIT_Control_Encode(
 	buf[7] = torque_int & 0xff;
 }
 
+BUFFER_T akmotormittransmitbuffer[8];
+
 /************************
  * @brief 发送电机 MIT 模式控制
  *
@@ -204,9 +206,9 @@ void AK_Motor_MIT_Transmit(BSP_Port_t port,
 {
 	uint8_t buf[8];
 
-	AK_Motor_MIT_Control_Encode(p_des, v_des, kp, kd, t_ff, buf);
+	AK_Motor_MIT_Control_Encode(p_des, v_des, kp, kd, t_ff, akmotormittransmitbuffer);
 
-	BSP_CAN_Transmit(port, id, buf);
+	BSP_CAN_Transmit(port, id, akmotormittransmitbuffer);
 }
 
 void AK_Motor_MIT_Decode(

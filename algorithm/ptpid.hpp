@@ -18,10 +18,12 @@ class PID
 {
 
 public:
-	float kp, ki, kd;										   // 参数
-	float maxout, maxintegral;								   // 限制
-	float integral, error, prev_error, pprev_error /*上上次*/; // 历史
-	float setpoint, feedback, output;						   // 输入输出
+	float kp, ki, kd;								 // 参数
+	float maxout, maxintegral;						 // 限制
+	float error, prev_error, pprev_error /*上上次*/; // 误差
+	float integral;									 // 积分
+	float derivative;								 // 微分
+	float setpoint, feedback, output;				 // 输入输出
 
 	PID(float kp, float ki, float kd, float maxout, float maxintegral);
 

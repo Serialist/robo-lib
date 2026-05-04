@@ -58,16 +58,22 @@ void vgd::PID::Reset()
 
 float vgd::PID::Update(float setpoint, float feedback)
 {
+	this->setpoint = setpoint;
+	this->feedback = feedback;
+
 	// 误差
 	error = setpoint - feedback;
 
 	// 积分计算和限幅
 	integral = ClampAbsf(integral + error, maxintegral);
 
+	// 微分计算
+	derivative = error - prev_error;
+
 	// 计算
-	output = kp * error					  // 比例
-			 + ki * integral			  // 积分
-			 + kd * (error - prev_error); // 微分
+	output = kp * error			//
+			 + ki * integral	//
+			 + kd * derivative; //
 
 	// 输出限幅
 	output = ClampAbsf(output, maxout);
@@ -88,6 +94,10 @@ float vgd::PID::Update(float setpoint, float feedback)
 */
 float vgd::PID::UpdateEZ(float e, float ie, float de)
 {
+	error = e;
+	integral = ie;
+	derivative = de;
+
 	output = kp * e + ki * ie + kd * de;
 	output = ClampAbsf(output, maxout);
 	return output;
@@ -95,6 +105,9 @@ float vgd::PID::UpdateEZ(float e, float ie, float de)
 
 float vgd::PID::update_diff(float setpoint, float feedback)
 {
+	this->setpoint = setpoint;
+	this->feedback = feedback;
+
 	// 误差
 	error = setpoint - feedback;
 

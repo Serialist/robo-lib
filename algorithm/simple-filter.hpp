@@ -42,6 +42,18 @@ private:
 	float output;
 };
 
+// 零阶保持器
+class ZeroOrder_Holder
+{
+public:
+	ZeroOrder_Holder(void);
+
+	float update(float input);
+
+private:
+	float prev_value;
+};
+
 } // namespace algorithm
 
 } // namespace vgd
