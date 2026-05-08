@@ -52,9 +52,8 @@
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
 #endif
 
-#define DEG_CLAMPF(Ang)                                                        \
-	LoopClampf((Ang), -180.0f, 180.0f)			   // 角度格式化为-180~180
-#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI) // 弧度格式化为-PI~PI
+#define DEG_CLAMPF(Ang) LoopClampf((Ang), -180.0f, 180.0f) // 角度格式化为-180~180
+#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI)		   // 弧度格式化为-PI~PI
 
 #ifndef DEG2RAD
 #define DEG2RAD(Ang) ((Ang) * 0.01745329252f)
@@ -153,11 +152,9 @@ float Clampf(float value, float min, float max);			   // 限幅
 float ClampAbsf(float value, float max);					   // 绝对值限幅
 float LoopClampf(float Input, float minValue, float maxValue); // 循环限幅
 
-float Remapf(
-	float a, float inmin, float inmax, float outmin, float outmax); // 值映射
-float Rampf(
-	float prev_x, float x, float k_min, float k_max, float dt); // 斜坡函数
-float Deadzonef(float value, float point, float deadzone);		// 死区
+float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值映射
+float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
+float Deadzonef(float value, float point, float deadzone);					 // 死区
 
 float Bit2Float(int x_int, float x_min, float x_max, int Bits);
 int Float2Bit(float x, float x_min, float x_max, int bits);
@@ -169,7 +166,7 @@ long long FPow(long long a, long long b);				  // 快速幂
 long long FPowMod(long long a, long long b, long long p); // 快速幂取模
 float FiSqrt(float x);									  // 快速平方根倒数
 float FSqrtf(float x);									  // 快速平方根
-long long FGcd(long long a, long long b); // 最大公约数 greatest common divisor
+long long FGcd(long long a, long long b);				  // 最大公约数 greatest common divisor
 } // namespace utils
 
 } // namespace vgd

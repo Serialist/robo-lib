@@ -29,9 +29,14 @@ vgd::PID::PID(float kp,
 	this->maxout = maxout;
 	this->maxintegral = maxintegral;
 
-	this->integral = 0.0f;
-	this->prev_error = 0.0f;
-	this->output = 0.0f;
+	error = 0;
+	prev_error = 0;
+	pprev_error = 0;
+	integral = 0;
+	derivative = 0;
+	setpoint = 0;
+	feedback = 0;
+	output = 0;
 }
 
 /// @brief 设置参数

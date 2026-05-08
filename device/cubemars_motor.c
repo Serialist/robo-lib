@@ -155,24 +155,23 @@ void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id)
 	BSP_CAN_Transmit(port, id, buf);
 }
 
-void AK_Motor_MIT_Control_Encode(
-	float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
+void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
 {
 	int angle_int, velocity_int, kp_int, kd_int, torque_int;
 
 	/// limit data to be within bounds ///
 
-	angle = Clampf(angle, P_MIN, P_MAX);
-	velocity = Clampf(velocity, V_MIN, V_MAX);
+	angle = Clampf(angle, -P_MAX, P_MAX);
+	velocity = Clampf(velocity, -V_MAX, V_MAX);
 	kp = Clampf(kp, Kp_MIN, Kp_MAX);
 	kd = Clampf(kd, Kd_MIN, Kd_MAX);
-	torque = Clampf(torque, T_MIN, T_MAX);
+	torque = Clampf(torque, -T_MAX, T_MAX);
 
-	angle_int = Float2Bit(angle, P_MIN, P_MAX, 16);
-	velocity_int = Float2Bit(velocity, V_MIN, V_MAX, 12);
+	angle_int = Float2Bit(angle, -P_MAX, P_MAX, 16);
+	velocity_int = Float2Bit(velocity, -V_MAX, V_MAX, 12);
 	kp_int = Float2Bit(kp, Kp_MIN, Kp_MAX, 12);
 	kd_int = Float2Bit(kd, Kd_MIN, Kd_MAX, 12);
-	torque_int = Float2Bit(torque, T_MIN, T_MAX, 12);
+	torque_int = Float2Bit(torque, -T_MAX, T_MAX, 12);
 
 	buf[0] = angle_int >> 8;
 	buf[1] = angle_int & 0xFF;
@@ -196,13 +195,7 @@ BUFFER_T akmotormittransmitbuffer[8];
  * @param kd 内置 PID 参数
  * @param t_ff 力矩前馈
  ************************/
-void AK_Motor_MIT_Transmit(BSP_Port_t port,
-						   uint8_t id,
-						   float p_des,
-						   float v_des,
-						   float kp,
-						   float kd,
-						   float t_ff)
+void AK_Motor_MIT_Transmit(BSP_Port_t port, uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff)
 {
 	uint8_t buf[8];
 
@@ -211,8 +204,7 @@ void AK_Motor_MIT_Transmit(BSP_Port_t port,
 	BSP_CAN_Transmit(port, id, akmotormittransmitbuffer);
 }
 
-void AK_Motor_MIT_Decode(
-	Motor_AK_RxData_t *data, uint8_t buf[8], float pMax, float vMax, float tMax)
+void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t *buf, float pMax, float vMax, float tMax)
 {
 	data->id = buf[0]; // 驱动 ID 号
 
@@ -221,9 +213,9 @@ void AK_Motor_MIT_Decode(
 	int i_int = ((buf[4] & 0xF) << 8) | (buf[5]);
 	int T_int = buf[6];
 
-	float p = Bit2Float(p_int, P_MIN, P_MAX, 16);
-	float v = Bit2Float(v_int, V_MIN, V_MAX, 12);
-	float i = Bit2Float(i_int, -T_MAX, T_MAX, 12);
+	float p = Bit2Float(p_int, -pMax, pMax, 16);
+	float v = Bit2Float(v_int, -vMax, vMax, 12);
+	float i = Bit2Float(i_int, -tMax, tMax, 12);
 	float Temp = T_int;
 
 	data->angle = p;

@@ -178,16 +178,15 @@ float vgd::utils::LoopClampf(float value, float min, float max)
 }
 
 /// @brief 值映射
-float vgd::utils::Remapf(
-	float a, float inmin, float inmax, float outmin, float outmax)
+float vgd::utils::Remapf(float a, float inmin, float inmax, float outmin, float outmax)
 {
 	return outmin + (a - inmin) * (outmax - outmin) / (inmax - inmin);
 }
 
 /// @brief 斜坡函数
-float vgd::utils::Rampf(float x, float x0, float k_min, float k_max, float dt)
+float vgd::utils::Rampf(float prev_x, float x, float k_min, float k_max, float dt)
 {
-	return x + Clampf(x0 - x, k_min * dt, k_max * dt);
+	return x + vgd::utils::Clampf(prev_x - x, k_min * dt, k_max * dt);
 }
 
 // 符号函数

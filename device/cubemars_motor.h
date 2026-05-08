@@ -20,15 +20,10 @@ extern "C"
 #include "bsp-adapter.h"
 #include "utils.h"
 
-#define P_MIN -12.5f
 #define P_MAX 12.5f
-#define V_MIN -50.0f
 #define V_MAX 50.0f
-#define V_MIN_2 -45.0f
 #define V_MAX_2 45.0f
-#define T_MIN -65.0f
 #define T_MAX 65.0f
-#define T_MIN_2 -15.0f
 #define T_MAX_2 15.0f
 #define Kp_MIN 0
 #define Kp_MAX 500.0f
@@ -48,13 +43,7 @@ extern "C"
 void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id);
-void AK_Motor_MIT_Transmit(BSP_Port_t port,
-						   uint8_t id,
-						   float p_des,
-						   float v_des,
-						   float kp,
-						   float kd,
-						   float t_ff);
+void AK_Motor_MIT_Transmit(BSP_Port_t port, uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff);
 
 /* ================================ new cubemars code ================================ */
 
@@ -68,14 +57,9 @@ typedef struct
 	float errCode; // 故障码
 } Motor_AK_RxData_t;
 
-void AK_Motor_MIT_Decode(Motor_AK_RxData_t *rxData,
-						 uint8_t data[8],
-						 float pMax,
-						 float vMax,
-						 float tMax);
+void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t *buf, float pMax, float vMax, float tMax);
 
-#define AK10_9_MIT_Feedback_Decode(buf, data)                                  \
-	AK_Motor_MIT_Decode(data, buf, P_MIN, V_MAX, T_MAX)
+#define AK10_9_MIT_Feedback_Decode(buf, data) AK_Motor_MIT_Decode(data, buf, P_MAX, V_MAX, T_MAX)
 
 #ifdef __cplusplus
 }

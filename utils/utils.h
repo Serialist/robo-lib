@@ -61,9 +61,8 @@ extern "C"
 #define MAX(a, b) ((a) >= (b) ? (a) : (b))
 #endif
 
-#define DEG_CLAMPF(Ang)                                                        \
-	LoopClampf((Ang), -180.0f, 180.0f)			   // 角度格式化为-180~180
-#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI) // 弧度格式化为-PI~PI
+#define DEG_CLAMPF(Ang) LoopClampf((Ang), -180.0f, 180.0f) // 角度格式化为-180~180
+#define RAD_CLAMPF(Ang) LoopClampf((Ang), -PI, PI)		   // 弧度格式化为-PI~PI
 
 #ifndef DEG2RAD
 #define DEG2RAD(Ang) ((Ang) * 0.01745329252f)
@@ -113,7 +112,8 @@ extern "C"
 
 #if defined(BOARD_DM_MC02)
 
-// 用作 buffer，这个是 h7 用的，因为buf需要实时数据不能 cache
+// 用作 buffer
+// h7 用，因为 buf 需要实时不能 cache，所以把这块内存放在 RAM1 中发一个 axi_sram 块中，这个块在 .sct 文件中会定义
 #define BUFFER_T __attribute__((section(".AXI_SRAM"))) uint8_t
 
 // cod里用的符号，还没改，先保留下来
@@ -156,16 +156,14 @@ extern "C"
 
 /* ================================================================ prototype ================================================================ */
 
-float Signf(float value);									   // 符号函数
-void Clampfp(float *in, float min, float max);				   // 指针限幅
-float Clampf(float value, float min, float max);			   // 限幅
-float ClampAbsf(float value, float max);					   // 绝对值限幅
-float LoopClampf(float Input, float minValue, float maxValue); // 循环限幅
-float Remapf(
-	float a, float inmin, float inmax, float outmin, float outmax); // 值映射
-float Rampf(
-	float prev_x, float x, float k_min, float k_max, float dt); // 斜坡函数
-float Deadzonef(float value, float point, float deadzone);		// 死区
+float Signf(float value);													 // 符号函数
+void Clampfp(float *in, float min, float max);								 // 指针限幅
+float Clampf(float value, float min, float max);							 // 限幅
+float ClampAbsf(float value, float max);									 // 绝对值限幅
+float LoopClampf(float Input, float minValue, float maxValue);				 // 循环限幅
+float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值映射
+float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
+float Deadzonef(float value, float point, float deadzone);					 // 死区
 
 float Bit2Float(int x_int, float x_min, float x_max, int Bits);
 int Float2Bit(float x, float x_min, float x_max, int bits);
@@ -176,7 +174,7 @@ long long FPow(long long a, long long b);				  // 快速幂
 long long FPowMod(long long a, long long b, long long p); // 快速幂取模
 float FiSqrt(float x);									  // 快速平方根倒数
 float FSqrtf(float x);									  // 快速平方根
-long long FGcd(long long a, long long b); // 最大公约数 greatest common divisor
+long long FGcd(long long a, long long b);				  // 最大公约数 greatest common divisor
 
 /* ================================================================ function ================================================================ */
 
