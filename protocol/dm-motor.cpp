@@ -11,7 +11,12 @@
 
 #include "dm-motor.hpp"
 
-vgd::motor::DM::DM(uint32_t id, Model model, Mode mode)
+namespace vgd
+{
+namespace motor
+{
+
+DM::DM(uint32_t id, Model model, Mode mode)
 {
 	this->id = id;
 	this->model = model;
@@ -38,7 +43,7 @@ vgd::motor::DM::DM(uint32_t id, Model model, Mode mode)
 *               状态、位置、速度、扭矩以及相关温度参数
 ************************************************************************
 **/
-bool vgd::motor::DM::Feedback_Decode(uint8_t *buf)
+bool DM::Feedback_Decode(uint8_t *buf)
 {
 	feedback.id = buf[0] & 0x0F;
 	feedback.state = (State)(buf[0] >> 4);
@@ -60,14 +65,10 @@ bool vgd::motor::DM::Feedback_Decode(uint8_t *buf)
 /**
 ************************************************************************
 * @brief:      	enable_motor_mode: 启用电机模式函数
-* @param[in]:   hcan:     指向CAN_HandleTypeDef结构的指针
-* @param[in]:   motor_id: 电机ID，指定目标电机
-* @param[in]:   mode_id:  模式ID，指定要开启的模式
-* @retval:     	void
 * @details:    	通过CAN总线向特定电机发送启用特定模式的命令
 ************************************************************************
 **/
-bool vgd::motor::DM::Enable()
+bool DM::Enable()
 {
 	uint8_t data[8];
 
@@ -83,14 +84,10 @@ bool vgd::motor::DM::Enable()
 /**
 ************************************************************************
 * @brief:      	disable_motor_mode: 禁用电机模式函数
-* @param[in]:   hcan:     指向CAN_HandleTypeDef结构的指针
-* @param[in]:   motor_id: 电机ID，指定目标电机
-* @param[in]:   mode_id:  模式ID，指定要禁用的模式
-* @retval:     	void
 * @details:    	通过CAN总线向特定电机发送禁用特定模式的命令
 ************************************************************************
 **/
-bool vgd::motor::DM::Disable(void)
+bool DM::Disable(void)
 {
 	uint8_t data[8];
 
@@ -106,14 +103,10 @@ bool vgd::motor::DM::Disable(void)
 /**
 ************************************************************************
 * @brief:      	save_pos_zero: 保存位置零点函数
-* @param[in]:   hcan:     指向CAN_HandleTypeDef结构的指针
-* @param[in]:   motor_id: 电机ID，指定目标电机
-* @param[in]:   mode_id:  模式ID，指定要保存位置零点的模式
-* @retval:     	void
 * @details:    	通过CAN总线向特定电机发送保存位置零点的命令
 ************************************************************************
 **/
-bool vgd::motor::DM::SetZero(void)
+bool DM::SetZero(void)
 {
 	uint8_t data[8];
 
@@ -129,14 +122,10 @@ bool vgd::motor::DM::SetZero(void)
 /**
 ************************************************************************
 * @brief:      	clear_err: 清除电机错误函数
-* @param[in]:   hcan:     指向CAN_HandleTypeDef结构的指针
-* @param[in]:   motor_id: 电机ID，指定目标电机
-* @param[in]:   mode_id:  模式ID，指定要清除错误的模式
-* @retval:     	void
 * @details:    	通过CAN总线向特定电机发送清除错误的命令。
 ************************************************************************
 **/
-bool vgd::motor::DM::ClearError(void)
+bool DM::ClearError(void)
 {
 	uint8_t data[8];
 
@@ -155,18 +144,15 @@ bool vgd::motor::DM::ClearError(void)
 /**
 ************************************************************************
 * @brief:      	mit_ctrl: MIT模式下的电机控制函数
-* @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
-* @param[in]:   motor_id:	电机ID，指定目标电机
 * @param[in]:   pos:			位置给定值
 * @param[in]:   vel:			速度给定值
 * @param[in]:   kp:				位置比例系数
 * @param[in]:   kd:				位置微分系数
 * @param[in]:   torq:			转矩给定值
-* @retval:     	void
 * @details:    	通过CAN总线向电机发送MIT模式下的控制帧。
 ************************************************************************
 **/
-bool vgd::motor::DM::MIT_Encode(float kp, float kd, float position, float velocity, float torque)
+bool DM::MIT_Encode(float kp, float kd, float position, float velocity, float torque)
 {
 	uint8_t data[8];
 	uint16_t pos_tmp, vel_tmp, kp_tmp, kd_tmp, tor_tmp;
@@ -190,14 +176,11 @@ bool vgd::motor::DM::MIT_Encode(float kp, float kd, float position, float veloci
 /**
 ************************************************************************
 * @brief:      	pos_speed_ctrl: 位置速度控制函数
-* @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
-* @param[in]:   motor_id:	电机ID，指定目标电机
 * @param[in]:   vel:			速度给定值
-* @retval:     	void
 * @details:    	通过CAN总线向电机发送位置速度控制命令
 ************************************************************************
 **/
-bool vgd::motor::DM::PosSpd_Encode(float position, float velocity)
+bool DM::PosSpd_Encode(float position, float velocity)
 {
 	uint8_t *pbuf, *vbuf;
 	uint8_t data[8];
@@ -218,14 +201,11 @@ bool vgd::motor::DM::PosSpd_Encode(float position, float velocity)
 /**
 ************************************************************************
 * @brief:      	speed_ctrl: 速度控制函数
-* @param[in]:   hcan: 		指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
-* @param[in]:   motor_id: 电机ID，指定目标电机
 * @param[in]:   vel: 			速度给定值
-* @retval:     	void
 * @details:    	通过CAN总线向电机发送速度控制命令
 ************************************************************************
 **/
-bool vgd::motor::DM::Speed_Encode(float velocity)
+bool DM::Speed_Encode(float velocity)
 {
 	uint8_t *vbuf;
 	uint8_t data[8];
@@ -251,7 +231,7 @@ bool vgd::motor::DM::Speed_Encode(float velocity)
 * @details:    	将给定的浮点数 x 在指定范围 [x_min, x_max] 内进行线性映射，映射结果为一个指定位数的无符号整数
 ************************************************************************
 **/
-int vgd::motor::DM::float_to_uint(float x_float, float x_min, float x_max, int bits)
+int DM::float_to_uint(float x_float, float x_min, float x_max, int bits)
 {
 	/* Converts a float to an unsigned int, given range and number of bits */
 	float span = x_max - x_min;
@@ -269,10 +249,13 @@ int vgd::motor::DM::float_to_uint(float x_float, float x_min, float x_max, int b
 * @details:    	将给定的无符号整数 x_int 在指定范围 [x_min, x_max] 内进行线性映射，映射结果为一个浮点数
 ************************************************************************
 **/
-float vgd::motor::DM::uint_to_float(int x_int, float x_min, float x_max, int bits)
+float DM::uint_to_float(int x_int, float x_min, float x_max, int bits)
 {
 	/* converts unsigned int to float, given range and number of bits */
 	float span = x_max - x_min;
 	float offset = x_min;
 	return ((float)x_int) * span / ((float)((1 << bits) - 1)) + offset;
 }
+
+} // namespace motor
+} // namespace vgd

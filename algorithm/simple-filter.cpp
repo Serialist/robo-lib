@@ -11,6 +11,8 @@
 
 #include "simple-filter.hpp"
 
+/* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
+
 vgd::algorithm::LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample_rate)
 {
 	this->cutoff_frequency = cutoff_frequency;
@@ -35,6 +37,8 @@ float vgd::algorithm::LowPass_Order_1::update(float input)
 	output = alpha * input + (1.0f - alpha) * output;
 	return output;
 }
+
+/* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
 
 vgd::algorithm::ZeroOrder_Holder::ZeroOrder_Holder(void)
 {
