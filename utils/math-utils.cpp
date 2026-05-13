@@ -14,7 +14,7 @@
 #include <cmath>
 #include <cstdint>
 
-using namespace vgd::utils;
+using namespace vgd;
 
 // 快速开方（牛顿迭代法）
 float math::SSqrt(float x) {
@@ -191,6 +191,29 @@ float math::Deadzonef(float value, float point, float deadzone) {
 	} else {
 		return value;
 	}
+}
+
+/// @brief 圆圈最近距离
+/// @param point 当前点（默认在 [0, 2PI]）
+/// @param setpoint 目标点（默认在 [0, 2PI]）
+/// @return 套圈最近距离
+float math::CircleNearestDistance(float point, float setpoint) {
+	float drct = setpoint - point;
+	if (std::abs(drct) < math::pi) // 不过零
+		return drct;
+	else if (math::Sign(drct))
+		return drct + 2 * math::pi;
+	else
+		return drct - 2 * math::pi;
+}
+
+/// @brief 圆圈最近点
+/// @tparam T
+/// @param point 当前点（默认在 [0, 2PI]）
+/// @param setpoint 目标点（默认在 [0, 2PI]）
+/// @return 套圈最近目标点
+float math::CircleNearestPoint(float point, float setpoint) {
+	return point + CircleNearestDistance(point, setpoint);
 }
 
 float math::Bit2Float(int x_int, float x_min, float x_max, int Bits) {

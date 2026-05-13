@@ -14,20 +14,23 @@
 
 /* ================================================================ import ================================================================ */
 
+#include "math-adapter.hpp"
+
 /* ================================================================ macro ================================================================ */
 
 /* ================================================================ prototype ================================================================ */
 
 namespace vgd {
-namespace utils {
 namespace math {
+
+constexpr float pi = 3.14159265358979323846; // 圆周率
 
 void Clampfp(float* in, float min, float max);				   // 指针限幅
 float Clampf(float value, float min, float max);			   // 限幅
 float ClampAbsf(float value, float max);					   // 绝对值限幅
 float LoopClampf(float Input, float minValue, float maxValue); // 循环限幅
 
-float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值映射
+float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值线性映射
 float Rampf(float prev_x, float x, float k_min, float k_max, float dt);		 // 斜坡函数
 float Deadzonef(float value, float point, float deadzone);					 // 死区
 
@@ -43,8 +46,10 @@ float FiSqrt(float x);									  // 快速平方根倒数
 float FSqrtf(float x);									  // 快速平方根
 long long FGcd(long long a, long long b);				  // 最大公约数 greatest common divisor
 
+float CircleNearestDistance(float point, float setpoint); // 圈最近目标距离
+float CircleNearestPoint(float point, float setpoint);	  // 圈最近目标点
+
 } // namespace math
-} // namespace utils
 } // namespace vgd
 
 #endif

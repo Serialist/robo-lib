@@ -23,15 +23,15 @@ namespace math {
 
 #ifdef ARM_MATH
 
-inline float sin(float x) {
+inline float Sin(float x) {
 	return arm_sin_f32(x);
 }
 
-inline float cos(float x) {
+inline float Cos(float x) {
 	return arm_cos_f32(x);
 }
 
-inline float sqrt(float x) {
+inline float Sqrt(float x) {
 	float out;
 	arm_sqrt_f32(x, &out);
 	return out;
@@ -39,7 +39,10 @@ inline float sqrt(float x) {
 
 #endif
 
-inline bool sign(float x) {
+/// @brief ·ûºÅº¯Êı
+/// @param x
+/// @return x < 0 true , x >= 0 false
+inline bool Sign(float x) {
 	return signbit(x);
 }
 
