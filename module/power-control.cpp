@@ -10,7 +10,6 @@
 */
 
 #include "power-control.hpp"
-#include "math-adapter.hpp"
 #include "math-utils.hpp"
 #include <cmath>
 
@@ -73,28 +72,28 @@ void Wheel_Leg::Update(
 	delta = B * B - 4 * A * C;
 	// 功率取解
 	if (delta > 0) {
-		float sqrt_delta = vgd::math::sqrt(delta);
+		float sqrt_delta = vgd::math::Sqrt(delta);
 
 		x1 = (-B + sqrt_delta) / (2 * A);
 		x2 = (-B - sqrt_delta) / (2 * A);
 
-		if (vgd::math::sign(x1) == vgd::math::sign(*uyaw))
+		if (vgd::math::Sign(x1) == vgd::math::Sign(*uyaw))
 			x = x1;
 
-		if (vgd::math::sign(x2) == vgd::math::sign(*uyaw))
-			x = vgd::math::sign(*uyaw) ? std::fminf(x, x2) : std::fmaxf(x, x2);
+		if (vgd::math::Sign(x2) == vgd::math::Sign(*uyaw))
+			x = vgd::math::Sign(*uyaw) ? std::fminf(x, x2) : std::fmaxf(x, x2);
 
 	} else {
 		x = -B / (2 * A);
 
-		if (vgd::math::sign(x) != vgd::math::sign(*uyaw)) {
+		if (vgd::math::Sign(x) != vgd::math::Sign(*uyaw)) {
 			x = 0;
 		}
 	}
 
 	// 得到功率，并限幅
-	kyaw = vgd::utils::math::Clampf(x / (*uyaw), 0, 1);
-	kspd = vgd::utils::math::Clampf(k * x / (*uyaw), 0, 1);
+	kyaw = vgd::math::Clampf(x / (*uyaw), 0, 1);
+	kspd = vgd::math::Clampf(k * x / (*uyaw), 0, 1);
 	*uyaw = kyaw * (*uyaw);
 	*uspd = kspd * (*uspd);
 }

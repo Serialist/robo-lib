@@ -1,5 +1,5 @@
 /**
- * @file cubemars_motor.c
+ * @file cubemars-motor.c
  * @author Serialist (ba3pt@qq.com)
  * @brief
  * @version 0.1.0
@@ -9,7 +9,7 @@
  *
  ************************/
 
-#include "cubemars_motor.h"
+#include "cubemars-motor.h"
 #include "bsp-adapter.h"
 
 // servo mode
