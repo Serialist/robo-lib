@@ -193,6 +193,30 @@ float math::Deadzonef(float value, float point, float deadzone) {
     }
 }
 
+/// @brief 循环最近距离
+/// @param point 当前点（应在 [min, max]）
+/// @param setpoint 目标点（应在 [min, max]）
+/// @return 循环最近距离
+float math::LoopNearestDistance(float point, float setpoint, float min, float max) {
+    float drct = setpoint - point;
+    float range = max - min;
+
+    if (std::abs(drct) < (range * 0.5)) // 不过零
+        return drct;
+    else if (math::Sign(drct))
+        return drct + range;
+    else
+        return drct - range;
+}
+
+/// @brief 循环最近点
+/// @param point 当前点（应在 [min, max]）
+/// @param setpoint 目标点（应在 [min, max]）
+/// @return 循环最近目标点
+float math::LoopNearestPoint(float point, float setpoint, float min, float max) {
+    return point + LoopNearestDistance(point, setpoint, min, max);
+}
+
 /// @brief 圆圈最近距离
 /// @param point 当前点（应在 [0, 2PI]）
 /// @param setpoint 目标点（应在 [0, 2PI]）
@@ -211,7 +235,30 @@ float math::CircleNearestDistance(float point, float setpoint) {
 /// @param point 当前点（应在 [0, 2PI]）
 /// @param setpoint 目标点（应在 [0, 2PI]）
 /// @return 套圈最近目标点
-/// @note 可用于选装时解算目标点
+/// @note 可用于旋转时解算目标点
 float math::CircleNearestPoint(float point, float setpoint) {
+    return point + CircleNearestDistance(point, setpoint);
+}
+
+/// @brief 半圈最近距离
+/// @param point 当前点（应在 [0, 2PI]）
+/// @param setpoint 目标点（应在 [0, 2PI]）
+/// @return 套半圈最近距离
+float math::HalfCircleNearestDistance(float point, float setpoint) {
+    float drct = setpoint - point;
+    if (std::abs(drct) < (math::pi * 0.5)) // 不过零
+        return drct;
+    else if (math::Sign(drct))
+        return drct + math::pi;
+    else
+        return drct - math::pi;
+}
+
+/// @brief 半圈最近点
+/// @param point 当前点（应在 [0, 2PI]）
+/// @param setpoint 目标点（应在 [0, 2PI]）
+/// @return 套半圈最近目标点
+/// @note 可用于旋转时解算目标点
+float math::HalfCircleNearestPoint(float point, float setpoint) {
     return point + CircleNearestDistance(point, setpoint);
 }
