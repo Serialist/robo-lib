@@ -19,16 +19,14 @@ extern "C" {
 #include "utils.h"
 
 typedef struct {
-	float vx;
-	float vy;
-	float vyaw;
-	uint8_t sw[2];
-	uint8_t button[4];
+    float ch[4];
+    uint8_t sw[4];
+    bool btn[8];
 } B2B_Chassis_Command_t;
 
 typedef struct {
-	float leglength[2];
-	float legangle[2];
+    float leglength[2];
+    float legangle[2];
 } B2B_Chassis_Feedback_t;
 
 void B2B_Chassis_Command_Encode(B2B_Chassis_Command_t* data, uint8_t* buf);
