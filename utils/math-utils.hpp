@@ -23,9 +23,9 @@
 namespace vgd {
 namespace math {
 
-inline constexpr float pi = 3.14159265358979323846; // pi
-inline constexpr float two_pi = 6.283185307179586;  // 2pi
-inline constexpr float e = 2.71828182845904523536;  // euler number
+constexpr float pi = 3.14159265358979323846; // pi
+constexpr float two_pi = 6.283185307179586;  // 2pi
+constexpr float e = 2.71828182845904523536;  // euler number
 
 void Clampfp(float* in, float min, float max);                 // 指针限幅
 float Clampf(float value, float min, float max);               // 限幅
