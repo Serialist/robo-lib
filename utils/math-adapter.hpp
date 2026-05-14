@@ -12,10 +12,10 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-#define ARM_MATH
+#include "utils.h"
 
 #ifdef ARM_MATH
-	#include "arm_math.h"
+    #include "arm_math.h"
 #endif
 
 namespace vgd {
@@ -24,17 +24,31 @@ namespace math {
 #ifdef ARM_MATH
 
 inline float Sin(float x) {
-	return arm_sin_f32(x);
+    return arm_sin_f32(x);
 }
 
 inline float Cos(float x) {
-	return arm_cos_f32(x);
+    return arm_cos_f32(x);
 }
 
 inline float Sqrt(float x) {
-	float out;
-	arm_sqrt_f32(x, &out);
-	return out;
+    float out;
+    arm_sqrt_f32(x, &out);
+    return out;
+}
+
+#else
+
+inline float Sin(float x) {
+    return sinf(x);
+}
+
+inline float Cos(float x) {
+    return cosf(x);
+}
+
+inline float Sqrt(float x) {
+    return sqrtf(x);
 }
 
 #endif
@@ -43,7 +57,7 @@ inline float Sqrt(float x) {
 /// @param x
 /// @return x < 0 true , x >= 0 false
 inline bool Sign(float x) {
-	return signbit(x);
+    return signbit(x);
 }
 
 } // namespace math
