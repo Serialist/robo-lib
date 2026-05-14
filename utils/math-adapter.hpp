@@ -12,7 +12,7 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-#include "utils.h"
+#include "robo-config.h"
 
 #ifdef ARM_MATH
     #include "arm_math.h"
@@ -40,15 +40,15 @@ inline float Sqrt(float x) {
 #else
 
 inline float Sin(float x) {
-    return sinf(x);
+    return std::sinf(x);
 }
 
 inline float Cos(float x) {
-    return cosf(x);
+    return std::cosf(x);
 }
 
 inline float Sqrt(float x) {
-    return sqrtf(x);
+    return std::sqrtf(x);
 }
 
 #endif

@@ -49,19 +49,20 @@ extern "C" {
 
 // 电机读取数据
 
-#define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191 * 2 * PI)	// unit: rad
+#define RM_MOTOR_ANGLE(self) ((float)(self)->encoder / 8191 * 2 * PI)   // unit: rad
 #define RM_MOTOR_VELOCITY(self) ((float)(self)->velocity / 60 * 2 * PI) // unit: rad/s
-#define RM_MOTOR_CURRENT(self) ((float)(self)->current * 20 / 16384)	// unit: A
-#define RM_MOTOR_TEMP(self) ((float)(self)->temperature)				// unit: C
+#define RM_MOTOR_CURRENT(self) ((float)(self)->current * 20 / 16384)    // unit: A
+#define RM_MOTOR_TEMP(self) ((float)(self)->temperature)                // unit: C
 
 // 关于 HEXROLL 减速箱 + M3508 电机下的一些转换
 
 #define HEXROLL_GEAR_RATIO (268.f / 17.f) // HEXROLL 减速比
 
 #define HEXROLL_VELOCITY(self) \
-	((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
+    ((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
 
 #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3326.263229308005)
+#define HEXROLL_CURRENT_TO_TORQUE(current) (int16_t)(current / 3326.263229308005)
 // approx torque * 3326.263229308005
 // #define HEXROLL_TORQUE_TO_CURRENT(torque) \
 // 	(int16_t)(torque / HEXROLL_GEAR_RATIO * M3508_GEAR_RATIO / 0.3 / 20 \ * 16384)
@@ -69,10 +70,10 @@ extern "C" {
 /* ================================================================ struct ================================================================ */
 
 typedef struct {
-	int16_t encoder;	 // 0-8191 --> 2pi
-	int16_t velocity;	 // rpm
-	int16_t current;	 // +-16384 --> +-3A
-	uint8_t temperature; // C
+    int16_t encoder;     // 0-8191 --> 2pi
+    int16_t velocity;    // rpm
+    int16_t current;     // +-16384 --> +-3A
+    uint8_t temperature; // C
 } RM_Motor_Feedback_t;
 
 /**
