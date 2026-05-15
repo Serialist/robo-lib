@@ -22,6 +22,7 @@ namespace math {
 /* ================================================================ constant ================================================================ */
 
 constexpr float pi = 3.14159265358979323846; // pi
+constexpr float half_pi = 1.570796326794897; // pi/2
 constexpr float two_pi = 6.283185307179586;  // 2pi
 constexpr float e = 2.71828182845904523536;  // euler number
 

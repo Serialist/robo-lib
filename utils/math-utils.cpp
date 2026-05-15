@@ -241,8 +241,8 @@ float math::CircleNearestPoint(float point, float setpoint) {
 }
 
 /// @brief 半圈最近距离
-/// @param point 当前点（应在 [0, 2PI]）
-/// @param setpoint 目标点（应在 [0, 2PI]）
+/// @param point 当前点（应在 [0, PI]）
+/// @param setpoint 目标点（应在 [0, PI]）
 /// @return 套半圈最近距离
 float math::HalfCircleNearestDistance(float point, float setpoint) {
     float drct = setpoint - point;
@@ -255,8 +255,8 @@ float math::HalfCircleNearestDistance(float point, float setpoint) {
 }
 
 /// @brief 半圈最近点
-/// @param point 当前点（应在 [0, 2PI]）
-/// @param setpoint 目标点（应在 [0, 2PI]）
+/// @param point 当前点（应在 [0, PI]）
+/// @param setpoint 目标点（应在 [0, PI]）
 /// @return 套半圈最近目标点
 /// @note 可用于旋转时解算目标点
 float math::HalfCircleNearestPoint(float point, float setpoint) {
