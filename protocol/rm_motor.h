@@ -49,7 +49,7 @@ extern "C" {
 
 // 电机读取数据
 
-#define RM_MOTOR_ANGLE(encoder) (encoder / 8191 * 2 * PI)               // unit: rad
+#define RM_MOTOR_ANGLE(encoder) ((float)encoder * 2.0 * PI / 8191.0)    // unit: rad
 #define RM_MOTOR_VELOCITY(self) ((float)(self)->velocity / 60 * 2 * PI) // unit: rad/s
 #define RM_MOTOR_CURRENT(self) ((float)(self)->current * 20 / 16384)    // unit: A
 #define RM_MOTOR_TEMP(self) ((float)(self)->temperature)                // unit: C

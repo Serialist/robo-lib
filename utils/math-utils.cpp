@@ -162,6 +162,10 @@ float math::LoopClampf(float value, float min, float max) {
     // return (value >= 0) ? (value + min) : (value + max);
 }
 
+float math::CircleClamp(float value) {
+    return value - std::floorf(value / math::two_pi) * math::two_pi;
+}
+
 /// @brief 值映射
 float math::Remapf(float a, float inmin, float inmax, float outmin, float outmax) {
     return outmin + (a - inmin) * (outmax - outmin) / (inmax - inmin);
