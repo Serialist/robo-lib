@@ -67,6 +67,17 @@ extern "C" {
 // #define HEXROLL_TORQUE_TO_CURRENT(torque) \
 // 	(int16_t)(torque / HEXROLL_GEAR_RATIO * M3508_GEAR_RATIO / 0.3 / 20 \ * 16384)
 
+// 掉线保护
+
+#define RM_MOTOR_OFFLINE_CNT 100u
+#define RM_MOTOR_IS_OFFLINE(self) ((self)->cnt < 50u)
+#define RM_MOTOR_HEARTBEAT(self) ((self)->cnt = RM_MOTOR_OFFLINE_CNT)
+#define RM_MOTOR_MONITOR(self) \
+    { \
+        if (!RM_MOTOR_IS_OFFLINE(self)) \
+            (self)->cnt--; \
+    }
+
 /* ================================================================ struct ================================================================ */
 
 typedef struct {
@@ -74,6 +85,7 @@ typedef struct {
     int16_t velocity;    // rpm
     int16_t current;     // +-16384 --> +-3A
     uint8_t temperature; // C
+    uint8_t cnt;
 } RM_Motor_Feedback_t;
 
 /**

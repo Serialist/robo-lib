@@ -88,6 +88,8 @@ void B2B_Chassis_Command_Decode(uint8_t* buf, B2B_Chassis_Command_t* data) {
     data->btn[5] = (buf[7] >> 2) & 0x01;
     data->btn[6] = (buf[7] >> 1) & 0x01;
     data->btn[7] = buf[7] & 0x01;
+
+    B2B_HEARTBEAT(data);
 }
 
 void B2B_Chassis_Feedback_Encode(B2B_Chassis_Feedback_t* data, uint8_t* buf) {
@@ -102,4 +104,6 @@ void B2B_Chassis_Feedback_Decode(uint8_t* buf, B2B_Chassis_Feedback_t* data) {
     data->leglength[1] = Bit2Float(buf[1], 0, 0.4, 8);
     data->legangle[0] = Bit2Float(buf[2], DEG2RAD(-60), DEG2RAD(60), 8);
     data->legangle[1] = Bit2Float(buf[3], DEG2RAD(-60), DEG2RAD(60), 8);
+
+    B2B_HEARTBEAT(data);
 }
