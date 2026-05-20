@@ -190,7 +190,14 @@ float Rampf(float prev_x, float x, float k_min, float k_max, float dt) {
 
 // 符号函数
 float Signf(float value) {
-    return (value > 0.0f) - (value < 0.0f);
+    if (value > 0) {
+        return 1;
+    } else if (value < 0) {
+        return -1;
+    } else {
+        return 0;
+    }
+    // return (value > 0.0f) - (value < 0.0f);
 }
 
 /**

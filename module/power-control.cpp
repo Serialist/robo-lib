@@ -25,17 +25,19 @@ Wheel_Leg::Wheel_Leg(
     float eoff, // 超电参数：关模式期望能量
     float kp,   // PID参数
     float kd,
-    float dt
+    float dt,
+    float p0
 ):
     k1(k1),
     k2(k2),
     k3(k3),
     eon(eon),
-    eoff(eoff) {
+    eoff(eoff),
+    p0(p0) {
     epid = controller::PID(kp, 0, kd, 0, 0, dt);
 
-    k = 0, kspd = 0, kyaw = 0;
-    pmax = 0, p0 = 0;
+    k = 0, k_limit = 0;
+    pmax = 0;
     A = 0, B = 0, C = 0, delta = 0, x1 = 0, x2 = 0, x = 0;
 }
 
@@ -45,8 +47,6 @@ Wheel_Leg::Wheel_Leg(
  * @param uspd 速度控制量
  * @param uyaw yaw 控制量
  * @param spcEnable 超电模式使能
- * @param tl yaw 控制量
- * @param tr 右 实际扭矩
  * @param omgl 左 角速度
  * @param omgr 右 角速度
  * @param ml 左 平衡扭矩
@@ -58,8 +58,6 @@ void Wheel_Leg::Update(
     float* uspd,
     float* uyaw,
     bool spcEnable,
-    float tl,
-    float tr,
     float omgl,
     float omgr,
     float ml,
@@ -69,10 +67,17 @@ void Wheel_Leg::Update(
 ) {
     // 能量环
     etarget = spcEnable ? eon : eoff;
-    pmax = epid.Update(etarget, espc);
+    pmax = std::fmaxf(p0, pr + epid.Update(etarget, espc));
+    pmax = 35;
+
+    bool is_infs = std::fabsf(*uyaw) < 1e-3f; // 分母不能无穷小
+
+    if (is_infs) // 所以让 uyaw = ufake = 1
+        k = (*uspd);
+    else
+        k = (*uspd) / (*uyaw);
 
     // 功率环
-    k = *uspd / *uyaw;
     A = k2 * (2 * k * k + 2);
     B = 2 * k2 * (k + 1) * ml   //
         + 2 * k2 * (k - 1) * mr //
@@ -81,9 +86,10 @@ void Wheel_Leg::Update(
     C = omgl * ml + omgr * mr                    //
         + k1 * (std::abs(omgl) + std::abs(omgr)) //
         + k2 * (mr * mr + ml * ml)               //
-        + k3 - pmax;
+        + 2 * k3 - pmax;
 
     delta = B * B - 4 * A * C;
+
     // 功率取解
     if (delta > 0) {
         float sqrt_delta = vgd::math::Sqrt(delta);
@@ -91,25 +97,42 @@ void Wheel_Leg::Update(
         x1 = (-B + sqrt_delta) / (2 * A);
         x2 = (-B - sqrt_delta) / (2 * A);
 
-        if (vgd::math::Sign(x1) == vgd::math::Sign(*uyaw))
-            x = x1;
+        bool x1_same_sign = vgd::math::Signf(x1) == vgd::math::Signf(*uyaw),
+             x2_same_sign = vgd::math::Signf(x2) == vgd::math::Signf(*uyaw);
 
-        if (vgd::math::Sign(x2) == vgd::math::Sign(*uyaw))
-            x = vgd::math::Sign(*uyaw) ? std::fminf(x, x2) : std::fmaxf(x, x2);
+        if (x1_same_sign && x2_same_sign) {
+            // 都同号选绝对值大
+            x = std::fabsf(x1) > std::fabsf(x2) ? x1 : x2;
+        } else if (x1_same_sign) {
+            // 只一个就选这个
+            x = x1;
+        } else if (x2_same_sign) {
+            x = x2;
+        } else {
+            // 否则 0
+            x = 0;
+        }
 
     } else {
-        x = -B / (2 * A);
-
-        if (vgd::math::Sign(x) != vgd::math::Sign(*uyaw)) {
+        x1 = -B / (2 * A);
+        if (vgd::math::Signf(x1) == vgd::math::Signf(*uyaw)) {
+            x = x1;
+        } else {
             x = 0;
         }
     }
 
     // 得到功率，并限幅
-    kyaw = vgd::math::Clampf(x / (*uyaw), 0, 1);
-    kspd = vgd::math::Clampf(k * x / (*uyaw), 0, 1);
-    *uyaw = kyaw * (*uyaw);
-    *uspd = kspd * (*uspd);
+
+    if (is_infs) {
+        k_limit = vgd::math::Clampf(x, 0, 1); // = x/ufake = x/1 = x
+        (*uspd) *= k_limit;
+        // uyaw 不变
+    } else {
+        k_limit = vgd::math::Clampf(x / (*uyaw), 0, 1);
+        (*uyaw) *= k_limit;
+        (*uspd) *= k_limit;
+    }
 }
 
 } // namespace power_control

@@ -29,8 +29,8 @@ class Wheel_Leg {
 
     float k1, k2, k3; // 电机参数
 
-    float k,        // k = speed / yaw
-        kspd, kyaw; // attenuation ratio, $k \in [0, 1]$
+    float k,     // k = speed / yaw
+        k_limit; // attenuation ratio, $k \in [0, 1]$
 
     float pmax, // max power setpoint
         p0;     // min(p_max) > p_0
@@ -50,15 +50,14 @@ public:
         float eoff, // 超电参数：关模式期望能量
         float kp,   // PID参数
         float kd,
-        float dt
+        float dt,
+        float p0
     );
 
     void Update(
         float* uspd,    // 速度控制量
         float* uyaw,    // yaw 控制量
         bool spcEnable, // 超电模式
-        float tl,       // 左 实际扭矩
-        float tr,       // 右 实际扭矩
         float omgl,     // 左 角速度
         float omgr,     // 右 角速度
         float ml,       // 左 平衡扭矩

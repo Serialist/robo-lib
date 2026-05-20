@@ -58,8 +58,8 @@ extern "C" {
 
 #define HEXROLL_GEAR_RATIO (268.f / 17.f) // HEXROLL 减速比
 
-#define HEXROLL_VELOCITY(self) \
-    ((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
+#define HEXROLL_VELOCITY(velocity) \
+    ((float)velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
 
 #define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)((float)(torque) * 3326.263229308005)
 #define HEXROLL_CURRENT_TO_TORQUE(current) (int16_t)((float)(current) / 3326.263229308005)
