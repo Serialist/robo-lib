@@ -49,10 +49,10 @@ extern "C" {
 
 // 电机读取数据
 
-#define RM_MOTOR_ANGLE(encoder) ((float)encoder * 2.0 * PI / 8191.0)    // unit: rad
-#define RM_MOTOR_VELOCITY(self) ((float)(self)->velocity / 60 * 2 * PI) // unit: rad/s
-#define RM_MOTOR_CURRENT(self) ((float)(self)->current * 20 / 16384)    // unit: A
-#define RM_MOTOR_TEMP(self) ((float)(self)->temperature)                // unit: C
+#define RM_MOTOR_ANGLE(encoder) ((float)(encoder) * 2.0 * PI / 8191.0) // unit: rad
+#define RM_MOTOR_VELOCITY(velocity) ((float)(velocity) / 60 * 2 * PI)  // unit: rad/s
+#define RM_MOTOR_CURRENT(self) ((float)(self)->current * 20 / 16384)   // unit: A
+#define RM_MOTOR_TEMP(self) ((float)(self)->temperature)               // unit: C
 
 // 关于 HEXROLL 减速箱 + M3508 电机下的一些转换
 
@@ -61,8 +61,8 @@ extern "C" {
 #define HEXROLL_VELOCITY(self) \
     ((float)(self)->velocity / 60.0f * 2 * PI / HEXROLL_GEAR_RATIO) // unit: rad/s
 
-#define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)(torque * 3326.263229308005)
-#define HEXROLL_CURRENT_TO_TORQUE(current) (int16_t)(current / 3326.263229308005)
+#define HEXROLL_TORQUE_TO_CURRENT(torque) (int16_t)((float)(torque) * 3326.263229308005)
+#define HEXROLL_CURRENT_TO_TORQUE(current) (int16_t)((float)(current) / 3326.263229308005)
 // approx torque * 3326.263229308005
 // #define HEXROLL_TORQUE_TO_CURRENT(torque) \
 // 	(int16_t)(torque / HEXROLL_GEAR_RATIO * M3508_GEAR_RATIO / 0.3 / 20 \ * 16384)

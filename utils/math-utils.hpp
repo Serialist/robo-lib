@@ -38,11 +38,12 @@ inline constexpr float Deg2Rad(float deg) {
 /* ================================================================ prototype ================================================================ */
 
 /* 限幅 */
-void Clampfp(float* in, float min, float max);                 // 指针限幅
-float Clampf(float value, float min, float max);               // 限幅
-float ClampAbsf(float value, float max);                       // 绝对值限幅
-float LoopClampf(float Input, float minValue, float maxValue); // 循环限幅
-float CircleClamp(float value);                                // 圈限幅[0, 2pi]
+void Clampfp(float* in, float min, float max);                  // 指针限幅
+float Clampf(float value, float min, float max);                // 限幅
+float ClampAbsf(float value, float max);                        // 绝对值限幅
+float LoopClampf(float Input, float minValue, float maxValue);  // 循环限幅
+float CircleClamp(float value);                                 // 圈限幅[0, 2pi]
+float StepClamp(float prev, float value, float min, float max); // 步进限幅
 
 /* 数值处理 */
 float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值线性映射

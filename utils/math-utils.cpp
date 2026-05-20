@@ -14,10 +14,12 @@
 #include <cmath>
 #include <cstdint>
 
-using namespace vgd;
+namespace vgd {
+
+namespace math {
 
 // 快速开方（牛顿迭代法）
-float math::SSqrt(float x) {
+float SSqrt(float x) {
     float y;
     float delta;
     float maxError;
@@ -49,7 +51,7 @@ float math::SSqrt(float x) {
  *
  * @note a ^ b
  */
-long long math::FPow(long long a, long long b) {
+long long FPow(long long a, long long b) {
     long long res = 1;
 
     while (b) {
@@ -71,7 +73,7 @@ long long math::FPow(long long a, long long b) {
  *
  * @note a ^ b % p
  */
-long long math::FPowMod(long long a, long long b, long long p) {
+long long FPowMod(long long a, long long b, long long p) {
     long long res = 1;
 
     while (b) {
@@ -84,7 +86,7 @@ long long math::FPowMod(long long a, long long b, long long p) {
 }
 
 /// @brief 快速平方根倒数
-float math::FiSqrt(float x) {
+float FiSqrt(float x) {
     float halfnum = 0.5f * x;
     float y = x;
     long i = *(long*)&y;
@@ -95,7 +97,7 @@ float math::FiSqrt(float x) {
 }
 
 /// @brief 快速平方根
-float math::FSqrtf(float x) {
+float FSqrtf(float x) {
     float halfnum = 0.5f * x;
     float y = x;
     long i = *(long*)&y;
@@ -106,14 +108,14 @@ float math::FSqrtf(float x) {
 }
 
 /// @brief 最大公约数 greatest common divisor
-long long math::FGcd(long long a, long long b) {
+long long FGcd(long long a, long long b) {
     if (b == 0)
         return a;
     return FGcd(b, a % b);
 }
 
 /// @brief 限幅
-void math::Clampfp(float* in, float min, float max) {
+void Clampfp(float* in, float min, float max) {
     if (*in < min) {
         *in = min;
     } else if (*in > max) {
@@ -122,16 +124,26 @@ void math::Clampfp(float* in, float min, float max) {
 }
 
 /// @brief 限幅
-float math::Clampf(float value, float min, float max) {
+float Clampf(float value, float min, float max) {
     return fminf(fmaxf(value, min), max);
 }
 
 /// @brief 绝对值限幅
-float math::ClampAbsf(float value, float max) {
+float ClampAbsf(float value, float max) {
     return fminf(fmaxf(value, -max), max);
 }
 
-float math::Modf(float value, float range) {
+/// @brief 步进限幅
+/// @param prev 前
+/// @param value 现在
+/// @param min 小
+/// @param max 大
+/// @return
+float StepClamp(float prev, float value, float min, float max) {
+    return prev + Clampf(value - prev, min, max);
+}
+
+float Modf(float value, float range) {
     if (range == 0)
         return NAN;
     return value - floorf(value / range) * range;
@@ -147,7 +159,7 @@ float math::Modf(float value, float range) {
  *
  * @note 不做检查，min > max 未定义
  */
-float math::LoopClampf(float value, float min, float max) {
+float LoopClampf(float value, float min, float max) {
     // 实现 1
     // a mod b  ==  a-floor(a/b)*b
     float range = max - min;
@@ -162,22 +174,22 @@ float math::LoopClampf(float value, float min, float max) {
     // return (value >= 0) ? (value + min) : (value + max);
 }
 
-float math::CircleClamp(float value) {
-    return value - std::floorf(value / math::two_pi) * math::two_pi;
+float CircleClamp(float value) {
+    return value - std::floorf(value / two_pi) * two_pi;
 }
 
 /// @brief 值映射
-float math::Remapf(float a, float inmin, float inmax, float outmin, float outmax) {
+float Remapf(float a, float inmin, float inmax, float outmin, float outmax) {
     return outmin + (a - inmin) * (outmax - outmin) / (inmax - inmin);
 }
 
 /// @brief 斜坡函数
-float math::Rampf(float prev_x, float x, float k_min, float k_max, float dt) {
-    return x + math::Clampf(prev_x - x, k_min * dt, k_max * dt);
+float Rampf(float prev_x, float x, float k_min, float k_max, float dt) {
+    return x + Clampf(prev_x - x, k_min * dt, k_max * dt);
 }
 
 // 符号函数
-float math::Signf(float value) {
+float Signf(float value) {
     return (value > 0.0f) - (value < 0.0f);
 }
 
@@ -189,7 +201,7 @@ float math::Signf(float value) {
  * @param deadzone 死区大小
  * @return float
  */
-float math::Deadzonef(float value, float point, float deadzone) {
+float Deadzonef(float value, float point, float deadzone) {
     if ((point - deadzone) < value && value < (point + deadzone)) {
         return point;
     } else {
@@ -201,13 +213,13 @@ float math::Deadzonef(float value, float point, float deadzone) {
 /// @param point 当前点（应在 [min, max]）
 /// @param setpoint 目标点（应在 [min, max]）
 /// @return 循环最近距离
-float math::LoopNearestDistance(float point, float setpoint, float min, float max) {
+float LoopNearestDistance(float point, float setpoint, float min, float max) {
     float drct = setpoint - point;
     float range = max - min;
 
     if (std::abs(drct) < (range * 0.5)) // 不过零
         return drct;
-    else if (math::Sign(drct))
+    else if (Sign(drct))
         return drct + range;
     else
         return drct - range;
@@ -217,7 +229,7 @@ float math::LoopNearestDistance(float point, float setpoint, float min, float ma
 /// @param point 当前点（应在 [min, max]）
 /// @param setpoint 目标点（应在 [min, max]）
 /// @return 循环最近目标点
-float math::LoopNearestPoint(float point, float setpoint, float min, float max) {
+float LoopNearestPoint(float point, float setpoint, float min, float max) {
     return point + LoopNearestDistance(point, setpoint, min, max);
 }
 
@@ -225,14 +237,14 @@ float math::LoopNearestPoint(float point, float setpoint, float min, float max) 
 /// @param point 当前点（应在 [0, 2PI]）
 /// @param setpoint 目标点（应在 [0, 2PI]）
 /// @return 套圈最近距离
-float math::CircleNearestDistance(float point, float setpoint) {
+float CircleNearestDistance(float point, float setpoint) {
     float drct = setpoint - point;
-    if (std::abs(drct) < math::pi) // 不过零
+    if (std::abs(drct) < pi) // 不过零
         return drct;
-    else if (math::Sign(drct))
-        return drct + 2 * math::pi;
+    else if (Sign(drct))
+        return drct + 2 * pi;
     else
-        return drct - 2 * math::pi;
+        return drct - 2 * pi;
 }
 
 /// @brief 圆圈最近点
@@ -240,7 +252,7 @@ float math::CircleNearestDistance(float point, float setpoint) {
 /// @param setpoint 目标点（应在 [0, 2PI]）
 /// @return 套圈最近目标点
 /// @note 可用于旋转时解算目标点
-float math::CircleNearestPoint(float point, float setpoint) {
+float CircleNearestPoint(float point, float setpoint) {
     return point + CircleNearestDistance(point, setpoint);
 }
 
@@ -248,14 +260,14 @@ float math::CircleNearestPoint(float point, float setpoint) {
 /// @param point 当前点（应在 [0, PI]）
 /// @param setpoint 目标点（应在 [0, PI]）
 /// @return 套半圈最近距离
-float math::HalfCircleNearestDistance(float point, float setpoint) {
+float HalfCircleNearestDistance(float point, float setpoint) {
     float drct = setpoint - point;
-    if (std::abs(drct) < (math::pi * 0.5)) // 不过零
+    if (std::abs(drct) < (pi * 0.5)) // 不过零
         return drct;
-    else if (math::Sign(drct))
-        return drct + math::pi;
+    else if (Sign(drct))
+        return drct + pi;
     else
-        return drct - math::pi;
+        return drct - pi;
 }
 
 /// @brief 半圈最近点
@@ -263,6 +275,9 @@ float math::HalfCircleNearestDistance(float point, float setpoint) {
 /// @param setpoint 目标点（应在 [0, PI]）
 /// @return 套半圈最近目标点
 /// @note 可用于旋转时解算目标点
-float math::HalfCircleNearestPoint(float point, float setpoint) {
+float HalfCircleNearestPoint(float point, float setpoint) {
     return point + CircleNearestDistance(point, setpoint);
 }
+
+} // namespace math
+} // namespace vgd

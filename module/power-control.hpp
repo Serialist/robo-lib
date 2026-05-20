@@ -37,6 +37,8 @@ class Wheel_Leg {
 
     float A, B, C, delta, x1, x2, x;
 
+    float etarget;
+
     float eon, eoff;
 
 public:
@@ -62,7 +64,6 @@ public:
         float ml,       // 左 平衡扭矩
         float mr,       // 右 平衡扭矩
         float pr,       // 当前的裁判系统最大允许功率
-        float etarget,  // 目标超电能量
         float espc      // 当前超电能量
     );
 };
