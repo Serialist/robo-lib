@@ -19,17 +19,26 @@
  * @param buf
  * @param data
  */
-void SuperPower_Fdb_Decode(uint8_t *buf, SuperPower_Fdb_t *data)
-{
-	uint16_t chassis = (buf[1] << 8 | buf[0]);
-	uint16_t cap_tar = (buf[3] << 8 | buf[2]);
-	uint16_t referee = (buf[5] << 8 | buf[4]);
-	uint16_t cap = (buf[7] << 8 | buf[6]);
+void SuperPower_Fdb_Decode(uint8_t* buf, SuperPower_Fdb_t* data) {
+    uint16_t chassis = (buf[1] << 8 | buf[0]);
+    uint16_t cap_tar = (buf[3] << 8 | buf[2]);
+    uint16_t referee = (buf[5] << 8 | buf[4]);
+    uint16_t cap = (buf[7] << 8 | buf[6]);
 
-	data->chassis = (chassis - 0x7FFF) / 10.0f;
-	data->cap_tar = (cap_tar - 0x7FFF) / 10.0f;
-	data->referee = (referee - 0x7FFF) / 10.0f;
-	data->cap = cap / 100.0f;
+    data->chassis = (chassis - 0x7FFF) / 10.0f;
+    data->cap_tar = (cap_tar - 0x7FFF) / 10.0f;
+    data->referee = (referee - 0x7FFF) / 10.0f;
+    data->cap = cap / 100.0f;
+    data->cnt = 100u;
+}
+
+void SuperPower_Monitor(SuperPower_Fdb_t* self) {
+    if (self->cnt < 50u) {
+        self->isOnline = false;
+    } else {
+        self->isOnline = true;
+        self->cnt--;
+    }
 }
 
 /**
@@ -40,16 +49,15 @@ void SuperPower_Fdb_Decode(uint8_t *buf, SuperPower_Fdb_t *data)
  *
  * @note buf[2..7] 保留位
  */
-void SuperPower_Cmd_Encode(float data, uint8_t *buf)
-{
-	uint16_t data_mapped = data * 10 + 0x7FFF;
+void SuperPower_Cmd_Encode(float data, uint8_t* buf) {
+    uint16_t data_mapped = data * 10 + 0x7FFF;
 
-	buf[0] = data_mapped;
-	buf[1] = data_mapped >> 8;
-	buf[2] = 0;
-	buf[3] = 0;
-	buf[4] = 0;
-	buf[5] = 0;
-	buf[6] = 0;
-	buf[7] = 0;
+    buf[0] = data_mapped;
+    buf[1] = data_mapped >> 8;
+    buf[2] = 0;
+    buf[3] = 0;
+    buf[4] = 0;
+    buf[5] = 0;
+    buf[6] = 0;
+    buf[7] = 0;
 }
