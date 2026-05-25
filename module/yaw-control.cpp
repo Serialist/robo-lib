@@ -12,7 +12,7 @@
 #include "yaw-control.hpp"
 #include "math-utils.hpp"
 
-namespace vgd {
+namespace rb2 {
 namespace module {
 
 void Yaw_Control() {
@@ -20,4 +20,4 @@ void Yaw_Control() {
 }
 
 } // namespace module
-} // namespace vgd
+} // namespace rb2

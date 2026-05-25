@@ -12,33 +12,31 @@
 #ifndef SIM_MODULE_HPP
 #define SIM_MODULE_HPP
 
-namespace vgd
-{
+namespace rb2 {
 
-class SecondOrderSystem
-{
-	// state variable
-	double x = 0.0; // position
-	double v = 0.0; // velocity
+class SecondOrderSystem {
+    // state variable
+    double x = 0.0; // position
+    double v = 0.0; // velocity
 
-	// sys param
-	double m;  // mass
-	double kf; // damping
+    // sys param
+    double m;  // mass
+    double kf; // damping
 
 public:
-	// constructor
-	SecondOrderSystem(double mass, double damping);
+    // constructor
+    SecondOrderSystem(double mass, double damping);
 
-	// get state
-	double position();
+    // get state
+    double position();
 
-	// update system
-	void step(double u, double dt);
+    // update system
+    void step(double u, double dt);
 
-	// reset sys
-	void reset();
+    // reset sys
+    void reset();
 };
 
-} // namespace vgd
+} // namespace rb2
 
 #endif

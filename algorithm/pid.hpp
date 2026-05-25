@@ -1,5 +1,5 @@
 /**
- * @file vgd-pid.hpp
+ * @file pid.hpp
  * @author Serialist (ba3pt@qq.com)
  * @brief 
  * @version 0.1.0
@@ -9,10 +9,10 @@
  * 
 */
 
-#ifndef VGD_PID_HPP
-#define VGD_PID_HPP
+#ifndef PID_HPP
+#define PID_HPP
 
-namespace vgd {
+namespace rb2 {
 namespace controller {
 class PID {
 private:
@@ -21,7 +21,7 @@ private:
     float error, prev_error, pprev_error /*上上次*/; // 误差
     float integral;                                  // 积分
     float derivative;                                // 微分
-    float setpoint, feedback, output;                // 输入输出
+    float setpoint, feedback, output, doutput;       // 输入输出
     float dt;
 
 public:
@@ -36,7 +36,8 @@ public:
     float UpdateEZ(float e, float ie, float de);
     float ClampAbsf(float x, float max);
 };
+
 } // namespace controller
-} // namespace vgd
+} // namespace rb2
 
 #endif

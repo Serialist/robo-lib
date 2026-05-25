@@ -13,26 +13,24 @@
 #define BSP_ADAPTER_H
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include "utils.h"
+#include <stdint.h>
 
-typedef enum
-{
-	BSP_PORT0 = 0,
-	BSP_PORT1,
-	BSP_PORT2,
-	BSP_PORT3,
-	BSP_PORT4,
-	BSP_PORT5,
-	BSP_PORT6,
-	BSP_PORT7,
-	BSP_PORT8
+typedef enum {
+    BSP_PORT0 = 0,
+    BSP_PORT1,
+    BSP_PORT2,
+    BSP_PORT3,
+    BSP_PORT4,
+    BSP_PORT5,
+    BSP_PORT6,
+    BSP_PORT7,
+    BSP_PORT8
 } BSP_Port_t;
 
-void BSP_CAN_Transmit(BSP_Port_t port, uint32_t id, uint8_t *data);
+void BSP_CAN_Transmit(BSP_Port_t port, uint32_t id, uint8_t* data);
 
 #ifdef __cplusplus
 }

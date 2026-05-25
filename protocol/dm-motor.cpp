@@ -11,24 +11,20 @@
 
 #include "dm-motor.hpp"
 
-namespace vgd
-{
-namespace motor
-{
+namespace rb2 {
+namespace motor {
 
-DM::DM(uint32_t id, Model model, Mode mode)
-{
-	this->id = id;
-	this->model = model;
-	this->mode = mode;
-	this->can_id = id + (uint32_t)mode;
+DM::DM(uint32_t id, Model model, Mode mode) {
+    this->id = id;
+    this->model = model;
+    this->mode = mode;
+    this->can_id = id + (uint32_t)mode;
 
-	switch (model)
-	{
-	case Model::DM_4310:
-		parameter = dm_4310_param;
-		break;
-	}
+    switch (model) {
+        case Model::DM_4310:
+            parameter = dm_4310_param;
+            break;
+    }
 }
 
 /* ---------------------------------------------------------------- feedback ---------------------------------------------------------------- */
@@ -43,21 +39,23 @@ DM::DM(uint32_t id, Model model, Mode mode)
 *               状态、位置、速度、扭矩以及相关温度参数
 ************************************************************************
 **/
-bool DM::Feedback_Decode(uint8_t *buf)
-{
-	feedback.id = buf[0] & 0x0F;
-	feedback.state = (State)(buf[0] >> 4);
+bool DM::Feedback_Decode(uint8_t* buf) {
+    feedback.id = buf[0] & 0x0F;
+    feedback.state = (State)(buf[0] >> 4);
 
-	feedback.position_int = (buf[1] << 8) | buf[2];
-	feedback.velocity_int = (buf[3] << 4) | (buf[4] >> 4);
-	feedback.torque_int = ((buf[4] & 0xF) << 8) | buf[5];
+    feedback.position_int = (buf[1] << 8) | buf[2];
+    feedback.velocity_int = (buf[3] << 4) | (buf[4] >> 4);
+    feedback.torque_int = ((buf[4] & 0xF) << 8) | buf[5];
 
-	feedback.temperature_mos = (float)(buf[6]);
-	feedback.temperature_rotor = (float)(buf[7]);
+    feedback.temperature_mos = (float)(buf[6]);
+    feedback.temperature_rotor = (float)(buf[7]);
 
-	feedback.position = uint_to_float(feedback.position_int, parameter.p_min, parameter.p_max, 16); // (-12.5,12.5)
-	feedback.velocity = uint_to_float(feedback.velocity_int, parameter.v_min, parameter.v_max, 12); // (-45.0,45.0)
-	feedback.torque = uint_to_float(feedback.torque_int, parameter.t_min, parameter.t_max, 12);		// (-18.0,18.0)
+    feedback.position =
+        uint_to_float(feedback.position_int, parameter.p_min, parameter.p_max, 16); // (-12.5,12.5)
+    feedback.velocity =
+        uint_to_float(feedback.velocity_int, parameter.v_min, parameter.v_max, 12); // (-45.0,45.0)
+    feedback.torque =
+        uint_to_float(feedback.torque_int, parameter.t_min, parameter.t_max, 12); // (-18.0,18.0)
 }
 
 /* ---------------------------------------------------------------- command ---------------------------------------------------------------- */
@@ -68,18 +66,17 @@ bool DM::Feedback_Decode(uint8_t *buf)
 * @details:    	通过CAN总线向特定电机发送启用特定模式的命令
 ************************************************************************
 **/
-bool DM::Enable()
-{
-	uint8_t data[8];
+bool DM::Enable() {
+    uint8_t data[8];
 
-	data[0] = 0xFF;
-	data[1] = 0xFF;
-	data[2] = 0xFF;
-	data[3] = 0xFF;
-	data[4] = 0xFF;
-	data[5] = 0xFF;
-	data[6] = 0xFF;
-	data[7] = 0xFC;
+    data[0] = 0xFF;
+    data[1] = 0xFF;
+    data[2] = 0xFF;
+    data[3] = 0xFF;
+    data[4] = 0xFF;
+    data[5] = 0xFF;
+    data[6] = 0xFF;
+    data[7] = 0xFC;
 }
 /**
 ************************************************************************
@@ -87,18 +84,17 @@ bool DM::Enable()
 * @details:    	通过CAN总线向特定电机发送禁用特定模式的命令
 ************************************************************************
 **/
-bool DM::Disable(void)
-{
-	uint8_t data[8];
+bool DM::Disable(void) {
+    uint8_t data[8];
 
-	data[0] = 0xFF;
-	data[1] = 0xFF;
-	data[2] = 0xFF;
-	data[3] = 0xFF;
-	data[4] = 0xFF;
-	data[5] = 0xFF;
-	data[6] = 0xFF;
-	data[7] = 0xFD;
+    data[0] = 0xFF;
+    data[1] = 0xFF;
+    data[2] = 0xFF;
+    data[3] = 0xFF;
+    data[4] = 0xFF;
+    data[5] = 0xFF;
+    data[6] = 0xFF;
+    data[7] = 0xFD;
 }
 /**
 ************************************************************************
@@ -106,18 +102,17 @@ bool DM::Disable(void)
 * @details:    	通过CAN总线向特定电机发送保存位置零点的命令
 ************************************************************************
 **/
-bool DM::SetZero(void)
-{
-	uint8_t data[8];
+bool DM::SetZero(void) {
+    uint8_t data[8];
 
-	data[0] = 0xFF;
-	data[1] = 0xFF;
-	data[2] = 0xFF;
-	data[3] = 0xFF;
-	data[4] = 0xFF;
-	data[5] = 0xFF;
-	data[6] = 0xFF;
-	data[7] = 0xFE;
+    data[0] = 0xFF;
+    data[1] = 0xFF;
+    data[2] = 0xFF;
+    data[3] = 0xFF;
+    data[4] = 0xFF;
+    data[5] = 0xFF;
+    data[6] = 0xFF;
+    data[7] = 0xFE;
 }
 /**
 ************************************************************************
@@ -125,18 +120,17 @@ bool DM::SetZero(void)
 * @details:    	通过CAN总线向特定电机发送清除错误的命令。
 ************************************************************************
 **/
-bool DM::ClearError(void)
-{
-	uint8_t data[8];
+bool DM::ClearError(void) {
+    uint8_t data[8];
 
-	data[0] = 0xFF;
-	data[1] = 0xFF;
-	data[2] = 0xFF;
-	data[3] = 0xFF;
-	data[4] = 0xFF;
-	data[5] = 0xFF;
-	data[6] = 0xFF;
-	data[7] = 0xFB;
+    data[0] = 0xFF;
+    data[1] = 0xFF;
+    data[2] = 0xFF;
+    data[3] = 0xFF;
+    data[4] = 0xFF;
+    data[5] = 0xFF;
+    data[6] = 0xFF;
+    data[7] = 0xFB;
 }
 
 /* ---------------------------------------------------------------- control ---------------------------------------------------------------- */
@@ -152,25 +146,24 @@ bool DM::ClearError(void)
 * @details:    	通过CAN总线向电机发送MIT模式下的控制帧。
 ************************************************************************
 **/
-bool DM::MIT_Encode(float kp, float kd, float position, float velocity, float torque)
-{
-	uint8_t data[8];
-	uint16_t pos_tmp, vel_tmp, kp_tmp, kd_tmp, tor_tmp;
+bool DM::MIT_Encode(float kp, float kd, float position, float velocity, float torque) {
+    uint8_t data[8];
+    uint16_t pos_tmp, vel_tmp, kp_tmp, kd_tmp, tor_tmp;
 
-	pos_tmp = float_to_uint(position, parameter.p_min, parameter.p_max, 16);
-	vel_tmp = float_to_uint(velocity, parameter.v_min, parameter.v_max, 12);
-	kp_tmp = float_to_uint(kp, parameter.kp_min, parameter.kp_max, 12);
-	kd_tmp = float_to_uint(kd, parameter.kd_min, parameter.kd_max, 12);
-	tor_tmp = float_to_uint(torque, parameter.t_min, parameter.t_max, 12);
+    pos_tmp = float_to_uint(position, parameter.p_min, parameter.p_max, 16);
+    vel_tmp = float_to_uint(velocity, parameter.v_min, parameter.v_max, 12);
+    kp_tmp = float_to_uint(kp, parameter.kp_min, parameter.kp_max, 12);
+    kd_tmp = float_to_uint(kd, parameter.kd_min, parameter.kd_max, 12);
+    tor_tmp = float_to_uint(torque, parameter.t_min, parameter.t_max, 12);
 
-	data[0] = (pos_tmp >> 8);
-	data[1] = pos_tmp;
-	data[2] = (vel_tmp >> 4);
-	data[3] = ((vel_tmp & 0xF) << 4) | (kp_tmp >> 8);
-	data[4] = kp_tmp;
-	data[5] = (kd_tmp >> 4);
-	data[6] = ((kd_tmp & 0xF) << 4) | (tor_tmp >> 8);
-	data[7] = tor_tmp;
+    data[0] = (pos_tmp >> 8);
+    data[1] = pos_tmp;
+    data[2] = (vel_tmp >> 4);
+    data[3] = ((vel_tmp & 0xF) << 4) | (kp_tmp >> 8);
+    data[4] = kp_tmp;
+    data[5] = (kd_tmp >> 4);
+    data[6] = ((kd_tmp & 0xF) << 4) | (tor_tmp >> 8);
+    data[7] = tor_tmp;
 }
 
 /**
@@ -180,23 +173,22 @@ bool DM::MIT_Encode(float kp, float kd, float position, float velocity, float to
 * @details:    	通过CAN总线向电机发送位置速度控制命令
 ************************************************************************
 **/
-bool DM::PosSpd_Encode(float position, float velocity)
-{
-	uint8_t *pbuf, *vbuf;
-	uint8_t data[8];
+bool DM::PosSpd_Encode(float position, float velocity) {
+    uint8_t *pbuf, *vbuf;
+    uint8_t data[8];
 
-	pbuf = (uint8_t *)&position;
-	vbuf = (uint8_t *)&velocity;
+    pbuf = (uint8_t*)&position;
+    vbuf = (uint8_t*)&velocity;
 
-	data[0] = *pbuf;
-	data[1] = *(pbuf + 1);
-	data[2] = *(pbuf + 2);
-	data[3] = *(pbuf + 3);
+    data[0] = *pbuf;
+    data[1] = *(pbuf + 1);
+    data[2] = *(pbuf + 2);
+    data[3] = *(pbuf + 3);
 
-	data[4] = *vbuf;
-	data[5] = *(vbuf + 1);
-	data[6] = *(vbuf + 2);
-	data[7] = *(vbuf + 3);
+    data[4] = *vbuf;
+    data[5] = *(vbuf + 1);
+    data[6] = *(vbuf + 2);
+    data[7] = *(vbuf + 3);
 }
 /**
 ************************************************************************
@@ -205,17 +197,16 @@ bool DM::PosSpd_Encode(float position, float velocity)
 * @details:    	通过CAN总线向电机发送速度控制命令
 ************************************************************************
 **/
-bool DM::Speed_Encode(float velocity)
-{
-	uint8_t *vbuf;
-	uint8_t data[8];
+bool DM::Speed_Encode(float velocity) {
+    uint8_t* vbuf;
+    uint8_t data[8];
 
-	vbuf = (uint8_t *)&velocity;
+    vbuf = (uint8_t*)&velocity;
 
-	data[0] = *vbuf;
-	data[1] = *(vbuf + 1);
-	data[2] = *(vbuf + 2);
-	data[3] = *(vbuf + 3);
+    data[0] = *vbuf;
+    data[1] = *(vbuf + 1);
+    data[2] = *(vbuf + 2);
+    data[3] = *(vbuf + 3);
 }
 
 /* ---------------------------------------------------------------- tool ---------------------------------------------------------------- */
@@ -231,12 +222,11 @@ bool DM::Speed_Encode(float velocity)
 * @details:    	将给定的浮点数 x 在指定范围 [x_min, x_max] 内进行线性映射，映射结果为一个指定位数的无符号整数
 ************************************************************************
 **/
-int DM::float_to_uint(float x_float, float x_min, float x_max, int bits)
-{
-	/* Converts a float to an unsigned int, given range and number of bits */
-	float span = x_max - x_min;
-	float offset = x_min;
-	return (int)((x_float - offset) * ((float)((1 << bits) - 1)) / span);
+int DM::float_to_uint(float x_float, float x_min, float x_max, int bits) {
+    /* Converts a float to an unsigned int, given range and number of bits */
+    float span = x_max - x_min;
+    float offset = x_min;
+    return (int)((x_float - offset) * ((float)((1 << bits) - 1)) / span);
 }
 /**
 ************************************************************************
@@ -249,13 +239,12 @@ int DM::float_to_uint(float x_float, float x_min, float x_max, int bits)
 * @details:    	将给定的无符号整数 x_int 在指定范围 [x_min, x_max] 内进行线性映射，映射结果为一个浮点数
 ************************************************************************
 **/
-float DM::uint_to_float(int x_int, float x_min, float x_max, int bits)
-{
-	/* converts unsigned int to float, given range and number of bits */
-	float span = x_max - x_min;
-	float offset = x_min;
-	return ((float)x_int) * span / ((float)((1 << bits) - 1)) + offset;
+float DM::uint_to_float(int x_int, float x_min, float x_max, int bits) {
+    /* converts unsigned int to float, given range and number of bits */
+    float span = x_max - x_min;
+    float offset = x_min;
+    return ((float)x_int) * span / ((float)((1 << bits) - 1)) + offset;
 }
 
 } // namespace motor
-} // namespace vgd
+} // namespace rb2

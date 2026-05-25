@@ -9,9 +9,8 @@
 #include "Referee_System.h"
 #include "cmsis_os.h"
 #include "math-utils.hpp"
+#include "pid.hpp"
 #include "superpower.h"
-#include "vgd-pid.hpp"
-#include <cmath>
 
 extern SuperPower_Fdb_t sp_fdb;
 
@@ -19,9 +18,9 @@ extern SuperPower_Fdb_t sp_fdb;
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
 
-namespace robolib {
+namespace rb2 {
 namespace module {
-namespace wl_pctrl {
+namespace wl_pwctrl {
 
 enum class ErrorFlags {
     MotorDisconnect = 1U,   // 电机断联
@@ -72,9 +71,9 @@ MODE mode;
 
 const TickType_t xTimeInterval = pdMS_TO_TICKS(SYSTEM_TIME_INTERVAL); // ms
 
-vgd::controller::PID powerPD { 50.0f, 0.0f, 0.20f, 100.0f, 0 };
+controller::PID powerPD { 50.0f, 0.0f, 0.20f, 100.0f, 0 };
 
-static inline bool floatEqual(float a, float b) {
+inline bool floatEqual(float a, float b) {
     return fabs(a - b) < 1e-5f;
 }
 
@@ -102,14 +101,14 @@ void update(
     float wRightWheel,
     float rightUelse
 ) {
-    wl_pctrl::chassisTargetSpeed = chassisTargetSpeed;
-    wl_pctrl::chassisCurrentSpeed = chassisCurrentSpeed;
-    wl_pctrl::Uspeed = Uspeed;
-    wl_pctrl::Uyaw = Uyaw;
-    wl_pctrl::wLeftWheel = wLeftWheel;
-    wl_pctrl::leftUelse = leftUelse;
-    wl_pctrl::wRightWheel = wRightWheel;
-    wl_pctrl::rightUelse = rightUelse;
+    wl_pwctrl::chassisTargetSpeed = chassisTargetSpeed;
+    wl_pwctrl::chassisCurrentSpeed = chassisCurrentSpeed;
+    wl_pwctrl::Uspeed = Uspeed;
+    wl_pwctrl::Uyaw = Uyaw;
+    wl_pwctrl::wLeftWheel = wLeftWheel;
+    wl_pwctrl::leftUelse = leftUelse;
+    wl_pwctrl::wRightWheel = wRightWheel;
+    wl_pwctrl::rightUelse = rightUelse;
 
     // u yaw speed ratio,
     if (floatEqual(Uyaw, 0.0f)) {
@@ -242,6 +241,6 @@ extern "C" void powerControllTask(void* pvParameters) {
     }
 }
 
-} // namespace wl_pctrl
+} // namespace wl_pwctrl
 } // namespace module
-} // namespace robolib
+} // namespace rb2

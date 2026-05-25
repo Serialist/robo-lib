@@ -9,9 +9,9 @@
 
 #include <cstdint>
 
-namespace robolib {
+namespace rb2 {
 namespace module {
-namespace wl_pctrl { // 轮腿功率控制
+namespace wl_pwctrl { // 轮腿功率控制
 
 enum class MODE : uint8_t {
     BATTERY = 0, // 电池模式
@@ -42,6 +42,6 @@ float getDecayUyaw();
 /// @brief 获取目前目标功率上限
 float getConfiguredMaxPower();
 
-} // namespace wl_pctrl
+} // namespace wl_pwctrl
 } // namespace module
-} // namespace robolib
+} // namespace rb2

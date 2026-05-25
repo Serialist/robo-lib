@@ -11,7 +11,7 @@
 
 #include "convert.hpp"
 
-namespace vgd {
+namespace rb2 {
 namespace convert {
 
 float Bit2Float(int x_int, float x_min, float x_max, int Bits) {
@@ -27,4 +27,4 @@ int Float2Bit(float x, float x_min, float x_max, int bits) {
 }
 
 } // namespace convert
-} // namespace vgd
+} // namespace rb2

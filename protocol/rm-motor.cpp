@@ -13,7 +13,7 @@
 
 #include "rm-motor.hpp"
 
-namespace vgd {
+namespace rb2 {
 namespace device {
 
 void RM_Motor::Encode(Control data) {
@@ -41,4 +41,4 @@ void RM_Motor::Transmit(RM_Motor_Control_t data) {
 }
 
 } // namespace device
-} // namespace vgd
+} // namespace rb2

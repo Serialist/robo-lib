@@ -16,7 +16,7 @@
 
 #include "math-adapter.hpp"
 
-namespace vgd {
+namespace rb2 {
 namespace math {
 
 /* ================================================================ constant ================================================================ */
@@ -49,6 +49,9 @@ float StepClamp(float prev, float value, float min, float max); // 步进限幅
 float Remapf(float a, float inmin, float inmax, float outmin, float outmax); // 值线性映射
 float Rampf(float prev_x, float x, float k_min, float k_max, float dt);      // 斜坡函数
 float Deadzonef(float value, float point, float deadzone);                   // 死区
+inline bool Equal(float a, float b) {
+    return std::fabsf(a - b) < 1e-5f;
+}
 
 /* 基本数学函数 */
 float Signf(float value);                                 // 符号函数
@@ -76,6 +79,6 @@ float HalfCircleNearestDistance(float point, float setpoint);
 float HalfCircleNearestPoint(float point, float setpoint);
 
 } // namespace math
-} // namespace vgd
+} // namespace rb2
 
 #endif

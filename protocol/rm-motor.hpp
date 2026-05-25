@@ -15,7 +15,7 @@
 #include "utils.h"
 #include <stdint.h>
 
-namespace vgd {
+namespace rb2 {
 namespace device {
 
 class RM_Motor {
@@ -61,6 +61,8 @@ public:
 
     // 掉线保护
 
+    using ID = uint8_t;
+
 #define RM_MOTOR_OFFLINE_CNT 100u
 #define RM_MOTOR_IS_OFFLINE(self) ((self)->cnt < 50u)
 #define RM_MOTOR_HEARTBEAT(self) ((self)->cnt = RM_MOTOR_OFFLINE_CNT)
@@ -95,16 +97,33 @@ public:
 
     RM_Motor(BSP::Port port, Type type, ID id);
 
-    void Transmit(int16_t current1, int16_t current2, int16_t current3, int16_t current4);
     void Transmit(int16_t current[4]);
+    inline void Transmit(int16_t current1, int16_t current2, int16_t current3, int16_t current4) {
+        Transmit((int16_t[4]) { current1, current2, current3, current4 });
+    }
 
     void Receive(uint8_t* buf);
 
-    int16_t GetEncoder(void);
-    float GetAngle(void);
-    float GetVelocity(void);
-    float GetCurrent(void);
-    float GetTemperature(void);
+    inline int16_t GetEncoder(void) {
+        return feedback.encoder;
+    }
+    inline float GetAngle(void) {
+        return RM_MOTOR_ANGLE(feedback.encoder);
+    }
+    inline float GetVelocity_RPM(void) {
+        return RM_MOTOR_VELOCITY(&feedback);
+    }
+
+    inline float GetVelocity(void) {
+        return HEXROLL_VELOCITY(&feedback);
+    }
+
+    inline float GetCurrent(void) {
+        return RM_MOTOR_CURRENT(&feedback);
+    }
+    inline float GetTemperature(void) {
+        return RM_MOTOR_TEMP(&feedback);
+    }
 
     void Encode(Control data);
 
@@ -112,6 +131,6 @@ public:
 };
 
 } // namespace device
-} // namespace vgd
+} // namespace rb2
 
 #endif

@@ -11,49 +11,47 @@
 
 #include "simple-filter.hpp"
 
-/* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
-
-vgd::algorithm::LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample_rate)
-{
-	this->cutoff_frequency = cutoff_frequency;
-	this->sample_rate = sample_rate;
-
-	alpha = 2.0f * cutoff_frequency / sample_rate;
-
-	output = 0;
-}
-
-vgd::algorithm::LowPass_Order_1::LowPass_Order_1(float alpha)
-{
-	this->alpha = alpha;
-
-	cutoff_frequency = 0;
-	sample_rate = 0;
-	output = 0;
-}
-
-float vgd::algorithm::LowPass_Order_1::update(float input)
-{
-	output = alpha * input + (1.0f - alpha) * output;
-	return output;
-}
+namespace rb2 {
+namespace algorithm {
 
 /* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
 
-vgd::algorithm::ZeroOrder_Holder::ZeroOrder_Holder(void)
-{
-	prev_value = 0;
+algorithm::LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample_rate) {
+    this->cutoff_frequency = cutoff_frequency;
+    this->sample_rate = sample_rate;
+
+    alpha = 2.0f * cutoff_frequency / sample_rate;
+
+    output = 0;
 }
 
-float vgd::algorithm::ZeroOrder_Holder::update(float input)
-{
-	if (input == 0)
-	{
-		return prev_value;
-	}
-	else
-	{
-		prev_value = input;
-		return input;
-	}
+algorithm::LowPass_Order_1::LowPass_Order_1(float alpha) {
+    this->alpha = alpha;
+
+    cutoff_frequency = 0;
+    sample_rate = 0;
+    output = 0;
 }
+
+float algorithm::LowPass_Order_1::update(float input) {
+    output = alpha * input + (1.0f - alpha) * output;
+    return output;
+}
+
+/* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
+
+algorithm::ZeroOrder_Holder::ZeroOrder_Holder(void) {
+    prev_value = 0;
+}
+
+float algorithm::ZeroOrder_Holder::update(float input) {
+    if (input == 0) {
+        return prev_value;
+    } else {
+        prev_value = input;
+        return input;
+    }
+}
+
+} // namespace algorithm
+} // namespace rb2

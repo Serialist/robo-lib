@@ -12,7 +12,7 @@
 #ifndef YAW_CONTROL_HPP
 #define YAW_CONTROL_HPP
 
-namespace vgd {
+namespace rb2 {
 namespace module {
 
 class Yaw_Controller {
@@ -23,6 +23,6 @@ public:
 };
 
 } // namespace module
-} // namespace vgd
+} // namespace rb2
 
 #endif

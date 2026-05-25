@@ -14,8 +14,7 @@
 #include <cmath>
 #include <cstdint>
 
-namespace vgd {
-
+namespace rb2 {
 namespace math {
 
 // 快速开方（牛顿迭代法）
@@ -287,4 +286,4 @@ float HalfCircleNearestPoint(float point, float setpoint) {
 }
 
 } // namespace math
-} // namespace vgd
+} // namespace rb2

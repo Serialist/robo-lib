@@ -12,50 +12,44 @@
 #ifndef SIMPLE_FILTER_HPP
 #define SIMPLE_FILTER_HPP
 
-namespace vgd
-{
+namespace rb2 {
+namespace algorithm {
 
-namespace algorithm
-{
-
-class LowPass_Order_1
-{
+class LowPass_Order_1 {
 public:
-	/// @brief constructor
-	/// @param cutoff_frequency 截止频率
-	/// @param sample_rate 采样率
-	LowPass_Order_1(float cutoff_frequency, float sample_rate);
+    /// @brief constructor
+    /// @param cutoff_frequency 截止频率
+    /// @param sample_rate 采样率
+    LowPass_Order_1(float cutoff_frequency, float sample_rate);
 
-	/// @brief constructor
-	/// @param alpha 滤波系数
-	LowPass_Order_1(float alpha);
+    /// @brief constructor
+    /// @param alpha 滤波系数
+    LowPass_Order_1(float alpha);
 
-	/// @brief 更新
-	/// @param input 输入
-	/// @return 滤波结果
-	float update(float input);
+    /// @brief 更新
+    /// @param input 输入
+    /// @return 滤波结果
+    float update(float input);
 
 private:
-	float cutoff_frequency;
-	float sample_rate;
-	float alpha;
-	float output;
+    float cutoff_frequency;
+    float sample_rate;
+    float alpha;
+    float output;
 };
 
 // 零阶保持器
-class ZeroOrder_Holder
-{
+class ZeroOrder_Holder {
 public:
-	ZeroOrder_Holder(void);
+    ZeroOrder_Holder(void);
 
-	float update(float input);
+    float update(float input);
 
 private:
-	float prev_value;
+    float prev_value;
 };
 
 } // namespace algorithm
-
-} // namespace vgd
+} // namespace rb2
 
 #endif // SIMPLE_FILTER_HPP

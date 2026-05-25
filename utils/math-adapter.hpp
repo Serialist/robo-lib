@@ -18,7 +18,7 @@
     #include "arm_math.h"
 #endif
 
-namespace vgd {
+namespace rb2 {
 namespace math {
 
 #ifdef ARM_MATH
@@ -61,6 +61,6 @@ inline bool Sign(float x) {
 }
 
 } // namespace math
-} // namespace vgd
+} // namespace rb2
 
 #endif
