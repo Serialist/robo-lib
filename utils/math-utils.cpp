@@ -10,8 +10,7 @@
 */
 
 #include "math-utils.hpp"
-
-#include <cmath>
+#include "math-adapter.hpp"
 #include <cstdint>
 
 namespace rb2 {

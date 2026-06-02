@@ -12,11 +12,8 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-#include "robo-config.h"
-
-#ifdef ARM_MATH
-    #include "arm_math.h"
-#endif
+#define ARM_MATH
+#include "arm_math.h"
 
 namespace rb2 {
 namespace math {

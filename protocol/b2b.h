@@ -16,7 +16,8 @@
 extern "C" {
 #endif
 
-#include "utils.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 #define B2B_OFFLINE_CNT 100u
 #define B2B_IS_OFFLINE(self) ((self)->cnt < 50u)

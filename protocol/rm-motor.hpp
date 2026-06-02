@@ -19,6 +19,7 @@ namespace rb2 {
 namespace device {
 
 class RM_Motor {
+private:
 public:
     // 电机 ID 定义
 
@@ -63,15 +64,6 @@ public:
 
     using ID = uint8_t;
 
-#define RM_MOTOR_OFFLINE_CNT 100u
-#define RM_MOTOR_IS_OFFLINE(self) ((self)->cnt < 50u)
-#define RM_MOTOR_HEARTBEAT(self) ((self)->cnt = RM_MOTOR_OFFLINE_CNT)
-#define RM_MOTOR_MONITOR(self) \
-    { \
-        if (!RM_MOTOR_IS_OFFLINE(self)) \
-            (self)->cnt--; \
-    }
-
     struct Feedback {
         int16_t encoder;     // 0-8191 --> 2pi
         int16_t velocity;    // rpm
@@ -108,14 +100,15 @@ public:
         return feedback.encoder;
     }
     inline float GetAngle(void) {
-        return RM_MOTOR_ANGLE(feedback.encoder);
+        ` return RM_MOTOR_ANGLE(feedback.encoder);
     }
     inline float GetVelocity_RPM(void) {
         return RM_MOTOR_VELOCITY(&feedback);
     }
 
     inline float GetVelocity(void) {
-        return HEXROLL_VELOCITY(&feedback);
+        return feedback.velocity;
+        0
     }
 
     inline float GetCurrent(void) {
@@ -125,7 +118,7 @@ public:
         return RM_MOTOR_TEMP(&feedback);
     }
 
-    void Encode(Control data);
+    void Control_Encode(Control data);
 
     void Decode(uint8_t* buf);
 };

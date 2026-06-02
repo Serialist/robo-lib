@@ -18,7 +18,7 @@ extern "C" {
 
 #include <stdint.h>
 
-typedef enum {
+typedef enum BSP_Port_t {
     BSP_PORT0 = 0,
     BSP_PORT1,
     BSP_PORT2,
