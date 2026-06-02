@@ -95,20 +95,19 @@
  *
  * @note 据说使能命令最好不要重复发送...?
  */
-void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id)
-{
-	uint8_t buf[8];
+void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id) {
+    uint8_t buf[8];
 
-	buf[0] = 0xFF;
-	buf[1] = 0xFF;
-	buf[2] = 0xFF;
-	buf[3] = 0xFF;
-	buf[4] = 0xFF;
-	buf[5] = 0xFF;
-	buf[6] = 0xFF;
-	buf[7] = 0xFC;
+    buf[0] = 0xFF;
+    buf[1] = 0xFF;
+    buf[2] = 0xFF;
+    buf[3] = 0xFF;
+    buf[4] = 0xFF;
+    buf[5] = 0xFF;
+    buf[6] = 0xFF;
+    buf[7] = 0xFC;
 
-	BSP_CAN_Transmit(port, id, buf);
+    BSP_CAN_Transmit(port, id, buf);
 }
 
 /**
@@ -116,20 +115,19 @@ void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id)
  *
  * @param id
  */
-void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id)
-{
-	uint8_t buf[8];
+void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id) {
+    uint8_t buf[8];
 
-	buf[0] = 0xFF;
-	buf[1] = 0xFF;
-	buf[2] = 0xFF;
-	buf[3] = 0xFF;
-	buf[4] = 0xFF;
-	buf[5] = 0xFF;
-	buf[6] = 0xFF;
-	buf[7] = 0xFD;
+    buf[0] = 0xFF;
+    buf[1] = 0xFF;
+    buf[2] = 0xFF;
+    buf[3] = 0xFF;
+    buf[4] = 0xFF;
+    buf[5] = 0xFF;
+    buf[6] = 0xFF;
+    buf[7] = 0xFD;
 
-	BSP_CAN_Transmit(port, id, buf);
+    BSP_CAN_Transmit(port, id, buf);
 }
 
 /**
@@ -139,48 +137,53 @@ void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id)
  *
  * @note 这个设置的零点位置似乎断电不保存
  */
-void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id)
-{
-	uint8_t buf[8];
+void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id) {
+    uint8_t buf[8];
 
-	buf[0] = 0xFF;
-	buf[1] = 0xFF;
-	buf[2] = 0xFF;
-	buf[3] = 0xFF;
-	buf[4] = 0xFF;
-	buf[5] = 0xFF;
-	buf[6] = 0xFF;
-	buf[7] = 0xFE;
+    buf[0] = 0xFF;
+    buf[1] = 0xFF;
+    buf[2] = 0xFF;
+    buf[3] = 0xFF;
+    buf[4] = 0xFF;
+    buf[5] = 0xFF;
+    buf[6] = 0xFF;
+    buf[7] = 0xFE;
 
-	BSP_CAN_Transmit(port, id, buf);
+    BSP_CAN_Transmit(port, id, buf);
 }
 
-void AK_Motor_MIT_Control_Encode(float angle, float velocity, float kp, float kd, float torque, uint8_t *buf)
-{
-	int angle_int, velocity_int, kp_int, kd_int, torque_int;
+void AK_Motor_MIT_Control_Encode(
+    float angle,
+    float velocity,
+    float kp,
+    float kd,
+    float torque,
+    uint8_t* buf
+) {
+    int angle_int, velocity_int, kp_int, kd_int, torque_int;
 
-	/// limit data to be within bounds ///
+    /// limit data to be within bounds ///
 
-	angle = Clampf(angle, -P_MAX, P_MAX);
-	velocity = Clampf(velocity, -V_MAX, V_MAX);
-	kp = Clampf(kp, Kp_MIN, Kp_MAX);
-	kd = Clampf(kd, Kd_MIN, Kd_MAX);
-	torque = Clampf(torque, -T_MAX, T_MAX);
+    angle = Clampf(angle, -P_MAX, P_MAX);
+    velocity = Clampf(velocity, -V_MAX, V_MAX);
+    kp = Clampf(kp, Kp_MIN, Kp_MAX);
+    kd = Clampf(kd, Kd_MIN, Kd_MAX);
+    torque = Clampf(torque, -T_MAX, T_MAX);
 
-	angle_int = Float2Bit(angle, -P_MAX, P_MAX, 16);
-	velocity_int = Float2Bit(velocity, -V_MAX, V_MAX, 12);
-	kp_int = Float2Bit(kp, Kp_MIN, Kp_MAX, 12);
-	kd_int = Float2Bit(kd, Kd_MIN, Kd_MAX, 12);
-	torque_int = Float2Bit(torque, -T_MAX, T_MAX, 12);
+    angle_int = Float2Bit(angle, -P_MAX, P_MAX, 16);
+    velocity_int = Float2Bit(velocity, -V_MAX, V_MAX, 12);
+    kp_int = Float2Bit(kp, Kp_MIN, Kp_MAX, 12);
+    kd_int = Float2Bit(kd, Kd_MIN, Kd_MAX, 12);
+    torque_int = Float2Bit(torque, -T_MAX, T_MAX, 12);
 
-	buf[0] = angle_int >> 8;
-	buf[1] = angle_int & 0xFF;
-	buf[2] = velocity_int >> 4;
-	buf[3] = ((velocity_int & 0xF) << 4) | (kp_int >> 8);
-	buf[4] = kp_int & 0xFF;
-	buf[5] = kd_int >> 4;
-	buf[6] = ((kd_int & 0xF) << 4) | (torque_int >> 8);
-	buf[7] = torque_int & 0xff;
+    buf[0] = angle_int >> 8;
+    buf[1] = angle_int & 0xFF;
+    buf[2] = velocity_int >> 4;
+    buf[3] = ((velocity_int & 0xF) << 4) | (kp_int >> 8);
+    buf[4] = kp_int & 0xFF;
+    buf[5] = kd_int >> 4;
+    buf[6] = ((kd_int & 0xF) << 4) | (torque_int >> 8);
+    buf[7] = torque_int & 0xff;
 }
 
 BUFFER_T akmotormittransmitbuffer[8];
@@ -195,31 +198,54 @@ BUFFER_T akmotormittransmitbuffer[8];
  * @param kd 内置 PID 参数
  * @param t_ff 力矩前馈
  ************************/
-void AK_Motor_MIT_Transmit(BSP_Port_t port, uint8_t id, float p_des, float v_des, float kp, float kd, float t_ff)
-{
-	uint8_t buf[8];
+void AK_Motor_MIT_Transmit(
+    BSP_Port_t port,
+    uint8_t id,
+    float p_des,
+    float v_des,
+    float kp,
+    float kd,
+    float t_ff
+) {
+    uint8_t buf[8];
 
-	AK_Motor_MIT_Control_Encode(p_des, v_des, kp, kd, t_ff, akmotormittransmitbuffer);
+    AK_Motor_MIT_Control_Encode(p_des, v_des, kp, kd, t_ff, akmotormittransmitbuffer);
 
-	BSP_CAN_Transmit(port, id, akmotormittransmitbuffer);
+    BSP_CAN_Transmit(port, id, akmotormittransmitbuffer);
 }
 
-void AK_Motor_MIT_Decode(Motor_AK_RxData_t *data, uint8_t *buf, float pMax, float vMax, float tMax)
-{
-	data->id = buf[0]; // 驱动 ID 号
+void AK_Motor_MIT_Decode(
+    Motor_AK_RxData_t* data,
+    uint8_t* buf,
+    float pMax,
+    float vMax,
+    float tMax
+) {
+    data->id = buf[0]; // 驱动 ID 号
 
-	int p_int = (buf[1] << 8) | (buf[2]);
-	int v_int = (buf[3] << 4) | (buf[4] >> 4);
-	int i_int = ((buf[4] & 0xF) << 8) | (buf[5]);
-	int T_int = buf[6];
+    int p_int = (buf[1] << 8) | (buf[2]);
+    int v_int = (buf[3] << 4) | (buf[4] >> 4);
+    int i_int = ((buf[4] & 0xF) << 8) | (buf[5]);
+    int T_int = buf[6];
 
-	float p = Bit2Float(p_int, -pMax, pMax, 16);
-	float v = Bit2Float(v_int, -vMax, vMax, 12);
-	float i = Bit2Float(i_int, -tMax, tMax, 12);
-	float Temp = T_int;
+    float p = Bit2Float(p_int, -pMax, pMax, 16);
+    float v = Bit2Float(v_int, -vMax, vMax, 12);
+    float i = Bit2Float(i_int, -tMax, tMax, 12);
+    float Temp = T_int;
 
-	data->angle = p;
-	data->speed = v;
-	data->torque = i;
-	data->temp = Temp - 40;
+    data->angle = p;
+    data->speed = v;
+    data->torque = i;
+    data->temp = Temp - 40;
+
+    data->cnt = 100u;
+    data->isOnline = true;
+}
+
+void AK_Motor_Monitor(Motor_AK_RxData_t* data) {
+    if (data->cnt < 50u) {
+        data->isOnline = false;
+    } else {
+        data->cnt--;
+    }
 }

@@ -30,13 +30,13 @@ void SuperPower_Fdb_Decode(uint8_t* buf, SuperPower_Fdb_t* data) {
     data->referee = (referee - 0x7FFF) / 10.0f;
     data->cap = cap / 100.0f;
     data->cnt = 100u;
+    data->isOnline = true;
 }
 
 void SuperPower_Monitor(SuperPower_Fdb_t* self) {
     if (self->cnt < 50u) {
         self->isOnline = false;
     } else {
-        self->isOnline = true;
         self->cnt--;
     }
 }

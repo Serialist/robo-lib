@@ -40,12 +40,14 @@ extern "C" {
 // void comm_can_set_origin(uint8_t controller_id, uint8_t set_origin_mode);
 
 typedef struct {
-	uint8_t id;
-	float angle;   // 位置
-	float speed;   // 速度
-	float torque;  // 扭矩
-	float temp;	   // 温度
-	float errCode; // 故障码
+    uint8_t id;
+    float angle;   // 位置
+    float speed;   // 速度
+    float torque;  // 扭矩
+    float temp;    // 温度
+    float errCode; // 故障码
+    uint8_t cnt;   // 在线监测倒计时
+    bool isOnline; // 在线状态
 } Motor_AK_RxData_t;
 
 // 运控模式//
@@ -53,15 +55,21 @@ void AK_Motor_MIT_Enable(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Disable(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Setorigin(BSP_Port_t port, uint8_t id);
 void AK_Motor_MIT_Transmit(
-	BSP_Port_t port,
-	uint8_t id,
-	float p_des,
-	float v_des,
-	float kp,
-	float kd,
-	float t_ff
+    BSP_Port_t port,
+    uint8_t id,
+    float p_des,
+    float v_des,
+    float kp,
+    float kd,
+    float t_ff
 );
 void AK_Motor_MIT_Decode(Motor_AK_RxData_t* data, uint8_t* buf, float pMax, float vMax, float tMax);
+
+void AK_Motor_Monitor(Motor_AK_RxData_t* data);
+
+inline bool AK_Motor_IsOnline(Motor_AK_RxData_t* data) {
+    return data->isOnline;
+}
 
 #define AK10_9_MIT_Feedback_Decode(buf, data) AK_Motor_MIT_Decode(data, buf, P_MAX, V_MAX, T_MAX)
 

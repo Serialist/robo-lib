@@ -42,6 +42,18 @@ float getDecayUyaw();
 /// @brief 获取目前目标功率上限
 float getConfiguredMaxPower();
 
+struct Debug {
+    float& chassisPower;    // 当前底盘功率
+    float& cmdPower;        // 当前控制功率
+    float& restrictedPower; // 限制后的功率
+
+    float& k1;
+    float& k2;
+    float& k3;
+};
+
+Debug& Get(void);
+
 } // namespace wl_pwctrl
 } // namespace module
 } // namespace rb2

@@ -28,7 +28,7 @@ typedef struct {
     float referee; // 电管输入功率
     float cap;     // 电容电压
     uint8_t cnt;
-    bool isOnline;
+    bool isOnline; // 超电在线标志位
 } SuperPower_Fdb_t;
 
 typedef float SuperPower_Cmd_t;

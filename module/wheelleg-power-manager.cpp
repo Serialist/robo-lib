@@ -7,10 +7,12 @@
 
 #include "wheelleg-power-manager.hpp"
 #include "Referee_System.h"
+#include "bsp-adapter.h"
 #include "cmsis_os.h"
 #include "math-utils.hpp"
 #include "pid.hpp"
 #include "superpower.h"
+#include "utils.h"
 
 extern SuperPower_Fdb_t sp_fdb;
 
@@ -34,9 +36,9 @@ float configuredMaxPower; // 能量环最大允许功率
 float powerBuff; // 当前电容剩余能量
 float buffSet;   // 期望剩余能量
 
-float chassisPower; // 当前底盘功率
-float cmdPower;     // 当前控制功率
-float restrictedPower;
+float chassisPower;    // 当前底盘功率
+float cmdPower;        // 当前控制功率
+float restrictedPower; // 限制后的功率
 
 float wLeftWheel;  // 左轮角速度 rad/s
 float wRightWheel; // 左轮角速度 rad/s
@@ -61,9 +63,9 @@ float B;
 float C;
 float Delta;
 
-const float k1 = 0.2f;
-const float k2 = 2.8f;
-const float k3 = 3.21f;
+float k1 = 0.2f;
+float k2 = 2.8f;
+float k3 = 2.21f;
 
 float K; // Uspeed = K * Uyaw
 
@@ -75,6 +77,12 @@ controller::PID powerPD { 50.0f, 0.0f, 0.20f, 100.0f, 0 };
 
 inline bool floatEqual(float a, float b) {
     return fabs(a - b) < 1e-5f;
+}
+
+Debug debug { chassisPower, cmdPower, restrictedPower, k1, k2, k3 };
+
+Debug& Get(void) {
+    return debug;
 }
 
 void setMode(MODE currentMode) {
@@ -212,6 +220,10 @@ void update(
         + (wLeftWheel * restrictedLeftTotalTorque) + (wRightWheel * restrictedRightTotalTorque);
 }
 
+BUFFER_T sp_txbuf[8];
+
+float sp_setpower = 0, prev_sp_setpower = 0;
+
 extern "C" void powerControllTask(void* pvParameters) {
     TickType_t xLastWakeTime;
     xLastWakeTime = xTaskGetTickCount();
@@ -225,17 +237,38 @@ extern "C" void powerControllTask(void* pvParameters) {
         // cap power loop
         if (sp_fdb.isOnline) {
             if (mode == MODE::BATTERY) {
-                buffSet = float(255 * 0.8f);
+                buffSet = float(3 + 20 * 0.8f);
             } else {
-                buffSet = float(255 * 0.4f);
+                buffSet = float(3 + 20 * 0.4f);
             }
 
-            configuredMaxPower = refereeMaxPower - powerPD.Update(sqrtf(buffSet), sqrtf(powerBuff));
+            configuredMaxPower =
+                refereeMaxPower - powerPD.Update(std::sqrtf(buffSet), std::sqrtf(powerBuff));
             configuredMaxPower = fmax(configuredMaxPower, 23.0f);
-        } else
+        } else {
             configuredMaxPower = refereeMaxPower;
+        }
 
         // configuredMaxPower = 60.0f;
+
+        sp_setpower = math::Clampf(configuredMaxPower - restrictedPower, -100, 120);
+
+        // 电容断联、裁判系统断联、电容满电或欠电，则强制限制功率为0
+        if (Referee_System_Info.robot_status.mains_power_chassis_output == 0
+            || sp_fdb.isOnline == false || sp_fdb.cap < 5 || sp_fdb.cap > 22)
+        {
+            sp_setpower = 0;
+        }
+        SuperPower_Cmd_Encode(
+            math::StepClamp(
+                prev_sp_setpower,
+                sp_setpower,
+                -30,
+                30
+            ), // 这是一个斜坡，按照手册单次增加不能超过50w
+            sp_txbuf
+        );
+        BSP_CAN_Transmit(BSP_PORT1, SUPERPOWER_CMD_ID, sp_txbuf);
 
         vTaskDelayUntil(&xLastWakeTime, xTimeInterval);
     }
