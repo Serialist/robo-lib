@@ -16,7 +16,7 @@ namespace algorithm {
 
 /* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
 
-algorithm::LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample_rate) {
+LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample_rate) {
     this->cutoff_frequency = cutoff_frequency;
     this->sample_rate = sample_rate;
 
@@ -25,7 +25,7 @@ algorithm::LowPass_Order_1::LowPass_Order_1(float cutoff_frequency, float sample
     output = 0;
 }
 
-algorithm::LowPass_Order_1::LowPass_Order_1(float alpha) {
+LowPass_Order_1::LowPass_Order_1(float alpha) {
     this->alpha = alpha;
 
     cutoff_frequency = 0;
@@ -33,18 +33,18 @@ algorithm::LowPass_Order_1::LowPass_Order_1(float alpha) {
     output = 0;
 }
 
-float algorithm::LowPass_Order_1::update(float input) {
+float LowPass_Order_1::update(float input) {
     output = alpha * input + (1.0f - alpha) * output;
     return output;
 }
 
-/* ---------------------------------------------------------------- LowPass_Order_1 ---------------------------------------------------------------- */
+/* ---------------------------------------------------------------- ZeroOrder_Holder ---------------------------------------------------------------- */
 
-algorithm::ZeroOrder_Holder::ZeroOrder_Holder(void) {
+ZeroOrder_Holder::ZeroOrder_Holder(void) {
     prev_value = 0;
 }
 
-float algorithm::ZeroOrder_Holder::update(float input) {
+float ZeroOrder_Holder::update(float input) {
     if (input == 0) {
         return prev_value;
     } else {
@@ -52,6 +52,8 @@ float algorithm::ZeroOrder_Holder::update(float input) {
         return input;
     }
 }
+
+/* ---------------------------------------------------------------- Moveing_Average_Filter ---------------------------------------------------------------- */
 
 } // namespace algorithm
 } // namespace rb2

@@ -13,6 +13,7 @@
 #define SIM_MODULE_HPP
 
 namespace rb2 {
+namespace algorithm {
 
 class SecondOrderSystem {
     // state variable
@@ -37,6 +38,7 @@ public:
     void reset();
 };
 
+} // namespace algorithm
 } // namespace rb2
 
 #endif
