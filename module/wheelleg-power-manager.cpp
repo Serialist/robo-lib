@@ -16,6 +16,9 @@
 
 extern SuperPower_Fdb_t sp_fdb;
 
+float setpower_test = 0;
+;
+
 #define SYSTEM_TIME_INTERVAL 1
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : ((x) > (max) ? (max) : (x)))
@@ -251,14 +254,15 @@ extern "C" void powerControllTask(void* pvParameters) {
 
         // configuredMaxPower = 60.0f;
 
-        sp_setpower = math::Clampf(configuredMaxPower - restrictedPower, -100, 120);
+        //        sp_setpower = math::Clampf(configuredMaxPower - restrictedPower, -100, 120);
 
-        // 电容断联、裁判系统断联、电容满电或欠电，则强制限制功率为0
-        if (Referee_System_Info.robot_status.mains_power_chassis_output == 0
-            || sp_fdb.isOnline == false || sp_fdb.cap < 5 || sp_fdb.cap > 22)
-        {
-            sp_setpower = 0;
-        }
+        //        // 电容断联、裁判系统断联、电容满电或欠电，则强制限制功率为0
+        //        if (Referee_System_Info.robot_status.mains_power_chassis_output == 0
+        //            || sp_fdb.isOnline == false || sp_fdb.cap < 5 || sp_fdb.cap > 22)
+        //        {
+        //            sp_setpower = 0;
+        //        }
+        sp_setpower = setpower_test;
         SuperPower_Cmd_Encode(
             math::StepClamp(
                 prev_sp_setpower,

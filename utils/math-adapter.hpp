@@ -12,13 +12,13 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-#define ARM_MATH
-#include "arm_math.h"
-
 namespace rb2 {
 namespace math {
 
+#include "config.h"
+
 #ifdef ARM_MATH
+    #include "arm_math.h"
 
 inline float Sin(float x) {
     return arm_sin_f32(x);
@@ -32,6 +32,13 @@ inline float Sqrt(float x) {
     float out;
     arm_sqrt_f32(x, &out);
     return out;
+}
+
+/// @brief ·ûºÅº¯Êý
+/// @param x
+/// @return x < 0 true , x >= 0 false
+inline bool Sign(float x) {
+    return signbit(x);
 }
 
 #else
@@ -48,14 +55,11 @@ inline float Sqrt(float x) {
     return std::sqrtf(x);
 }
 
-#endif
-
-/// @brief ·ûºÅº¯Êý
-/// @param x
-/// @return x < 0 true , x >= 0 false
 inline bool Sign(float x) {
-    return signbit(x);
+    return x < 0;
 }
+
+#endif
 
 } // namespace math
 } // namespace rb2

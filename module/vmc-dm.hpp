@@ -1,5 +1,5 @@
 /**
- * @file vmc-dm.h
+ * @file vmc-dm.hpp
  * @author Serialist (ba3pt@qq.com)
  * @brief
  * @version 0.1.0
@@ -9,23 +9,34 @@
  *
  */
 
-#ifndef VMC_CALC_H
-#define VMC_CALC_H
+#ifndef VMC_DM_HPP
+#define VMC_DM_HPP
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-// #define OFFGROUND_FILTER_ENABLE
+#undef OFFGROUND_FILTER_ENABLE
 
 #include <stdbool.h>
 #include <stdint.h>
-
 #ifdef OFFGROUND_FILTER_ENABLE
     #include "filter.h"
 #endif
 
-typedef struct {
+namespace rb2 {
+namespace module {
+
+#define FRONT 0
+#define BACK 1
+
+// #define OFFGROUND_FILTER_ENABLE
+
+class VMC_DM {
+public:
+    VMC_DM(float l1, float l2, float l3, float l4, float l5);
+
+    void VMC_5bar_FK(float phi1, float phi4, float pitch, float dpitch, float dt); // 正运动学
+    void VMC_5bar_IK(float tp, float f0);                                          // 逆运动学
+    bool OffGround_Detection(float az);                                            // 离地检测
+
+private:
     /*左右两腿的公共参数，固定不变*/
     float l5; // AE长度 //单位为m
     float l1; // 单位为m
@@ -77,22 +88,9 @@ typedef struct {
 #ifdef OFFGROUND_FILTER_ENABLE
     Filter_Average_t filter;
 #endif
+};
 
-} VMC_t;
-void VMC_Init(VMC_t* vmc); // 给杆长赋值
-void VMC_5bar_FK(
-    VMC_t* vmc,
-    float phi1,
-    float phi4,
-    float pitch,
-    float dpitch,
-    float dt
-);                                                // 正运动学，pitch，vpitch，
-void VMC_5bar_IK(VMC_t* vmc, float tp, float f0); // 逆运动学
-bool OffGround_Detection(VMC_t* leg, float az);   // 离地检测
-
-#ifdef __cplusplus
-}
-#endif
+} // namespace module
+} // namespace rb2
 
 #endif
