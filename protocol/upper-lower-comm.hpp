@@ -1,5 +1,5 @@
 /**
- * @file upper-lower-comm.h
+ * @file upper-lower-comm.hpp
  * @author Serialist (ba3pt@qq.com)
  * @brief
  * @version 0.1.0
@@ -16,6 +16,7 @@
 #define YAW 1
 
 #include "stdbool.h"
+#include "stdint.h"
 
 namespace comm {
 

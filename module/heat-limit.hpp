@@ -12,6 +12,9 @@
 #ifndef HEAT_LIMIT_HPP
 #define HEAT_LIMIT_HPP
 
+#include "stdint.h"
+#include "math.h"
+
 template<
     int BULLET_HEAT = 10,       // 单发热量
     int GEAR_RATIO = 36,        // 2006减速比
@@ -50,9 +53,9 @@ float Heat_Limit(float cooling_speed, float heat_limit, float heat_per_bullet) {
             float max_safe_rpm =
                 (target_fire_rate * 60.0f / SLOTS_ON_PLATE) * GEAR_RATIO * SMALL_GEAR_RATIO;
 
-            shoot_freq = std::max(
+            shoot_freq = std::fmax(
                 0.0f,
-                std::min(max_safe_rpm, static_cast<float>(SHOOT_MOTOR_DARTLE_SPEED_SET))
+                std::fmin(max_safe_rpm, static_cast<float>(SHOOT_MOTOR_DARTLE_SPEED_SET))
             );
         }
     } else {
