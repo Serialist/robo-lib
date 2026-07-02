@@ -27,9 +27,8 @@ extern "C" {
 #include "stdlib.h"
 #include "string.h"
 
+#include "arm_math.h"
 #include "robo-config.h"
-
-// #include "math_adapter.h"
 
 // #include "cmsis_os.h" // 下面有这个要不要用（?）
 

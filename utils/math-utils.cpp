@@ -11,7 +11,6 @@
 
 #include "math-utils.hpp"
 #include "math-adapter.hpp"
-#include <cstdint>
 
 namespace rb2 {
 namespace math {

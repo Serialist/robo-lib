@@ -12,13 +12,17 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-namespace rb2 {
-namespace math {
-
-#include "config.h"
+#include "robo-config.h"
+#include <math.h>
 
 #ifdef ARM_MATH
     #include "arm_math.h"
+#endif
+
+namespace rb2 {
+namespace math {
+
+#ifdef ARM_MATH
 
 inline float Sin(float x) {
     return arm_sin_f32(x);
