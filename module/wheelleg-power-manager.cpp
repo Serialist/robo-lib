@@ -76,7 +76,7 @@ MODE mode;
 
 const TickType_t xTimeInterval = pdMS_TO_TICKS(SYSTEM_TIME_INTERVAL); // ms
 
-controller::PID powerPD { 50.0f, 0.0f, 0.20f, 100.0f, 0 };
+controller::PID powerPD { 1, 0, 0, 20, 0 };
 
 inline bool floatEqual(float a, float b) {
     return fabs(a - b) < 1e-5f;

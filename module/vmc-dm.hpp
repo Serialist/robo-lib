@@ -36,7 +36,6 @@ public:
     void VMC_5bar_IK(float tp, float f0);                                          // 逆运动学
     bool OffGround_Detection(float az);                                            // 离地检测
 
-private:
     /*左右两腿的公共参数，固定不变*/
     float l5; // AE长度 //单位为m
     float l1; // 单位为m

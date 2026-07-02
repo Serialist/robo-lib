@@ -13,7 +13,6 @@
 #include "math-adapter.hpp"
 #include "math.h"
 
-#define PI 3.14159265358979323846f
 #define COSF(x) rb2::math::Cos(x)
 #define SINF(x) rb2::math::Sin(x)
 
@@ -21,13 +20,17 @@ namespace rb2 {
 namespace module {
 
 // 给杆长赋值
-VMC_DM::VMC_DM(float l1, float l2, float l3, float l4, float l5) {
-    l5 = 0.15f; // AE长度 //单位为m
-    l1 = 0.15f; // 单位为m
-    l2 = 0.25f; // 单位为m
-    l3 = 0.25f; // 单位为m
-    l4 = 0.15f; // 单位为m
-
+// l1 = 0.15f; // 单位为m
+// l2 = 0.25f; // 单位为m
+// l3 = 0.25f; // 单位为m
+// l4 = 0.15f; // 单位为m
+// l5 = 0.15f; // AE长度 //单位为m
+VMC_DM::VMC_DM(float l1, float l2, float l3, float l4, float l5):
+    l1(l1),
+    l2(l2),
+    l3(l3),
+    l4(l4),
+    l5(l5) {
     first_flag = 0;
 
     is_offground = false;
@@ -39,8 +42,8 @@ VMC_DM::VMC_DM(float l1, float l2, float l3, float l4, float l5) {
 
 // 计算theta和d_theta给lqr用，同时也计算腿长L0
 void VMC_DM::VMC_5bar_FK(float phi1, float phi4, float pitch, float dpitch, float dt) {
-    phi1 = phi1;
-    phi4 = phi4;
+    this->phi1 = phi1;
+    this->phi4 = phi4;
 
     YD = l4 * SINF(phi4);      // D的y坐标
     YB = l1 * SINF(phi1);      // B的y坐标
@@ -97,9 +100,9 @@ void VMC_DM::VMC_5bar_IK(float tp, float f0) {
     j21 = (l4 * SINF(phi0 - phi2) * SINF(phi3 - phi4)) / SINF(phi3 - phi2);
     j22 = (l4 * COSF(phi0 - phi2) * SINF(phi3 - phi4)) / (L0 * SINF(phi3 - phi2));
 
-    torque_set[FRONT] =
-        j11 * F0 + j12 * Tp; // 得到RightFront的输出轴期望力矩，F0为五连杆机构末端沿腿的推力
-    torque_set[BACK] = j21 * F0 + j22 * Tp; // 得到RightBack的输出轴期望力矩，Tp为沿中心轴的力矩
+    // 得到RightFront的输出轴期望力矩，F0为五连杆机构末端沿腿的推力，Tp为沿中心轴的力矩
+    torque_set[FRONT] = j11 * F0 + j12 * Tp;
+    torque_set[BACK] = j21 * F0 + j22 * Tp;
 }
 
 #define OFFGROUND_FN_THRESHOLD 0.0f // 离地支持力阈值
