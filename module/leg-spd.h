@@ -12,11 +12,8 @@
 #ifndef LEG_SPD_H
 #define LEG_SPD_H
 
-#include "blessing.h"
-
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /* Function Declarations */
@@ -27,4 +24,3 @@ void Leg_Spd(float dphi1, float dphi4, float phi1, float phi4, float spd[2]);
 #endif
 
 #endif
-/* End of code generation (LegPos.h) */

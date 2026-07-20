@@ -10,7 +10,6 @@
  ************************/
 
 #include "cubemars-motor.h"
-#include "bsp-adapter.h"
 
 // servo mode
 // void comm_can_transmit_eid(uint32_t id, const uint8_t *data, uint8_t len)

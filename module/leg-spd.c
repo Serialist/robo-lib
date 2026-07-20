@@ -10,7 +10,7 @@
  */
 
 /* Include files */
-#include "utils.h"
+#include "utils/utils.h"
 #include "leg-spd.h"
 
 /* Function Definitions */

@@ -7,12 +7,13 @@
 
 #include "wheelleg-power-manager.hpp"
 #include "Referee_System.h"
-#include "bsp-adapter.h"
 #include "cmsis_os.h"
-#include "math-utils.hpp"
-#include "pid.hpp"
-#include "superpower.h"
-#include "utils.h"
+
+#include "algorithm/pid.hpp"
+#include "protocol/superpower.h"
+#include "utils/bsp-adapter.h"
+#include "utils/math-utils.hpp"
+#include "utils/utils.h"
 
 extern SuperPower_Fdb_t sp_fdb;
 

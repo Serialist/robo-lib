@@ -126,7 +126,7 @@
  ******************************************************************************
  */
 
-#include "kalman_filter_whx.h"
+#include "algorithm/kalman_filter_whx.h"
 
 uint16_t sizeof_float, sizeof_double;
 
