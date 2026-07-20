@@ -15,6 +15,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+	
+#include "cmsis_os.h"
 
 /// @brief 按照 freertos.c 写的任务初始化工具宏
 // あみのし这个很蠢啊要是再改就建议自己写一遍去 cubemx 生成的 freertos.c 找
