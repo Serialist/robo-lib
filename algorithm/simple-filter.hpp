@@ -29,7 +29,7 @@ public:
     /// @brief 更新
     /// @param input 输入
     /// @return 滤波结果
-    float update(float input);
+    float& update(float input);
 
 private:
     float cutoff_frequency;
@@ -43,7 +43,7 @@ class ZeroOrder_Holder {
 public:
     ZeroOrder_Holder(void);
 
-    float update(float input);
+    float& update(float input);
 
 private:
     float prev_value;

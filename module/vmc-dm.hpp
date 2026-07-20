@@ -12,21 +12,14 @@
 #ifndef VMC_DM_HPP
 #define VMC_DM_HPP
 
-#undef OFFGROUND_FILTER_ENABLE
-
-#include <stdbool.h>
-#include <stdint.h>
-#ifdef OFFGROUND_FILTER_ENABLE
-    #include "filter.h"
-#endif
-
-namespace rb2 {
-namespace module {
-
 #define FRONT 0
 #define BACK 1
 
-// #define OFFGROUND_FILTER_ENABLE
+#include <stdbool.h>
+#include <stdint.h>
+
+namespace rb2 {
+namespace module {
 
 class VMC_DM {
 public:
@@ -83,10 +76,6 @@ public:
 
     float fn; // 支持力
     float is_offground;
-
-#ifdef OFFGROUND_FILTER_ENABLE
-    Filter_Average_t filter;
-#endif
 };
 
 } // namespace module

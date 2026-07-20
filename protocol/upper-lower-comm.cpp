@@ -161,13 +161,15 @@ void Aimbot::Control_Decode_SP2025_USB(uint8_t* buf) {
     } else
         vision.Data_Error = 1;
 
-    vision.Cmd[0] = sp_control.mode;
+    vision.Cmd[0] = (uint8_t)sp_control.mode;
 
     // 此处加了个低通
     // vision.Error[0] = Low_Pass(RadToAng(data->pitch_err), 0.05);
     // vision.Error[1] = Low_Pass(RadToAng(data->yaw_err), 0.05);
-    vision.Error[0] = RadToAng(sp_control.pitch_err);
-    vision.Error[1] = RadToAng(sp_control.yaw_err);
+    vision.Error[0] = (double)sp_control.pitch_err * 1e-6;
+    vision.Error[1] = (double)sp_control.yaw_err * 1e-6;
+
+    debug_cnt++;
 }
 
 /* -------------------------------- CAN -------------------------------- */

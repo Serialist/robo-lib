@@ -33,7 +33,7 @@ LowPass_Order_1::LowPass_Order_1(float alpha) {
     output = 0;
 }
 
-float LowPass_Order_1::update(float input) {
+float& LowPass_Order_1::update(float input) {
     output = alpha * input + (1.0f - alpha) * output;
     return output;
 }
@@ -44,7 +44,7 @@ ZeroOrder_Holder::ZeroOrder_Holder(void) {
     prev_value = 0;
 }
 
-float ZeroOrder_Holder::update(float input) {
+float& ZeroOrder_Holder::update(float input) {
     if (input == 0) {
         return prev_value;
     } else {

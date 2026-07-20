@@ -25,10 +25,10 @@ void SuperPower_Fdb_Decode(uint8_t* buf, SuperPower_Fdb_t* data) {
     uint16_t referee = (buf[5] << 8 | buf[4]);
     uint16_t cap = (buf[7] << 8 | buf[6]);
 
-    data->chassis = (chassis - 0x7FFF) / 10.0f;
-    data->cap_tar = (cap_tar - 0x7FFF) / 10.0f;
-    data->referee = (referee - 0x7FFF) / 10.0f;
-    data->cap = cap / 100.0f;
+    data->chassis = (float)(chassis - 0x7FFF) / 10.0f;
+    data->cap_tar = (float)(cap_tar - 0x7FFF) / 10.0f;
+    data->referee = (float)(referee - 0x7FFF) / 10.0f;
+    data->cap = (float)cap / 100.0f;
     data->cnt = 100u;
     data->isOnline = true;
 }

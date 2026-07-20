@@ -20,7 +20,6 @@ extern "C" {
 
 /* ================================================================ include ================================================================ */
 
-#include "blessing.h"
 #include "math.h"
 #include "stdbool.h"
 #include "stdint.h"
@@ -34,12 +33,10 @@ extern "C" {
 
 /* ================================================================ macro ================================================================ */
 
-#ifndef user_malloc
-    #ifdef _CMSIS_OS_H
-        #define user_malloc pvPortMalloc
-    #else
-        #define user_malloc malloc
-    #endif
+#if !defined(user_malloc) && defined(_CMSIS_OS_H)
+    #define user_malloc pvPortMalloc
+#else
+    #define user_malloc malloc
 #endif
 
 #ifndef PI

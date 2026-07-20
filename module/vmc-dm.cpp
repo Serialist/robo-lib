@@ -10,11 +10,11 @@
  */
 
 #include "vmc-dm.hpp"
-#include "math-adapter.hpp"
+#include "arm_math.h"
 #include "math.h"
 
-#define COSF(x) rb2::math::Cos(x)
-#define SINF(x) rb2::math::Sin(x)
+#define SINF(x) arm_sin_f32(x)
+#define COSF(x) arm_cos_f32(x)
 
 namespace rb2 {
 namespace module {
@@ -34,10 +34,6 @@ VMC_DM::VMC_DM(float l1, float l2, float l3, float l4, float l5):
     first_flag = 0;
 
     is_offground = false;
-
-#ifdef OFFGROUND_FILTER_ENABLE
-    Filter_Average_Init(&filter, 10);
-#endif
 }
 
 // 计算theta和d_theta给lqr用，同时也计算腿长L0
@@ -95,6 +91,7 @@ void VMC_DM::VMC_5bar_IK(float tp, float f0) {
     Tp = tp;
     F0 = f0;
 
+    // 计算雅可比
     j11 = (l1 * SINF(phi0 - phi3) * SINF(phi1 - phi2)) / SINF(phi3 - phi2);
     j12 = (l1 * COSF(phi0 - phi3) * SINF(phi1 - phi2)) / (L0 * SINF(phi3 - phi2));
     j21 = (l4 * SINF(phi0 - phi2) * SINF(phi3 - phi4)) / SINF(phi3 - phi2);
@@ -118,10 +115,6 @@ bool VMC_DM::OffGround_Detection(float az) {
                + 2.0f * d_L0 * d_theta * SINF(theta) //
                + L0 * dd_theta * SINF(theta)         //
                + L0 * d_theta * d_theta * COSF(theta));
-
-#ifdef OFFGROUND_FILTER_ENABLE
-    fn = Filter_Average_Update(&filter, fn);
-#endif
 
     is_offground = fn < OFFGROUND_FN_THRESHOLD;
 

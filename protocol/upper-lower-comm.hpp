@@ -18,6 +18,8 @@
 #include "stdbool.h"
 #include "stdint.h"
 
+#pragma pack(push, 1)
+
 namespace comm {
 
 // 自瞄
@@ -50,11 +52,19 @@ public:
 
     /* ---------------- upper interface ---------------- */
 
-    inline float Get_PitchError(void) {
+    inline float Get_PitchError(void) const {
         return vision.Error[0];
     }
-    inline float Get_YawError(void) {
+    inline float Get_YawError(void) const {
         return vision.Error[1];
+    }
+    inline bool Get_FireFlag(void) const {
+        return vision.Cmd[0] == (uint8_t)Control_SP2025_USB::Mode::Fire;
+    }
+    bool debug11;
+    inline bool Get_LockedFlag(void) {
+        debug11 = vision.Cmd[0] != 0;
+        return debug11;
     }
 
     inline void Set_Mode(Mode mode) {
@@ -64,6 +74,9 @@ public:
         vision.yaw = yaw;
         vision.pitch = pitch;
         vision.roll = roll;
+    }
+    inline void Set_BulletVelocity(float velocity) {
+        vision.Velocity = velocity;
     }
 
     // void Set_Color(Color color);
@@ -75,11 +88,15 @@ public:
     void Transmit(void);
 
     void Monitor(void);
+    inline const bool& Is_Online(void) {
+        return is_online;
+    }
 
 private:
     void (*tx_func)(uint8_t* buf, uint64_t len);
 
     uint8_t heartbeat_cnt;
+
     bool is_online;
 
     struct Vision {
@@ -104,6 +121,8 @@ private:
 
     /* --------------------------------- SP 2025 -------------------------------- */
 
+    uint64_t debug_cnt = 0;
+
     __attribute__((packed)) struct Feedback_SP2025_USB {
         uint8_t head[2];
         uint8_t mode; // 0: 空闲, 1: 自瞄, 2: 小符, 3: 大符
@@ -113,9 +132,13 @@ private:
 
     __attribute__((packed)) struct Control_SP2025_USB {
         uint8_t head[2];
-        uint8_t mode;
-        double yaw_err;
-        double pitch_err;
+        enum class Mode : uint8_t {
+            Idle = 0,   // 空闲
+            Locked = 1, // 锁定
+            Fire = 2,   // 发射
+        } mode;
+        int32_t yaw_err;
+        int32_t pitch_err;
         uint16_t crc16;
     } sp_control;
 
@@ -137,5 +160,7 @@ private:
 };
 
 } // namespace comm
+
+#pragma pack(pop)
 
 #endif
