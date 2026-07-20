@@ -112,17 +112,6 @@ extern "C" {
     // h7 用，因为 buf 需要实时不能 cache，所以把这块内存放在 RAM1 中发一个 axi_sram 块中，这个块在 .sct 文件中会定义
     #define BUFFER_T __attribute__((section(".AXI_SRAM"))) uint8_t
 
-    // cod里用的符号，还没改，先保留下来
-    #define Matrix arm_matrix_instance_f32
-    #define Matrix_64 arm_matrix_instance_f64
-    #define Matrix_Init arm_mat_init_f32
-    #define Matrix_Add arm_mat_add_f32
-    #define Matrix_Subtract arm_mat_sub_f32
-    #define Matrix_Multiply arm_mat_mult_f32
-    #define Matrix_Transpose arm_mat_trans_f32
-    #define Matrix_Inverse arm_mat_inverse_f32
-    #define Matrix_Inverse_64 arm_mat_inverse_f64
-
     // 自己定义的符号名，以后改成这个吧
     #define MAT32 arm_matrix_instance_f32
     #define MAT32_INIT arm_mat_init_f32

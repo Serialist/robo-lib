@@ -12,14 +12,17 @@
 #ifndef KALMAN_FILTER_HPP
 #define KALMAN_FILTER_HPP
 
+#include <cstddef>
+
 #include "algorithm/linear-algebra.hpp"
 
 namespace observer {
 
 using algebra::Matrix;
 using algebra::Vector;
+using std::size_t;
 
-template<typename T, std::size_t MEASURE_SIZE, std::size_t STATE_SIZE>
+template<typename T, size_t MEASURE_SIZE, size_t STATE_SIZE>
 class Kalman_Filter {
 private:
     // 状态向量

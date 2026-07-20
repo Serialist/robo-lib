@@ -51,14 +51,11 @@ public:
     constexpr Vector(Vector&&) noexcept = default; // 移动构造
 
     constexpr Vector(array<T, N>& x): data(x) {} // 从数组构造
-    template<
-        typename... Args,
-        typename = std::enable_if_t<
-            (sizeof...(Args) == N) &&
-            (std::is_convertible_v<std::decay_t<Args>, T> && ...)
-        >
-    >
-    constexpr Vector(Args&&... args): data { std::forward<Args>(args)... } {}
+    constexpr Vector(const array<T, N>& x): data(x) {}
+    template<typename... U>
+    constexpr Vector(U... args): data { T(args)... } {
+        static_assert(sizeof...(args) == N, "Vector: wrong arg count");
+    }
 
     ~Vector() = default;
 
@@ -84,12 +81,12 @@ public:
     // C++17: v.get<1>()
     template<size_t I>
     T& get() noexcept {
-        static_assert(I < N);
+        static_assert(I < N, "[algebra::Vector::get]: index out of range");
         return data[I];
     }
     template<size_t I>
     const T& get() const noexcept {
-        static_assert(I < N);
+        static_assert(I < N, "[algebra::Vector::get]: index out of range");
         return data[I];
     }
 
@@ -243,12 +240,12 @@ public:
     }
 
     // return zero/one vector
-    constexpr static Vector zero() {
+    static Vector zero() {
         Vector v;
         v.fill(T(0));
         return v;
     }
-    constexpr static Vector one() {
+    static Vector one() {
         Vector v;
         v.fill(T(1));
         return v;
@@ -289,10 +286,18 @@ public:
 
     Matrix(const Matrix&) = default;
     Matrix(Matrix&&) noexcept = default;
-    ~Matrix() = default;
+
+    constexpr Matrix(const array<T, ROW * COL>& x): data(x) {}
+
+    template<typename... U>
+    constexpr Matrix(U... args): data { T(args)... } {
+        static_assert(sizeof...(args) == ROW * COL, "Matrix: wrong arg count");
+    }
 
     Matrix& operator=(const Matrix&) = default;
     Matrix& operator=(Matrix&&) noexcept = default;
+
+    ~Matrix() = default;
 
     // -------------------------------- meta --------------------------------
 
@@ -438,9 +443,7 @@ public:
     }
 
     // 秩
-    size_t rank() const {
-        static_assert(0, "[matrix::rank]: work in progress.");
-    }
+    // size_t rank() const {}
 
     // -------------------------------- 方阵专属 --------------------------------
 
@@ -612,16 +615,27 @@ public:
 
 template<size_t N>
 using Vectorf = Vector<float, N>;
+using Vector2f = Vector<float, 2>;
+using Vector3f = Vector<float, 3>;
+using Vector4f = Vector<float, 4>;
 
 template<size_t N>
 using Vectord = Vector<double, N>;
-
-using Vector2f = Vector<float, 2>;
 using Vector2d = Vector<double, 2>;
-using Vector3f = Vector<float, 3>;
 using Vector3d = Vector<double, 3>;
-using Vector4f = Vector<float, 4>;
 using Vector4d = Vector<double, 4>;
+
+template<size_t ROW, size_t COL>
+using Matrixf = Matrix<float, ROW, COL>;
+using Matrix2f = Matrix<float, 2, 2>;
+using Matrix3f = Matrix<float, 3, 3>;
+using Matrix4f = Matrix<float, 4, 4>;
+
+template<size_t ROW, size_t COL>
+using Matrixd = Matrix<double, ROW, COL>;
+using Matrix2d = Matrix<double, 2, 2>;
+using Matrix3d = Matrix<double, 3, 3>;
+using Matrix4d = Matrix<double, 4, 4>;
 
 } // namespace algebra
 
