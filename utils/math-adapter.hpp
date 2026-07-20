@@ -12,7 +12,7 @@
 #ifndef MATH_ADAPTER_HPP
 #define MATH_ADAPTER_HPP
 
-#include "robo-config.h"
+#include "robo-lib-config.h"
 #include <math.h>
 
 #ifdef ARM_MATH
