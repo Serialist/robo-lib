@@ -10,7 +10,7 @@
  */
 
 #include "b2b.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 #define SCALE_FACTOR 100
 

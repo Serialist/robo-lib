@@ -16,8 +16,8 @@
 extern "C" {
 #endif
 
-#include "bsp-adapter.h"
-#include "utils.h"
+#include "utils/bsp-adapter.h"
+#include "utils/utils.h"
 
 #define P_MAX 12.5f
 #define V_MAX 50.0f

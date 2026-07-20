@@ -9,10 +9,12 @@
  *
  */
 
-#include "upper-lower-comm.hpp"
-#include "crc.hpp"
 #include "stdint.h"
 #include "string.h"
+
+#include "upper-lower-comm.hpp"
+
+#include "utils/crc.hpp"
 
 #define Red 0x00
 #define Blue 0x01

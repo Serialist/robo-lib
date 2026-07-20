@@ -17,8 +17,6 @@ extern "C"
 {
 #endif
 
-#include "utils.h"
-
 #define U_T 0
 #define U_TP 1
 
