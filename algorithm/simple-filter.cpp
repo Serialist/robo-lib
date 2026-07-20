@@ -45,12 +45,9 @@ ZeroOrder_Holder::ZeroOrder_Holder(void) {
 }
 
 float& ZeroOrder_Holder::update(float input) {
-    if (input == 0) {
-        return prev_value;
-    } else {
+    if (input != 0) 
         prev_value = input;
-        return input;
-    }
+    return prev_value;
 }
 
 /* ---------------------------------------------------------------- Moveing_Average_Filter ---------------------------------------------------------------- */
