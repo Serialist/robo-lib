@@ -3,12 +3,16 @@
  * @brief 港科
  * 
  * @note 
- * 依赖：上交矩阵库 matrix.hpp
+ * 依赖：
+ * 上交矩阵库 matrix-arm.hpp
+ * freertos
 */
 
 #include "FreeRTOS.h"
-#include "matrix.hpp"
 #include "task.h"
+#include <cstdint>
+
+#include "algorithm/matrix-arm.hpp"
 
 #pragma once
 
