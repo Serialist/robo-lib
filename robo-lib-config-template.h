@@ -21,6 +21,8 @@ extern "C" {
 
 // #define ARM_MATH
 
+#define DEBUG
+
 #ifdef __cplusplus
 }
 #endif
