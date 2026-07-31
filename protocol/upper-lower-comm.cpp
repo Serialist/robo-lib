@@ -168,8 +168,8 @@ void Aimbot::Control_Decode_SP2025_USB(uint8_t* buf) {
     // 此处加了个低通
     // vision.Error[0] = Low_Pass(RadToAng(data->pitch_err), 0.05);
     // vision.Error[1] = Low_Pass(RadToAng(data->yaw_err), 0.05);
-    vision.Error[0] = (double)sp_control.pitch_err * 1e-6;
-    vision.Error[1] = (double)sp_control.yaw_err * 1e-6;
+    vision.Error[0] = (double)sp_control.pitch_err;
+    vision.Error[1] = (double)sp_control.yaw_err;
 
     debug_cnt++;
 }

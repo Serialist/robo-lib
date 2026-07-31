@@ -46,7 +46,7 @@ struct B2B_OmniPie_Data {
 // debug var for UI
 extern int16_t debug_ui[4];
 
-// id 0x21;
+// id 0x21
 void B2B_OmniPie_CtrlMsg_Encode(struct B2B_OmniPie_Data* data, uint8_t* buf);
 // id 0x22
 void B2B_OmniPie_InfoMsg_Encode(struct B2B_OmniPie_Data* data, uint8_t* buf);

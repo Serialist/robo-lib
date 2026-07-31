@@ -75,6 +75,13 @@ public:
         vision.pitch = pitch;
         vision.roll = roll;
     }
+    inline void SetQuat(float q0, float q1, float q2, float q3) {
+        sp_feedback.quat[0] = q0;
+        sp_feedback.quat[1] = q1;
+        sp_feedback.quat[2] = q2;
+        sp_feedback.quat[3] = q3;
+    }
+
     inline void Set_BulletVelocity(float velocity) {
         vision.Velocity = velocity;
     }
@@ -126,7 +133,8 @@ private:
     __attribute__((packed)) struct Feedback_SP2025_USB {
         uint8_t head[2];
         uint8_t mode; // 0: 空闲, 1: 自瞄, 2: 小符, 3: 大符
-        double bullet_speed;
+        float quat[4];
+        float bullet_speed;
         uint16_t crc16;
     } sp_feedback;
 
@@ -137,8 +145,8 @@ private:
             Locked = 1, // 锁定
             Fire = 2,   // 发射
         } mode;
-        int32_t yaw_err;
-        int32_t pitch_err;
+        float yaw_err;
+        float pitch_err;
         uint16_t crc16;
     } sp_control;
 
